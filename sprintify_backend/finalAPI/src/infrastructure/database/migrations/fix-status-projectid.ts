@@ -33,7 +33,7 @@ export async function fixStatusProjectIdMigration(): Promise<void> {
     
     // Get the first available project to assign orphaned statuses to
     const firstProject = await queryRunner.query(
-      `SELECT id FROM project LIMIT 1`
+      `SELECT id FROM projects LIMIT 1`
     );
     
     if (firstProject.length === 0) {
