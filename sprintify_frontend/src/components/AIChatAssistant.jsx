@@ -112,7 +112,7 @@ const AIChatAssistant = ({ projectId, isOpen, onClose }) => {
           fetchProjectById(projectId),
           fetchEpics({ projectId }),
           getProjectMembers(projectId),
-          fetchSprints({ projectId }),
+          fetchSprints(projectId),
           fetchBoardColumns(projectId),
         ]);
 

@@ -53,7 +53,7 @@ const ProjectOverview = () => {
         setIssuesByAssignee(chartData);
 
         // Fetch sprints and build activity
-        const sprints = await fetchSprints({ projectId });
+        const sprints = await fetchSprints(projectId);
         const now = new Date();
         const activity = sprints
           .map((s) => {
