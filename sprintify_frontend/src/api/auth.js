@@ -63,24 +63,76 @@ export const login = async (email, password) => {
 };
 export const register = async (userData) => {
   try {
-    const response = await api.post("/user/register", {
-      email: userData.email,
-      password: userData.password,
-      fullName: userData.fullName,
-    });
+    if (isJsonServer()) {
+      // Mock registration for json-server development
+      const response = await api.get("/users");
+      const users = response.data;
+      
+      // Check if email already exists
+      const existingUser = users.find(u => u.email === userData.email);
+      if (existingUser) {
+        throw new Error("An account with this email already exists");
+      }
 
-    const { user, token, success } = response.data;
+      // Generate new user ID
+      const newUserId = `user-${users.length + 1}`;
+      
+      // Create new user object
+      const newUser = {
+        id: newUserId,
+        email: userData.email,
+        password: userData.password,
+        fullName: userData.fullName,
+        image: "/avatars/default.png",
+        isEmailVerified: false,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        deletedAt: null
+      };
 
-    if (!success || !token) {
-      throw new Error("Registration failed");
+      // Add user to JSON server (this will persist in db.json)
+      const createResponse = await api.post("/users", newUser);
+      
+      // Create a simple mock token
+      const mockToken = btoa(JSON.stringify({ 
+        userId: newUser.id, 
+        email: newUser.email, 
+        fullName: newUser.fullName,
+        exp: Date.now() + 24 * 60 * 60 * 1000 // 24 hours
+      }));
+
+      return {
+        success: true,
+        token: mockToken,
+        user: {
+          id: newUser.id,
+          email: newUser.email,
+          fullName: newUser.fullName,
+          image: newUser.image,
+          isEmailVerified: newUser.isEmailVerified
+        },
+        message: "Registration successful",
+      };
+    } else {
+      const response = await api.post("/user/register", {
+        email: userData.email,
+        password: userData.password,
+        fullName: userData.fullName,
+      });
+
+      const { user, token, success } = response.data;
+
+      if (!success || !token) {
+        throw new Error("Registration failed");
+      }
+
+      return {
+        success: true,
+        token: token,
+        user: user,
+        message: "Registration successful",
+      };
     }
-
-    return {
-      success: true,
-      token: token,
-      user: user,
-      message: "Registration successful",
-    };
   } catch (error) {
     if (error.response) {
       throw new Error(error.response.data?.message || "Registration failed");
