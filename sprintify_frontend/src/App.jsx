@@ -16,6 +16,7 @@ import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 import ConfirmEmail from "./pages/auth/ConfirmEmail";
 import BoardDemo from "./pages/BoardDemo";
+import StatusFieldDemo from "./components/demo/StatusFieldDemo";
 
 // Dashboard Layout + Pages
 import DashboardLayout from "./components/layouts/DashboardLayout";
@@ -74,6 +75,7 @@ function App() {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/confirm-email" element={<ConfirmEmail />} />
         <Route path="/board-demo" element={<BoardDemo />} />
+        <Route path="/status-demo" element={<StatusFieldDemo />} />
         {/*  Dashboard Routes */}
         <Route
           path="/dashboard"

@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Plus } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { createTask } from "../../../api/tasks";
+import { fetchStatuses } from "../../../api/statuses";
 import { useIssueForm } from "../../../hooks/useIssueForm";
 import IssueFormFields from "./IssueFormFields";
 import IssueFormActions from "./IssueFormActions";
@@ -20,17 +21,44 @@ const CreateInlineItem = ({
 
   const [isCreating, setIsCreating] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [statuses, setStatuses] = useState([]);
+  const [statusesLoading, setStatusesLoading] = useState(false);
+
+  // Fetch statuses when component mounts or when creating starts
+  useEffect(() => {
+    if (isCreating && projectId && statuses.length === 0) {
+      fetchAvailableStatuses();
+    }
+  }, [isCreating, projectId, statuses.length]);
+
+  const fetchAvailableStatuses = async () => {
+    if (!projectId) return;
+    
+    setStatusesLoading(true);
+    try {
+      const fetchedStatuses = await fetchStatuses({ projectId });
+      setStatuses(fetchedStatuses || []);
+    } catch (error) {
+      console.error("Failed to fetch statuses:", error);
+      // Fallback: create a default status list if fetch fails
+      setStatuses([]);
+    } finally {
+      setStatusesLoading(false);
+    }
+  };
 
   // Issue form state
   const {
     title,
     description,
     storyPoint,
+    statusId,
     setTitle,
     setDescription,
     setStoryPoint,
+    setStatusId,
     resetForm,
-  } = useIssueForm();
+  } = useIssueForm(null, null, defaultStatusId);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title.trim()) return;
@@ -43,7 +71,7 @@ const CreateInlineItem = ({
         title: title.trim(),
         description: description.trim(),
         storyPoint: parseInt(storyPoint) || 0,
-        statusId: defaultStatusId,
+        statusId: statusId || defaultStatusId,
         sprintId: selectedSprintId || null,
         assignee: null,
         projectId, // Include projectId for automatic key generation
@@ -105,9 +133,12 @@ const CreateInlineItem = ({
         title={title}
         description={description}
         storyPoint={storyPoint}
+        statusId={statusId}
+        statuses={statuses}
         onTitleChange={setTitle}
         onDescriptionChange={setDescription}
         onStoryPointChange={setStoryPoint}
+        onStatusChange={setStatusId}
       />
 
       <IssueFormActions

@@ -1,10 +1,19 @@
 // Custom hook for form state management following SRP
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export const useIssueForm = (onSubmit, onCancel) => {
+export const useIssueForm = (onSubmit, onCancel, defaultStatusId = null) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [storyPoint, setStoryPoint] = useState(1);
+  const [statusId, setStatusId] = useState(defaultStatusId || "");
+  const [isCreating, setIsCreating] = useState(false);
+
+  // Update statusId when defaultStatusId changes
+  useEffect(() => {
+    if (defaultStatusId && !statusId) {
+      setStatusId(defaultStatusId);
+    }
+  }, [defaultStatusId, statusId]);
 
   const isValid = title.trim().length > 0;
 
@@ -16,6 +25,7 @@ export const useIssueForm = (onSubmit, onCancel) => {
       title: title.trim(),
       description: description.trim(),
       storyPoint: parseInt(storyPoint),
+      statusId: statusId,
       assignee: null,
       assigneeUser: null,
     };
@@ -33,15 +43,21 @@ export const useIssueForm = (onSubmit, onCancel) => {
     setTitle("");
     setDescription("");
     setStoryPoint(1);
+    setStatusId(defaultStatusId || "");
   };
+  
   return {
     title,
     description,
     storyPoint,
+    statusId,
+    isCreating,
     isValid,
     setTitle,
     setDescription,
     setStoryPoint,
+    setStatusId,
+    setIsCreating,
     handleSubmit,
     handleCancel,
     resetForm,
