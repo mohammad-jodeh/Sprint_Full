@@ -18,10 +18,9 @@ export default function EpicDetailsModal({
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
-    api
-      .get("/users")
-      .then((res) => setUsers(res.data))
-      .catch(() => toast.error("Failed to fetch users"));
+    // Note: Backend doesn't support listing all users
+    // For now, we'll handle this case gracefully
+    setUsers([]);
   }, []);
 
   if (!epic) return null;

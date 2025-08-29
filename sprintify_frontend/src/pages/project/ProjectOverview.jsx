@@ -34,7 +34,7 @@ const ProjectOverview = () => {
         const stats = await fetchProjectTaskStatistics(projectId);
         setIssueStats(stats);
 
-        const issues = await fetchTasks({ projectId, includeRelated: true });
+        const issues = await fetchTasks(projectId, { includeRelated: true });
         const countByAssignee = {};
 
         issues.forEach((issue) => {

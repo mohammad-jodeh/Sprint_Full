@@ -60,12 +60,15 @@ export const fetchProjectTaskStatistics = async (projectId) => {
   try {
     const tasks = await fetchTasks(projectId);
     
+    // Ensure tasks is an array
+    const taskArray = Array.isArray(tasks) ? tasks : [];
+    
     // Calculate statistics based on task status
     const statistics = {
-      total: tasks.length,
-      todo: tasks.filter(task => task.status === 'TODO' || task.status === 'BACKLOG').length,
-      in_progress: tasks.filter(task => task.status === 'IN_PROGRESS' || task.status === 'IN PROGRESS').length,
-      done: tasks.filter(task => task.status === 'DONE' || task.status === 'COMPLETED').length,
+      total: taskArray.length,
+      todo: taskArray.filter(task => task.status === 'TODO' || task.status === 'BACKLOG').length,
+      in_progress: taskArray.filter(task => task.status === 'IN_PROGRESS' || task.status === 'IN PROGRESS').length,
+      done: taskArray.filter(task => task.status === 'DONE' || task.status === 'COMPLETED').length,
     };
     
     return statistics;

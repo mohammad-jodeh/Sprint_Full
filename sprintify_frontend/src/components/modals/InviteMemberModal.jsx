@@ -23,11 +23,9 @@ export default function InviteMemberModal({ onClose, onAdd }) {
   };
 
   useEffect(() => {
-    api.get("/users").then((res) => {
-      // Filter out current user and already invited users
-      const filteredUsers = res.data.filter((u) => u.id !== user?.id);
-      setUsers(filteredUsers);
-    });
+    // Note: Backend doesn't support listing all users, so we'll start with empty list
+    // Users can be added by searching via email in the SelectUsersModal
+    setUsers([]);
     
     // Get existing project members to disable them in selection
     getProjectMembers(projectId)

@@ -85,14 +85,9 @@ export default function InviteTeamMemberModal({ onClose, onAdd }) {
           showCustomToast("User not found", "error");
         }
       } else {
-        // Search by name through all users
-        const response = await api.get("/users");
-        const filtered = response.data.filter(u => 
-          u.fullName.toLowerCase().includes(searchTerm.toLowerCase()) &&
-          u.id !== user?.id &&
-          !disabledIds.includes(u.id)
-        );
-        setSearchResults(filtered.slice(0, 10)); // Limit to 10 results
+        // For name-based search, suggest using email instead
+        setSearchResults([]);
+        showCustomToast("Please search by email address (user@example.com)", "info");
       }
     } catch (error) {
       console.error("Search failed:", error);

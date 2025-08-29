@@ -95,7 +95,7 @@ const useAuthStore = create(
         set({ projectRoleLoading: true, projectRoleError: null });
 
         try {
-          const response = await api.get(`/project_members/${projectId}`);
+          const response = await api.get(`/${projectId}/members`);
           const members = response.data.members || response.data || [];
           const projectMember = members.find(
             (member) => member.userId === state.user.id

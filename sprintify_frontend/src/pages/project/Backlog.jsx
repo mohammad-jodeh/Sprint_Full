@@ -640,25 +640,20 @@ export default function Backlog() {
               toast.success("Issue created successfully!");
               setTimeout(async () => {
                 try {
-                  const [refreshedResponse, usersRes, statusesRes] =
+                  const [refreshedResponse, statusesRes] =
                     await Promise.all([
-                      api.get(`/issues?projectId=${projectId}`),
-                      api.get("/users"),
-                      api.get("/statuses"),
+                      fetchIssues(projectId),
+                      api.get(`/${projectId}/status`),
                     ]);
 
                   // Manually populate related data
-                  const issues = refreshedResponse.data.map((issue) => {
-                    const assigneeUser = issue.assignee
-                      ? usersRes.data.find((u) => u.id === issue.assignee)
-                      : null;
+                  const issues = refreshedResponse.map((issue) => {
                     const status = statusesRes.data.find(
                       (s) => s.id === issue.statusId
                     );
 
                     return {
                       ...issue,
-                      assigneeUser,
                       status,
                     };
                   });
@@ -690,25 +685,20 @@ export default function Backlog() {
               toast.success("Issue updated successfully!");
               setTimeout(async () => {
                 try {
-                  const [refreshedResponse, usersRes, statusesRes] =
+                  const [refreshedResponse, statusesRes] =
                     await Promise.all([
-                      api.get(`/issues?projectId=${projectId}`),
-                      api.get("/users"),
-                      api.get("/statuses"),
+                      fetchIssues(projectId),
+                      api.get(`/${projectId}/status`),
                     ]);
 
                   // Manually populate related data
-                  const issues = refreshedResponse.data.map((issue) => {
-                    const assigneeUser = issue.assignee
-                      ? usersRes.data.find((u) => u.id === issue.assignee)
-                      : null;
+                  const issues = refreshedResponse.map((issue) => {
                     const status = statusesRes.data.find(
                       (s) => s.id === issue.statusId
                     );
 
                     return {
                       ...issue,
-                      assigneeUser,
                       status,
                     };
                   });
