@@ -1,9 +1,19 @@
-import { protectedApi } from "./config";
+import { protectedApi, baseUrl } from "./config";
+
+// Helper function to determine if we're using json-server
+const isJsonServer = () => baseUrl.includes('3001');
 
 export const fetchSprints = async (projectId, params = {}) => {
   try {
-    const response = await protectedApi.get(`/${projectId}/sprints`, { params });
-    return response.data.sprints || response.data.data?.sprints || response.data;
+    if (isJsonServer()) {
+      // Get all sprints and filter by projectId
+      const response = await protectedApi.get(`/sprints`);
+      const projectSprints = response.data.filter(sprint => sprint.projectId === projectId);
+      return projectSprints;
+    } else {
+      const response = await protectedApi.get(`/${projectId}/sprints`, { params });
+      return response.data.sprints || response.data.data?.sprints || response.data;
+    }
   } catch (error) {
     if (error.response) {
       throw new Error(error.response.data?.message || "Failed to fetch sprints");
@@ -62,8 +72,15 @@ export const deleteSprint = async (projectId, id) => {
 
 export const fetchSprintIssues = async (projectId, sprintId, params = {}) => {
   try {
-    const response = await protectedApi.get(`/${projectId}/sprints/${sprintId}/issues`, { params });
-    return response.data.data || response.data;
+    if (isJsonServer()) {
+      // Get all issues and filter by sprintId
+      const response = await protectedApi.get(`/issues`);
+      const sprintIssues = response.data.filter(issue => issue.sprintId === sprintId);
+      return sprintIssues;
+    } else {
+      const response = await protectedApi.get(`/${projectId}/sprints/${sprintId}/issues`, { params });
+      return response.data.data || response.data;
+    }
   } catch (error) {
     if (error.response) {
       throw new Error(error.response.data?.message || "Failed to fetch sprint issues");

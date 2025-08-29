@@ -8,11 +8,23 @@ import { fetchSprints } from "../api/sprints";
 import { fetchEpics } from "../api/epics";
 
 /**
- * Helper function to determine the active sprint from a list of sprints
+ * Helper function to determine the active sprint from a list of sprints and project
  * @param {Array} sprints - Array of sprint objects
+ * @param {Object} project - Project object with activeSprintId
  * @returns {Object|null} - Active sprint or null if none found
  */
-const getActiveSprint = (sprints) => {
+const getActiveSprint = (sprints, project) => {
+  // First, check if project has an activeSprintId
+  if (project?.activeSprintId) {
+    const activeSprint = sprints.find(sprint => sprint.id === project.activeSprintId);
+    if (activeSprint) return activeSprint;
+  }
+  
+  // Then check for sprints marked as active
+  const activeMarkedSprint = sprints.find(sprint => sprint.isActive === true);
+  if (activeMarkedSprint) return activeMarkedSprint;
+  
+  // Finally, fall back to date-based logic
   const now = new Date();
   return (
     sprints.find((sprint) => {
@@ -27,16 +39,42 @@ const getActiveSprint = (sprints) => {
 /**
  * Helper function to get all active sprints from a list of sprints
  * @param {Array} sprints - Array of sprint objects
+ * @param {Object} project - Project object with activeSprintId
  * @returns {Array} - Array of active sprints
  */
-const getActiveSprints = (sprints) => {
+const getActiveSprints = (sprints, project) => {
+  // Include the project's active sprint
+  const activeSprints = [];
+  
+  if (project?.activeSprintId) {
+    const activeSprint = sprints.find(sprint => sprint.id === project.activeSprintId);
+    if (activeSprint) activeSprints.push(activeSprint);
+  }
+  
+  // Include sprints marked as active
+  const activeMarkedSprints = sprints.filter(sprint => sprint.isActive === true);
+  activeMarkedSprints.forEach(sprint => {
+    if (!activeSprints.find(s => s.id === sprint.id)) {
+      activeSprints.push(sprint);
+    }
+  });
+  
+  // Include date-based active sprints
   const now = new Date();
-  return sprints.filter((sprint) => {
+  const dateActiveSprints = sprints.filter((sprint) => {
     if (sprint.archived) return false;
     const startDate = new Date(sprint.startDate);
     const endDate = new Date(sprint.endDate);
     return startDate <= now && endDate >= now;
   });
+  
+  dateActiveSprints.forEach(sprint => {
+    if (!activeSprints.find(s => s.id === sprint.id)) {
+      activeSprints.push(sprint);
+    }
+  });
+  
+  return activeSprints;
 };
 
 /**
@@ -84,8 +122,8 @@ export function useBoardData(projectId) {
         );
 
         // Determine all active sprints and set the first one as default
-        const activeSprintsData = getActiveSprints(sprintsData);
-        const primaryActiveSprint = getActiveSprint(sprintsData);
+        const activeSprintsData = getActiveSprints(sprintsData, proj);
+        const primaryActiveSprint = getActiveSprint(sprintsData, proj);
 
         // Return all project issues (filtering will be done in Board component)
         const allIssues = allIssueData;

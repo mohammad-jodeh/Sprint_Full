@@ -1,10 +1,42 @@
-import { protectedApi } from "./config";
+import { protectedApi, baseUrl } from "./config";
+
+// Helper function to determine if we're using json-server
+const isJsonServer = () => baseUrl.includes('3001');
 
 // 🔹 Get all members of a specific project with user data
 export const getProjectMembers = async (projectId) => {
   try {
-    const response = await protectedApi.get(`/${projectId}/members`);
-    return response.data;
+    if (isJsonServer()) {
+      // Get project members from json-server
+      const [membersResponse, usersResponse] = await Promise.all([
+        protectedApi.get("/project_members"),
+        protectedApi.get("/users")
+      ]);
+      
+      const allMembers = membersResponse.data;
+      const allUsers = usersResponse.data;
+      
+      // Filter members by projectId and populate user data
+      const projectMembers = allMembers
+        .filter(member => member.projectId === projectId)
+        .map(member => {
+          const user = allUsers.find(u => u.id === member.userId);
+          return {
+            ...member,
+            user: user || null,
+            // Map permission string to number for consistency
+            permission: typeof member.permission === 'string' ? 
+              (member.permission === 'ADMINISTRATOR' ? 2 : 
+               member.permission === 'MODERATOR' ? 1 : 0) : 
+              member.permission
+          };
+        });
+      
+      return { members: projectMembers };
+    } else {
+      const response = await protectedApi.get(`/${projectId}/members`);
+      return response.data;
+    }
   } catch (error) {
     console.error("Failed to fetch project members:", error);
     throw error;

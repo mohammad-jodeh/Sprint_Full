@@ -1,10 +1,47 @@
-  import { protectedApi } from "./config";
+import { protectedApi, baseUrl } from "./config";
+
+// Helper function to determine if we're using json-server
+const isJsonServer = () => baseUrl.includes('3001');
+
+// Helper function to get current user ID from auth store
+const getCurrentUserId = () => {
+  try {
+    const authState = JSON.parse(localStorage.getItem('spritify-auth-token') || '{}');
+    return authState?.state?.user?.id || null;
+  } catch {
+    return null;
+  }
+};
 
 // Get all projects for the authenticated user
 export const fetchProjects = async () => {
   try {
-    const response = await protectedApi.get("/project");
-    return response.data;
+    if (isJsonServer()) {
+      // For json-server, we need to get projects the user has access to via project_members
+      const [projectsResponse, membersResponse] = await Promise.all([
+        protectedApi.get("/projects"),
+        protectedApi.get("/project_members")
+      ]);
+      
+      const allProjects = projectsResponse.data;
+      const allMembers = membersResponse.data;
+      
+      // Get the current user's ID from auth store
+      const currentUserId = getCurrentUserId();
+      if (!currentUserId) {
+        throw new Error("User not authenticated");
+      }
+      
+      // Filter projects where the user is a member
+      const userMemberships = allMembers.filter(member => member.userId === currentUserId);
+      const userProjectIds = userMemberships.map(member => member.projectId);
+      const userProjects = allProjects.filter(project => userProjectIds.includes(project.id));
+      
+      return { data: userProjects };
+    } else {
+      const response = await protectedApi.get("/project");
+      return response.data;
+    }
   } catch (error) {
     if (error.response) {
       throw new Error(
