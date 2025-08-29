@@ -32,7 +32,7 @@ export const useFilterData = (projectId) => {
           // Fallback to API data
           const [membersRes, sprintsRes] = await Promise.all([
             getProjectMembers(projectId).catch(() => []),
-            fetchSprints({ projectId }).catch(() => []),
+            fetchSprints(projectId).catch(() => []),
           ]);
 
           setAvailableUsers(membersRes || []);

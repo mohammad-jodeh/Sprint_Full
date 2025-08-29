@@ -31,12 +31,12 @@ export class CreateIssueDto {
   @IsOptional()
   @IsUUID()
   statusId?: string;
-  @IsEnum(IssueType)
   @IsOptional()
+  @IsEnum(IssueType)
   type: IssueType = IssueType.TASK;
 
-  @IsEnum(issuePriority)
   @IsOptional()
+  @IsEnum(issuePriority)
   issuePriority: issuePriority = issuePriority.MEDIUM;
 }
 

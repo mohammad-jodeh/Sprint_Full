@@ -25,7 +25,7 @@ export default function useDashboardData() {
     try {
       const [issuesRes, projectsRes] =
         await Promise.all([
-          api.get("/issues"),
+          api.get(`/issues/${user.id}`), // Fixed: use user-specific endpoint
           fetchProjects(), // This returns only projects the user has access to
         ]);
       const issues = Array.isArray(issuesRes.data) ? issuesRes.data : [];
