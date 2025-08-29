@@ -84,4 +84,26 @@ export class ProjectController {
       next(error);
     }
   }
+
+  async findById(req: Request, res: Response, next: NextFunction) {
+    const { id } = req.params;
+    const user = req.user?.id;
+
+    try {
+      const projects = await this.projectService.find({ id }, user!);
+      if (!projects.length) {
+        res.status(404).json({
+          success: false,
+          message: "Project not found"
+        });
+        return;
+      }
+      res.status(200).json({
+        project: new ProjectResponseDto(projects[0]),
+        success: true,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }

@@ -42,5 +42,12 @@ export class ProjectRoutes extends BaseRoute {
       restrictTokens(Token.ACCESS),
       controller.find.bind(controller)
     );
+
+    this.router.get(
+      "/:id",
+      authenticate,
+      restrictTokens(Token.ACCESS),
+      controller.findById.bind(controller)
+    );
   }
 }
