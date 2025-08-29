@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Dialog } from "@headlessui/react";
 import Portal from "../ui/Portal";
 import { updateStatus } from "../../api/statuses";
+import { STATUS_TYPES } from "../board/StatusTypeUtils";
 
 export default function EditStatusModal({
   status,
@@ -10,19 +11,19 @@ export default function EditStatusModal({
   onUpdated,
 }) {
   const [name, setName] = useState("");
-  const [type, setType] = useState("BACKLOG");
+  const [type, setType] = useState(STATUS_TYPES.BACKLOG);
   const [loading, setLoading] = useState(false);
 
   const statusTypes = [
-    { value: "BACKLOG", label: "Backlog" },
-    { value: "IN_PROGRESS", label: "In Progress" },
-    { value: "DONE", label: "Done" },
+    { value: STATUS_TYPES.BACKLOG, label: "Backlog" },
+    { value: STATUS_TYPES.IN_PROGRESS, label: "In Progress" },
+    { value: STATUS_TYPES.DONE, label: "Done" },
   ];
 
   useEffect(() => {
     if (status) {
       setName(status.name || "");
-      setType(status.type || "BACKLOG");
+      setType(status.type !== undefined ? status.type : STATUS_TYPES.BACKLOG);
     }
   }, [status]);
 
@@ -85,7 +86,7 @@ export default function EditStatusModal({
                 </label>
                 <select
                   value={type}
-                  onChange={(e) => setType(e.target.value)}
+                  onChange={(e) => setType(Number(e.target.value))}
                   className="w-full px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   {statusTypes.map((statusType) => (
