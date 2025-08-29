@@ -28,13 +28,12 @@ const NewIssueForm = ({ status, onCancel, onSubmit }) => {
     try {
       const taskData = {
         ...issueData,
-        projectId, // Include projectId for automatic key generation
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         deletedAt: null,
       };
 
-      await createTask(taskData);
+      await createTask(projectId, taskData);
       onSubmit();
     } catch (error) {
       console.error("Error creating issue:", error);
