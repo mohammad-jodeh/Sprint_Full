@@ -11,11 +11,11 @@ export default function CreateStatusModal({
   onCreate,
 }) {
   const [name, setName] = useState("");
-  const [type, setType] = useState("TODO");
+  const [type, setType] = useState("BACKLOG");
   const [loading, setLoading] = useState(false);
 
   const statusTypes = [
-    { value: "TODO", label: "To Do" },
+    { value: "BACKLOG", label: "Backlog" },
     { value: "IN_PROGRESS", label: "In Progress" },
     { value: "DONE", label: "Done" },
   ];  const handleCreate = async () => {
@@ -40,7 +40,7 @@ export default function CreateStatusModal({
       }
 
       setName("");
-      setType("TODO");
+      setType("BACKLOG");
       onClose();
     } catch (err) {
       console.error("Failed to create status", err);

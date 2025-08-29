@@ -20,12 +20,12 @@ const CreateColumn = ({
   const [title, setTitle] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [statuses, setStatuses] = useState([
-    { name: "", color: "#3B82F6", type: "TODO" },
+    { name: "", color: "#3B82F6", type: "BACKLOG" },
   ]);
   const [currentStep, setCurrentStep] = useState(1); // 1: Column details, 2: Statuses
 
   const statusTypes = [
-    { value: "TODO", label: "To Do", color: "bg-gray-500" },
+    { value: "BACKLOG", label: "Backlog", color: "bg-gray-500" },
     { value: "IN_PROGRESS", label: "In Progress", color: "bg-blue-500" },
     { value: "DONE", label: "Done", color: "bg-green-500" },
   ];
@@ -72,7 +72,7 @@ const CreateColumn = ({
       } // Pass both column and created statuses to the callback
       onColumnCreated({ column: newColumn, statuses: createdStatuses });
       setTitle("");
-      setStatuses([{ name: "", color: "#3B82F6", type: "TODO" }]);
+      setStatuses([{ name: "", color: "#3B82F6", type: "BACKLOG" }]);
       setCurrentStep(1);
       setIsCreating(false);
     } catch (error) {
@@ -84,12 +84,12 @@ const CreateColumn = ({
   };
   const handleCancel = () => {
     setTitle("");
-    setStatuses([{ name: "", color: "#3B82F6", type: "TODO" }]);
+    setStatuses([{ name: "", color: "#3B82F6", type: "BACKLOG" }]);
     setCurrentStep(1);
     setIsCreating(false);
   };
   const addStatus = () => {
-    setStatuses([...statuses, { name: "", color: "#3B82F6", type: "TODO" }]);
+    setStatuses([...statuses, { name: "", color: "#3B82F6", type: "BACKLOG" }]);
   };
 
   const removeStatus = (index) => {
