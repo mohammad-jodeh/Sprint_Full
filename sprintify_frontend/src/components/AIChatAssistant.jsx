@@ -349,9 +349,8 @@ const AIChatAssistant = ({ projectId, isOpen, onClose }) => {
           assignee: aiIssue.assignee || null,
           epicId: epicId,
           sprintId: sprintId,
-          projectId: projectId,
         };
-        const createdIssue = await createTask(issuePayload);
+        const createdIssue = await createTask(projectId, issuePayload);
 
         successCount++;
       } catch (error) {

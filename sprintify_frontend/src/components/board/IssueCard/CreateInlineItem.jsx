@@ -8,6 +8,7 @@ import IssueFormFields from "./IssueFormFields";
 import IssueFormActions from "./IssueFormActions";
 import { useProjectRole } from "../../../hooks/useProjectRole";
 import { can, PERMISSIONS } from "../../../utils/permission";
+import { STATUS_TYPES } from "../StatusTypeUtils";
 
 const CreateInlineItem = ({
   columnId,
@@ -67,14 +68,29 @@ const CreateInlineItem = ({
   const handleCreateIssue = async () => {
     setIsLoading(true);
     try {
-      const newIssue = await createTask({
+      // Ensure we have a valid statusId with robust fallback logic
+      let finalStatusId = statusId || defaultStatusId;
+      
+      // If no statusId provided, try to find one from available statuses
+      if (!finalStatusId && statuses.length > 0) {
+        // Prefer BACKLOG status (type 0) first, then any available status
+        const backlogStatus = statuses.find(s => s.type === STATUS_TYPES.TODO);
+        finalStatusId = backlogStatus ? backlogStatus.id : statuses[0].id;
+      }
+      
+      // As last resort, if still no status, the backend should handle this
+      // but we need to ensure statusId is not undefined
+      if (!finalStatusId) {
+        throw new Error("No valid status available. Please ensure project has statuses configured.");
+      }
+      
+      const newIssue = await createTask(projectId, {
         title: title.trim(),
         description: description.trim(),
         storyPoint: parseInt(storyPoint) || 0,
-        statusId: statusId || defaultStatusId,
+        statusId: finalStatusId,
         sprintId: selectedSprintId || null,
         assignee: null,
-        projectId, // Include projectId for automatic key generation
       });
 
       if (onIssueCreated) {
