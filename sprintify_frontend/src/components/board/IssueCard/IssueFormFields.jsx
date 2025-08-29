@@ -84,10 +84,11 @@ const StatusSelector = ({ value, statuses, onChange }) => (
   <div className="flex items-center space-x-3 flex-1">
     <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Status:</label>
     <select
-      value={value}
+      value={value || ""}
       onChange={(e) => onChange(e.target.value)}
       className="flex-1 text-sm border border-gray-300/50 dark:border-gray-600/50 rounded-lg px-3 py-2 bg-white/70 dark:bg-gray-800/70 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 backdrop-blur-sm transition-all"
     >
+      {!value && <option value="">Select status</option>}
       {statuses.map(status => (
         <option key={status.id} value={status.id}>
           {status.name}
