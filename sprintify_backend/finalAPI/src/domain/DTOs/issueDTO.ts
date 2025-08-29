@@ -107,6 +107,7 @@ class BasicSprintDto {
 class BasicStatusDto {
   @Expose() id!: string;
   @Expose() name!: string;
+  @Expose() type!: number; // Add the type field for status categorization
   @Expose() order?: number; // order is optional in Partial, required in Full
 }
 

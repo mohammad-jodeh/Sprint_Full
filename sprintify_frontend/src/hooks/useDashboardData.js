@@ -23,15 +23,13 @@ export default function useDashboardData() {
 
     setLoading(true);
     try {
-      const [issuesRes, projectsRes, statusesRes] =
+      const [issuesRes, projectsRes] =
         await Promise.all([
           api.get("/issues"),
           fetchProjects(), // This returns only projects the user has access to
-          api.get("/statuses"),
         ]);
       const issues = Array.isArray(issuesRes.data) ? issuesRes.data : [];
       const projects = Array.isArray(projectsRes.projects) ? projectsRes.projects : [];
-      const statuses = Array.isArray(statusesRes.data) ? statusesRes.data : [];
 
       // Get user's accessible projects - already filtered by backend
       const userProjectIds = projects.map((project) => String(project.id));
@@ -45,17 +43,21 @@ export default function useDashboardData() {
       setIssueCount(userIssues.length);
       setRecentIssues(userIssues.slice(-5).reverse());
 
-      // Status breakdown by type
+      // Build status type map from the issue data itself (status.type field)
       const statusTypeMap = {};
-      statuses.forEach((status) => {
-        statusTypeMap[String(status.id)] = status.type;
+      userIssues.forEach((issue) => {
+        if (issue.status && issue.status.id) {
+          statusTypeMap[String(issue.status.id)] = issue.status.type;
+        }
       });
 
       const typeCount = {};
       userIssues.forEach((issue) => {
-        const type = statusTypeMap[String(issue.statusId)];
-        const label = STATUS_TYPE_LABELS[type] || "Unknown";
-        typeCount[label] = (typeCount[label] || 0) + 1;
+        if (issue.status) {
+          const type = issue.status.type;
+          const label = STATUS_TYPE_LABELS[type] || "Unknown";
+          typeCount[label] = (typeCount[label] || 0) + 1;
+        }
       });
 
       // Ensure consistent order: To Do, In Progress, Done

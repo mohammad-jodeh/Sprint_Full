@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import api from "../api/config";
 import { fetchIssueByUserId } from "../api/issues";
 import useAuthStore from "../store/authstore";
 import { fetchProjects } from "../api/projects";
@@ -14,11 +13,8 @@ export default function useMyTasks() {
 
     try {
       setLoading(true);
-      // Fetch statuses and user's accessible projects
-      const [statusRes, projectsRes] = await Promise.all([
-        api.get(`/statuses`),
-        fetchProjects(),
-      ]);
+      // Get user's accessible projects
+      const projectsRes = await fetchProjects();
       const userProjects = Array.isArray(projectsRes.projects) ? projectsRes.projects : [];
       // Get project IDs that the user has access to
       const userProjectIds = userProjects.map((p) => String(p.id));
@@ -30,13 +26,16 @@ export default function useMyTasks() {
       const userTasks = issueLists.flat();
       setTasks(userTasks);
 
+      // Build status type map from the issue data itself (status.type field)
       const statusMap = {};
-      statusRes.data.forEach((s) => {
-        statusMap[s.id] = s.type;
+      userTasks.forEach((task) => {
+        if (task.status && task.status.id) {
+          statusMap[task.status.id] = task.status.type;
+        }
       });
       setStatusTypeMap(statusMap);
     } catch (err) {
-      console.error("Failed to load tasks or statuses:", err);
+      console.error("Failed to load tasks:", err);
     } finally {
       setLoading(false);
     }
