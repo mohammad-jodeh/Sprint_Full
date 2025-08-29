@@ -10,11 +10,11 @@ export default function EditStatusModal({
   onUpdated,
 }) {
   const [name, setName] = useState("");
-  const [type, setType] = useState("TODO");
+  const [type, setType] = useState("BACKLOG");
   const [loading, setLoading] = useState(false);
 
   const statusTypes = [
-    { value: "TODO", label: "To Do" },
+    { value: "BACKLOG", label: "Backlog" },
     { value: "IN_PROGRESS", label: "In Progress" },
     { value: "DONE", label: "Done" },
   ];
@@ -22,7 +22,7 @@ export default function EditStatusModal({
   useEffect(() => {
     if (status) {
       setName(status.name || "");
-      setType(status.type || "TODO");
+      setType(status.type || "BACKLOG");
     }
   }, [status]);
 

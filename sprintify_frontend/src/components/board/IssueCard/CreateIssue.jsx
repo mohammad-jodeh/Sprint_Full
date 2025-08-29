@@ -80,7 +80,7 @@ const CreateIssue = ({
       // If no statusId provided, try to find one from available statuses
       if (!finalStatusId && statuses.length > 0) {
         // Prefer BACKLOG status (type 0) first, then any available status
-        const backlogStatus = statuses.find(s => s.type === STATUS_TYPES.TODO);
+        const backlogStatus = statuses.find(s => s.type === STATUS_TYPES.BACKLOG);
         finalStatusId = backlogStatus ? backlogStatus.id : statuses[0].id;
       }
       

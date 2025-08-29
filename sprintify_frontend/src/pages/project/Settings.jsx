@@ -196,8 +196,8 @@ export default function BoardSettingsPage() {
                   {status.name}{" "}
                   <span className="text-[10px] opacity-50 ml-1">
                     (
-                    {status.type === "TODO" || status.type === 0
-                      ? "To Do"
+                    {status.type === "BACKLOG" || status.type === 0
+                      ? "Backlog"
                       : status.type === "IN_PROGRESS" || status.type === 1
                       ? "In Progress"
                       : "Done"}

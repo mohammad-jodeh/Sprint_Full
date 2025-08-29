@@ -1,13 +1,13 @@
 /**
  * Maps status types to colors
- * @param {number|string} statusType - The type of status (0/"TODO": Todo, 1/"IN_PROGRESS": In Progress, 2/"DONE": Done)
+ * @param {number|string} statusType - The type of status (0/"BACKLOG": Backlog, 1/"IN_PROGRESS": In Progress, 2/"DONE": Done)
  * @returns {string} - Color name for the status
  */
 export const getStatusColor = (statusType) => {
   switch (statusType) {
     case 0:
-    case "TODO":
-      return "blue"; // To Do
+    case "BACKLOG":
+      return "blue"; // Backlog
     case 1:
     case "IN_PROGRESS":
       return "yellow"; // In Progress
@@ -27,8 +27,8 @@ export const getStatusColor = (statusType) => {
 export const getStatusIcon = (statusType) => {
   switch (statusType) {
     case 0:
-    case "TODO":
-      return "📋"; // To Do
+    case "BACKLOG":
+      return "📋"; // Backlog
     case 1:
     case "IN_PROGRESS":
       return "⚙️"; // In Progress

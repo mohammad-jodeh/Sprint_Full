@@ -1,14 +1,14 @@
 // Status type utility functions following SRP (Single Responsibility Principle)
 export const STATUS_TYPES = {
-  TODO: 0,
+  BACKLOG: 0,
   IN_PROGRESS: 1,
   DONE: 2,
 };
 
 export const getStatusTypeColor = (statusType) => {
   switch (statusType) {
-    case STATUS_TYPES.TODO:
-    case "TODO":
+    case STATUS_TYPES.BACKLOG:
+    case "BACKLOG":
       return "border-l-gray-400 bg-gradient-to-r from-gray-50/80 to-gray-100/80 dark:from-gray-800/50 dark:to-gray-700/50";
     case STATUS_TYPES.IN_PROGRESS:
     case "IN_PROGRESS":
@@ -23,9 +23,9 @@ export const getStatusTypeColor = (statusType) => {
 
 export const getStatusTypeText = (statusType) => {
   switch (statusType) {
-    case STATUS_TYPES.TODO:
-    case "TODO":
-      return "To Do";
+    case STATUS_TYPES.BACKLOG:
+    case "BACKLOG":
+      return "Backlog";
     case STATUS_TYPES.IN_PROGRESS:
     case "IN_PROGRESS":
       return "In Progress";

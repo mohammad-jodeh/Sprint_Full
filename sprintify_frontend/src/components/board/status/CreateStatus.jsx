@@ -4,11 +4,11 @@ import { createStatus } from "../../../api/statuses";
 const CreateStatus = ({ columnId, onStatusCreated }) => {
   const [isCreating, setIsCreating] = useState(false);
   const [name, setName] = useState("");
-  const [type, setType] = useState("TODO"); // Default type
+  const [type, setType] = useState("BACKLOG"); // Default type
   const [isLoading, setIsLoading] = useState(false);
 
   const statusTypes = [
-    { value: "TODO", label: "To Do", color: "bg-gray-500" },
+    { value: "BACKLOG", label: "Backlog", color: "bg-gray-500" },
     { value: "IN_PROGRESS", label: "In Progress", color: "bg-blue-500" },
     { value: "DONE", label: "Done", color: "bg-green-500" },
   ];
@@ -28,7 +28,7 @@ const CreateStatus = ({ columnId, onStatusCreated }) => {
 
       onStatusCreated(newStatus);
       setName("");
-      setType("TODO");
+      setType("BACKLOG");
       setIsCreating(false);
     } catch (error) {
       console.error("Failed to create status:", error);
@@ -40,7 +40,7 @@ const CreateStatus = ({ columnId, onStatusCreated }) => {
 
   const handleCancel = () => {
     setName("");
-    setType("TODO");
+    setType("BACKLOG");
     setIsCreating(false);
   };
 
