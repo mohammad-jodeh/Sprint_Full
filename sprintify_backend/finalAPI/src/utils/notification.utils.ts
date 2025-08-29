@@ -6,6 +6,7 @@
 
 import { NotificationService } from "../app/services/notification.service";
 import { NotificationType, NotificationPriority } from "../domain/types/enums";
+import { container } from "tsyringe";
 
 /**
  * Send a notification to a single user
@@ -36,7 +37,8 @@ export async function sendNotification(
     scheduleFor?: Date;
   }
 ): Promise<void> {
-  await sendNotificationHelper({
+  const notificationService = container.resolve(NotificationService);
+  await notificationService.create({
     ...notificationData,
     recipientId: userId,
   });
@@ -70,10 +72,13 @@ export async function sendNotificationToUsers(
     actionUrl?: string;
   }
 ): Promise<void> {
-  await sendNotificationToUsersHelper({
-    ...notificationData,
-    recipientIds: userIds,
-  });
+  const notificationService = container.resolve(NotificationService);
+  for (const userId of userIds) {
+    await notificationService.create({
+      ...notificationData,
+      recipientId: userId,
+    });
+  }
 }
 
 /**
@@ -106,9 +111,15 @@ export async function sendProjectNotification(
     actionUrl?: string;
   }
 ): Promise<void> {
-  await sendProjectNotificationHelper({
-    ...notificationData,
-    projectId,
-    memberIds,
-  });
+  const notificationService = container.resolve(NotificationService);
+  for (const memberId of memberIds) {
+    await notificationService.create({
+      ...notificationData,
+      recipientId: memberId,
+      metadata: {
+        ...notificationData.metadata,
+        projectId,
+      },
+    });
+  }
 }
