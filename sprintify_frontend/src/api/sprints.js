@@ -3,7 +3,7 @@ import { protectedApi } from "./config";
 export const fetchSprints = async (projectId, params = {}) => {
   try {
     const response = await protectedApi.get(`/${projectId}/sprints`, { params });
-    return response.data.sprints || response.data;
+    return response.data.sprints || response.data.data?.sprints || response.data;
   } catch (error) {
     if (error.response) {
       throw new Error(error.response.data?.message || "Failed to fetch sprints");
