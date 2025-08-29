@@ -1,0 +1,52 @@
+/* Board View Styles */
+
+/* Card Types */
+.epic-card {
+  @apply bg-background-light/80 border-l-4 border-accent p-3 rounded-md shadow-md;
+}
+
+.story-card {
+  @apply bg-background-light/80 border-l-4 border-primary p-3 rounded-md shadow-md;
+}
+
+.task-card {
+  @apply bg-background-light/80 border-l-4 border-secondary p-3 rounded-md shadow-md;
+}
+
+.bug-card {
+  @apply bg-background-light/80 border-l-4 border-error p-3 rounded-md shadow-md;
+}
+
+/* Button Styles */
+.btn {
+  @apply px-4 py-2 rounded-md transition-colors duration-200 text-sm font-medium flex items-center;
+}
+
+.btn-primary {
+  @apply bg-primary hover:bg-primary/80 text-white;
+}
+
+.btn-ghost {
+  @apply bg-transparent hover:bg-gray-700/40 text-gray-300;
+}
+
+/* Background Grid Pattern */
+.bg-grid-pattern {
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Sidebar Gradient */
+.bg-gradient-sidebar {
+  background: linear-gradient(180deg, rgba(17, 24, 39, 1) 0%, rgba(24, 31, 47, 1) 100%);
+}
+
+/* Wrapper for ensuring proper layout */
+.bg-background-dark {
+  @apply bg-gray-900;
+}
+
+.bg-background-light {
+  @apply bg-gray-800;
+}

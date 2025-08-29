@@ -1,0 +1,1436 @@
+{
+  "users": [
+    {
+      "id": "user-1",
+      "email": "zaid.soman@example.com",
+      "isEmailVerified": true,
+      "password": "test123",
+      "fullName": "Zaid Soman",
+      "image": "/avatars/zaid.png",
+      "createdAt": "2024-01-15T08:30:00.000Z",
+      "updatedAt": "2024-06-01T10:15:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "user-2",
+      "email": "nora.tarek@example.com",
+      "isEmailVerified": true,
+      "password": "test123",
+      "fullName": "Nora Tarek",
+      "image": "/avatars/nora.png",
+      "createdAt": "2024-01-20T09:15:00.000Z",
+      "updatedAt": "2024-05-28T14:20:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "user-3",
+      "email": "kareem.ali@example.com",
+      "isEmailVerified": true,
+      "password": "test123",
+      "fullName": "Kareem Ali",
+      "image": "/avatars/kareem.png",
+      "createdAt": "2024-01-25T11:45:00.000Z",
+      "updatedAt": "2024-05-30T16:30:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "user-4",
+      "email": "sarah.hassan@example.com",
+      "isEmailVerified": false,
+      "password": "test123",
+      "fullName": "Sarah Hassan",
+      "image": "/avatars/sarah.png",
+      "createdAt": "2024-02-01T13:20:00.000Z",
+      "updatedAt": "2024-05-25T12:10:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "user-5",
+      "email": "ahmed.mohamed@example.com",
+      "isEmailVerified": true,
+      "password": "test123",
+      "fullName": "Ahmed Mohamed",
+      "image": "/avatars/ahmed.png",
+      "createdAt": "2024-02-10T15:30:00.000Z",
+      "updatedAt": "2024-06-02T09:45:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "user-1750184450974",
+      "email": "mas@g.com",
+      "password": "MZuriqi780$",
+      "fullName": "Mahmoudzz",
+      "isEmailVerified": false,
+      "image": null,
+      "createdAt": "2025-06-17T18:20:50.974Z",
+      "updatedAt": "2025-06-17T18:20:50.974Z",
+      "deletedAt": null
+    }
+  ],
+  "projects": [
+    {
+      "id": "project-1",
+      "name": "Sprintify - Task Management Platform",
+      "keyPrefix": "SPR",
+      "createdBy": "user-1",
+      "activeSprintId": "sprint-1",
+      "createdAt": "2024-03-01T10:00:00.000Z",
+      "updatedAt": "2024-05-15T14:30:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "project-2",
+      "name": "E-Commerce Mobile App",
+      "keyPrefix": "ECA",
+      "createdBy": "user-2",
+      "activeSprintId": "sprint-4",
+      "createdAt": "2024-03-15T12:00:00.000Z",
+      "updatedAt": "2024-05-20T16:45:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "eee2",
+      "name": "Test1",
+      "keyPrefix": "TEST1",
+      "createdBy": "user-1"
+    },
+    {
+      "id": "535a",
+      "name": "testt",
+      "keyPrefix": "TESTT",
+      "createdBy": "user-1"
+    }
+  ],
+  "project_members": [
+    {
+      "id": "pm-1",
+      "permission": "ADMINISTRATOR",
+      "userId": "user-1",
+      "projectId": "project-1",
+      "createdAt": "2024-03-01T10:00:00.000Z",
+      "updatedAt": "2024-03-01T10:00:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "pm-2",
+      "permission": "MODERATOR",
+      "userId": "user-2",
+      "projectId": "project-1",
+      "createdAt": "2024-03-02T11:30:00.000Z",
+      "updatedAt": "2024-04-15T13:20:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "pm-3",
+      "permission": "MEMBER",
+      "userId": "user-3",
+      "projectId": "project-1",
+      "createdAt": "2024-03-05T14:15:00.000Z",
+      "updatedAt": "2024-03-05T14:15:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "pm-4",
+      "permission": "MEMBER",
+      "userId": "user-4",
+      "projectId": "project-1",
+      "createdAt": "2024-03-10T16:45:00.000Z",
+      "updatedAt": "2024-03-10T16:45:00.000Z",
+      "deletedAt": null,
+      "user": {
+        "id": "user-4",
+        "email": "sarah.hassan@example.com",
+        "isEmailVerified": false,
+        "password": "test123",
+        "fullName": "Sarah Hassan",
+        "image": "/avatars/sarah.png",
+        "createdAt": "2024-02-01T13:20:00.000Z",
+        "updatedAt": "2024-05-25T12:10:00.000Z",
+        "deletedAt": null
+      }
+    },
+    {
+      "id": "pm-5",
+      "permission": "ADMINISTRATOR",
+      "userId": "user-2",
+      "projectId": "project-2",
+      "createdAt": "2024-03-15T12:00:00.000Z",
+      "updatedAt": "2024-03-15T12:00:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "pm-6",
+      "permission": "MODERATOR",
+      "userId": "user-1",
+      "projectId": "project-2",
+      "createdAt": "2024-03-16T09:30:00.000Z",
+      "updatedAt": "2024-04-20T11:15:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "pm-7",
+      "permission": "MEMBER",
+      "userId": "user-5",
+      "projectId": "project-2",
+      "createdAt": "2024-03-20T13:20:00.000Z",
+      "updatedAt": "2024-03-20T13:20:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "1b54",
+      "userId": "user-1",
+      "projectId": "eee2",
+      "permission": "ADMINISTRATOR"
+    },
+    {
+      "id": "4f00",
+      "projectId": "eee2",
+      "userId": "user-4",
+      "permission": "MEMBER"
+    },
+    {
+      "id": "5879",
+      "userId": "user-1",
+      "projectId": "535a",
+      "permission": "ADMINISTRATOR"
+    }
+  ],
+  "columns": [
+    {
+      "id": "col-1",
+      "name": "Backlog",
+      "order": 1,
+      "projectId": "project-1",
+      "createdAt": "2024-03-01T10:15:00.000Z",
+      "updatedAt": "2024-03-01T10:15:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "col-2",
+      "name": "To Do",
+      "order": 2,
+      "projectId": "project-1",
+      "createdAt": "2024-03-01T10:16:00.000Z",
+      "updatedAt": "2024-03-01T10:16:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "col-3",
+      "name": "In Progress",
+      "order": 3,
+      "projectId": "project-1",
+      "createdAt": "2024-03-01T10:17:00.000Z",
+      "updatedAt": "2024-03-01T10:17:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "col-4",
+      "name": "Code Review",
+      "order": 4,
+      "projectId": "project-1",
+      "createdAt": "2024-03-01T10:18:00.000Z",
+      "updatedAt": "2024-03-01T10:18:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "col-5",
+      "name": "Testing",
+      "order": 5,
+      "projectId": "project-1",
+      "createdAt": "2024-03-01T10:19:00.000Z",
+      "updatedAt": "2024-03-01T10:19:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "col-6",
+      "name": "Done",
+      "order": 6,
+      "projectId": "project-1",
+      "createdAt": "2024-03-01T10:20:00.000Z",
+      "updatedAt": "2024-03-01T10:20:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "col-7",
+      "name": "Backlog",
+      "order": 1,
+      "projectId": "project-2",
+      "createdAt": "2024-03-15T12:15:00.000Z",
+      "updatedAt": "2024-03-15T12:15:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "col-8",
+      "name": "In Progress",
+      "order": 2,
+      "projectId": "project-2",
+      "createdAt": "2024-03-15T12:16:00.000Z",
+      "updatedAt": "2024-03-15T12:16:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "col-9",
+      "name": "Done",
+      "order": 3,
+      "projectId": "project-2",
+      "createdAt": "2024-03-15T12:17:00.000Z",
+      "updatedAt": "2024-03-15T12:17:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "c453",
+      "name": "To Do",
+      "order": 1,
+      "projectId": "eee2",
+      "createdAt": "2025-06-07T12:08:36.559Z",
+      "updatedAt": "2025-06-07T12:08:36.559Z",
+      "deletedAt": null
+    },
+    {
+      "id": "5043",
+      "name": "In Progress",
+      "order": 2,
+      "projectId": "eee2",
+      "createdAt": "2025-06-07T12:08:36.567Z",
+      "updatedAt": "2025-06-07T12:08:36.567Z",
+      "deletedAt": null
+    },
+    {
+      "id": "df21",
+      "name": "Done",
+      "order": 3,
+      "projectId": "eee2",
+      "createdAt": "2025-06-07T12:08:36.573Z",
+      "updatedAt": "2025-06-07T12:08:36.573Z",
+      "deletedAt": null
+    },
+    {
+      "id": "6fb7",
+      "name": "To Do",
+      "order": 1,
+      "projectId": "535a",
+      "createdAt": "2025-06-11T02:00:17.366Z",
+      "updatedAt": "2025-06-11T02:00:17.366Z",
+      "deletedAt": null
+    },
+    {
+      "id": "d32b",
+      "name": "In Progress",
+      "order": 2,
+      "projectId": "535a",
+      "createdAt": "2025-06-11T02:00:17.375Z",
+      "updatedAt": "2025-06-11T02:00:17.375Z",
+      "deletedAt": null
+    },
+    {
+      "id": "79a6",
+      "name": "Done",
+      "order": 3,
+      "projectId": "535a",
+      "createdAt": "2025-06-11T02:00:17.384Z",
+      "updatedAt": "2025-06-11T02:00:17.384Z",
+      "deletedAt": null
+    },
+    {
+      "id": "2ffd",
+      "name": "hi",
+      "projectId": "535a",
+      "order": 4
+    }
+  ],
+  "statuses": [
+    {
+      "id": "st-1",
+      "name": "Open",
+      "type": 0,
+      "columnId": "col-1",
+      "createdAt": "2024-03-01T10:25:00.000Z",
+      "updatedAt": "2024-03-01T10:25:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "st-2",
+      "name": "Ready",
+      "type": 0,
+      "columnId": "col-2",
+      "createdAt": "2024-03-01T10:26:00.000Z",
+      "updatedAt": "2024-03-01T10:26:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "st-3",
+      "name": "In Development",
+      "type": 1,
+      "columnId": "col-3",
+      "createdAt": "2024-03-01T10:27:00.000Z",
+      "updatedAt": "2024-03-01T10:27:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "st-4",
+      "name": "Code Review",
+      "type": 1,
+      "columnId": "col-4",
+      "createdAt": "2024-03-01T10:28:00.000Z",
+      "updatedAt": "2024-03-01T10:28:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "st-5",
+      "name": "Testing",
+      "type": 1,
+      "columnId": "col-5",
+      "createdAt": "2024-03-01T10:29:00.000Z",
+      "updatedAt": "2024-03-01T10:29:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "st-6",
+      "name": "Completed",
+      "type": 2,
+      "columnId": "col-6",
+      "createdAt": "2024-03-01T10:30:00.000Z",
+      "updatedAt": "2024-03-01T10:30:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "st-7",
+      "name": "New",
+      "type": 0,
+      "columnId": "col-7",
+      "createdAt": "2024-03-15T12:25:00.000Z",
+      "updatedAt": "2024-03-15T12:25:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "st-8",
+      "name": "Working",
+      "type": 1,
+      "columnId": "col-8",
+      "createdAt": "2024-03-15T12:26:00.000Z",
+      "updatedAt": "2024-03-15T12:26:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "st-9",
+      "name": "Finished",
+      "type": 2,
+      "columnId": "col-9",
+      "createdAt": "2024-03-15T12:27:00.000Z",
+      "updatedAt": "2024-03-15T12:27:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "aa7a",
+      "name": "Ready",
+      "type": 0,
+      "columnId": "c453",
+      "createdAt": "2025-06-07T12:08:36.580Z",
+      "updatedAt": "2025-06-07T12:08:36.580Z",
+      "deletedAt": null
+    },
+    {
+      "id": "d7b2",
+      "name": "In Development",
+      "type": 1,
+      "columnId": "5043",
+      "createdAt": "2025-06-07T12:08:36.590Z",
+      "updatedAt": "2025-06-07T12:08:36.590Z",
+      "deletedAt": null
+    },
+    {
+      "id": "75e4",
+      "name": "Completed",
+      "type": 2,
+      "columnId": "df21",
+      "createdAt": "2025-06-07T12:08:36.598Z",
+      "updatedAt": "2025-06-07T12:08:36.598Z",
+      "deletedAt": null
+    },
+    {
+      "id": "b0ff",
+      "name": "To Do",
+      "type": 0,
+      "columnId": "6fb7",
+      "createdAt": "2025-06-11T02:00:17.393Z",
+      "updatedAt": "2025-06-11T02:00:17.393Z",
+      "deletedAt": null
+    },
+    {
+      "id": "2d8d",
+      "name": "In Progress",
+      "type": 1,
+      "columnId": "d32b",
+      "createdAt": "2025-06-11T02:00:17.421Z",
+      "updatedAt": "2025-06-11T02:00:17.421Z",
+      "deletedAt": null
+    },
+    {
+      "id": "e5da",
+      "name": "Done",
+      "type": 2,
+      "columnId": "79a6",
+      "createdAt": "2025-06-11T02:00:17.439Z",
+      "updatedAt": "2025-06-11T02:00:17.439Z",
+      "deletedAt": null
+    },
+    {
+      "id": "c6dc",
+      "name": "status1",
+      "color": "#3B82F6",
+      "type": "IN_PROGRESS",
+      "columnId": "2ffd",
+      "projectId": "535a",
+      "order": 999
+    }
+  ],
+  "epics": [
+    {
+      "id": "epic-1",
+      "key": "SPR-EPIC-1",
+      "name": "User Authentication & Authorization",
+      "title": "User Authentication & Authorization",
+      "description": "Complete user management system including login, registration, password reset, and role-based access control.",
+      "assignee": "user-1",
+      "projectId": "project-1",
+      "createdAt": "2024-03-01T11:00:00.000Z",
+      "updatedAt": "2024-05-15T14:20:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "epic-2",
+      "key": "SPR-EPIC-2",
+      "name": "Project Management Core",
+      "title": "Project Management Core",
+      "description": "Core project management features including boards, sprints, issues, and team collaboration tools.",
+      "assignee": "user-2",
+      "projectId": "project-1",
+      "createdAt": "2024-03-01T11:15:00.000Z",
+      "updatedAt": "2024-05-20T16:30:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "epic-3",
+      "key": "SPR-EPIC-3",
+      "name": "Reporting & Analytics",
+      "title": "Reporting & Analytics",
+      "description": "Advanced reporting features, dashboards, and analytics for project insights and team performance.",
+      "assignee": "user-3",
+      "projectId": "project-1",
+      "createdAt": "2024-03-01T11:30:00.000Z",
+      "updatedAt": "2024-05-10T12:45:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "epic-4",
+      "key": "ECA-EPIC-1",
+      "name": "Product Catalog Management",
+      "title": "Product Catalog Management",
+      "description": "Complete product management system with categories, inventory, and pricing.",
+      "assignee": "user-2",
+      "projectId": "project-2",
+      "createdAt": "2024-03-15T13:00:00.000Z",
+      "updatedAt": "2024-05-25T11:20:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "epic-5",
+      "key": "ECA-EPIC-2",
+      "name": "Order Processing System",
+      "title": "Order Processing System",
+      "description": "End-to-end order management from cart to delivery tracking.",
+      "assignee": "user-1",
+      "projectId": "project-2",
+      "createdAt": "2024-03-15T13:15:00.000Z",
+      "updatedAt": "2024-05-22T15:40:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "8014",
+      "name": "Test",
+      "description": "Help",
+      "projectId": "eee2",
+      "assignee": "user-1"
+    }
+  ],
+  "sprints": [
+    {
+      "id": "sprint-1",
+      "name": "Sprint 1 - Foundation Setup",
+      "startDate": "2024-03-01",
+      "endDate": "2024-03-14",
+      "projectId": "project-1",
+      "createdAt": "2024-02-28T09:00:00.000Z",
+      "updatedAt": "2024-03-15T17:30:00.000Z",
+      "deletedAt": null,
+      "isActive": true,
+      "isCompleted": false
+    },
+    {
+      "id": "sprint-2",
+      "name": "Sprint 2 - Core Features",
+      "startDate": "2024-03-15",
+      "endDate": "2024-03-28",
+      "projectId": "project-1",
+      "createdAt": "2024-03-14T10:00:00.000Z",
+      "updatedAt": "2024-03-29T16:45:00.000Z",
+      "deletedAt": null,
+      "isActive": false,
+      "isCompleted": false
+    },
+    {
+      "id": "sprint-3",
+      "name": "Sprint 3 - Advanced Features",
+      "startDate": "2024-03-29",
+      "endDate": "2024-04-11",
+      "projectId": "project-1",
+      "createdAt": "2024-03-28T11:00:00.000Z",
+      "updatedAt": "2024-04-12T14:20:00.000Z",
+      "deletedAt": null,
+      "isActive": false,
+      "isCompleted": false
+    },
+    {
+      "id": "sprint-4",
+      "name": "Sprint 1 - E-Commerce Setup",
+      "startDate": "2024-03-20",
+      "endDate": "2024-04-02",
+      "projectId": "project-2",
+      "createdAt": "2024-03-18T12:30:00.000Z",
+      "updatedAt": "2024-04-03T15:10:00.000Z",
+      "deletedAt": null,
+      "isActive": true,
+      "isCompleted": false
+    },
+    {
+      "id": "sprint-5",
+      "name": "Sprint 2 - Payment Integration",
+      "startDate": "2024-04-03",
+      "endDate": "2024-04-16",
+      "projectId": "project-2",
+      "createdAt": "2024-04-02T13:15:00.000Z",
+      "updatedAt": "2024-04-17T10:30:00.000Z",
+      "deletedAt": null,
+      "isActive": false,
+      "isCompleted": false
+    },
+    {
+      "id": "sprint-active-1",
+      "name": "Sprint 4 - June Release",
+      "startDate": "2025-06-01",
+      "endDate": "2025-06-14",
+      "projectId": "project-1",
+      "createdAt": "2025-06-01T09:00:00.000Z",
+      "updatedAt": "2025-06-05T10:00:00.000Z",
+      "deletedAt": null,
+      "isActive": true,
+      "isCompleted": false
+    },
+    {
+      "id": "9b22",
+      "name": "zaid",
+      "startDate": "2025-06-07",
+      "endDate": "2025-06-21",
+      "projectId": "eee2",
+      "archived": false
+    },
+    {
+      "id": "3ba4",
+      "name": "test1",
+      "startDate": "2025-06-11",
+      "endDate": "2025-06-16",
+      "projectId": "535a",
+      "archived": false
+    },
+    {
+      "id": "71cd",
+      "name": "ajh",
+      "startDate": "2025-06-11",
+      "endDate": "2025-06-27",
+      "projectId": "535a",
+      "archived": false
+    }
+  ],
+  "issues": [
+    {
+      "id": "issue-1",
+      "key": "SPR-1",
+      "title": "Setup User Registration Form",
+      "description": "Create a responsive user registration form with validation for email, password, and basic user information.",
+      "storyPoint": 3,
+      "statusId": "st-1",
+      "assignee": "user-1",
+      "epicId": "epic-1",
+      "sprintId": "DkcTMzE",
+      "projectId": "project-1",
+      "type": "TASK",
+      "createdAt": "2024-03-01T12:00:00.000Z",
+      "updatedAt": "2024-03-10T16:30:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "issue-2",
+      "key": "SPR-2",
+      "title": "Implement JWT Authentication",
+      "description": "Setup JWT-based authentication system with token generation, validation, and refresh mechanisms.",
+      "storyPoint": 5,
+      "statusId": "st-6",
+      "assignee": "user-2",
+      "epicId": "epic-1",
+      "sprintId": "sprint-1",
+      "projectId": "project-1",
+      "type": "TASK",
+      "createdAt": "2024-03-02T09:30:00.000Z",
+      "updatedAt": "2024-03-12T14:20:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "issue-3",
+      "key": "SPR-3",
+      "title": "Create Project Dashboard UI",
+      "description": "Design and implement the main project dashboard with project overview, recent activities, and quick actions.",
+      "storyPoint": 8,
+      "statusId": "st-1",
+      "assignee": "user-3",
+      "epicId": "epic-2",
+      "sprintId": "sprint-active-1",
+      "projectId": "project-1",
+      "type": "STORY",
+      "createdAt": "2024-03-15T10:15:00.000Z",
+      "updatedAt": "2024-05-28T11:45:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "issue-4",
+      "key": "SPR-4",
+      "title": "Implement Drag & Drop for Kanban Board",
+      "description": "Add drag and drop functionality to move issues between different columns on the Kanban board.",
+      "storyPoint": 13,
+      "statusId": "st-4",
+      "assignee": "user-1",
+      "epicId": "epic-2",
+      "sprintId": "sprint-2",
+      "projectId": "project-1",
+      "type": "STORY",
+      "createdAt": "2024-03-16T14:20:00.000Z",
+      "updatedAt": "2024-05-30T09:20:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "issue-5",
+      "key": "SPR-5",
+      "title": "Setup Sprint Management",
+      "description": "Create sprint creation, editing, and management functionality with start/end dates and capacity planning.",
+      "storyPoint": 8,
+      "statusId": "st-2",
+      "assignee": "user-2",
+      "epicId": "epic-2",
+      "sprintId": "sprint-3",
+      "projectId": "project-1",
+      "type": "STORY",
+      "createdAt": "2024-03-20T11:30:00.000Z",
+      "updatedAt": "2024-04-05T15:10:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "issue-6",
+      "key": "SPR-6",
+      "title": "Add User Profile Management",
+      "description": "Allow users to update their profile information, avatar, and account settings.",
+      "storyPoint": 5,
+      "statusId": "st-1",
+      "assignee": "user-4",
+      "epicId": "epic-1",
+      "sprintId": null,
+      "projectId": "project-1",
+      "type": "STORY",
+      "createdAt": "2024-04-01T13:45:00.000Z",
+      "updatedAt": "2024-04-01T13:45:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "issue-7",
+      "key": "SPR-7",
+      "title": "Create Team Management Interface",
+      "description": "Build interface for project owners to invite team members, assign roles, and manage permissions.",
+      "storyPoint": 8,
+      "statusId": "st-1",
+      "assignee": "user-3",
+      "epicId": "epic-2",
+      "sprintId": null,
+      "projectId": "project-1",
+      "type": "STORY",
+      "createdAt": "2024-04-02T10:20:00.000Z",
+      "updatedAt": "2024-04-02T10:20:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "issue-8",
+      "key": "SPR-8",
+      "title": "Implement Email Notifications",
+      "description": "Setup email notification system for issue assignments, status changes, and sprint updates.",
+      "storyPoint": 5,
+      "statusId": "st-1",
+      "assignee": "user-1",
+      "epicId": "epic-2",
+      "sprintId": null,
+      "projectId": "project-1",
+      "type": "TASK",
+      "createdAt": "2024-04-03T16:15:00.000Z",
+      "updatedAt": "2024-04-03T16:15:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "issue-9",
+      "key": "SPR-9",
+      "title": "Build Analytics Dashboard",
+      "description": "Create comprehensive analytics dashboard with charts for sprint progress, team velocity, and burndown charts.",
+      "storyPoint": 13,
+      "statusId": "st-1",
+      "assignee": "user-3",
+      "epicId": "epic-3",
+      "sprintId": "sprint-active-1",
+      "projectId": "project-1",
+      "type": "EPIC",
+      "createdAt": "2024-04-05T12:30:00.000Z",
+      "updatedAt": "2024-04-05T12:30:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "issue-10",
+      "key": "SPR-10",
+      "title": "Add Issue Comments & Activity Log",
+      "description": "Implement commenting system and activity tracking for issues with real-time updates.",
+      "storyPoint": 8,
+      "statusId": "st-1",
+      "assignee": "user-2",
+      "epicId": "epic-2",
+      "sprintId": null,
+      "projectId": "project-1",
+      "type": "STORY",
+      "createdAt": "2024-04-08T09:45:00.000Z",
+      "updatedAt": "2024-04-08T09:45:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "issue-11",
+      "key": "ECA-1",
+      "title": "Setup Product Catalog Structure",
+      "description": "Create database schema and API endpoints for product categories, attributes, and inventory management.",
+      "storyPoint": 8,
+      "statusId": "st-8",
+      "assignee": "user-2",
+      "epicId": "epic-4",
+      "sprintId": "sprint-4",
+      "projectId": "project-2",
+      "type": "STORY",
+      "createdAt": "2024-03-20T14:00:00.000Z",
+      "updatedAt": "2024-03-25T11:30:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "issue-12",
+      "key": "ECA-2",
+      "title": "Implement Product Search & Filtering",
+      "description": "Build advanced product search with filters for category, price range, ratings, and attributes.",
+      "storyPoint": 13,
+      "statusId": "st-7",
+      "assignee": "user-1",
+      "epicId": "epic-4",
+      "sprintId": "sprint-5",
+      "projectId": "project-2",
+      "type": "STORY",
+      "createdAt": "2024-03-22T16:20:00.000Z",
+      "updatedAt": "2024-04-10T13:15:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "issue-13",
+      "key": "ECA-3",
+      "title": "Create Shopping Cart Functionality",
+      "description": "Implement shopping cart with add/remove items, quantity updates, and persistent storage.",
+      "storyPoint": 8,
+      "statusId": "st-9",
+      "assignee": "user-5",
+      "epicId": "epic-5",
+      "sprintId": "sprint-4",
+      "projectId": "project-2",
+      "type": "STORY",
+      "createdAt": "2024-03-25T10:45:00.000Z",
+      "updatedAt": "2024-04-01T15:20:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "issue-14",
+      "key": "ECA-4",
+      "title": "Integrate Payment Gateway",
+      "description": "Setup secure payment processing with multiple payment methods and transaction handling.",
+      "storyPoint": 13,
+      "statusId": "st-8",
+      "assignee": "user-2",
+      "epicId": "epic-5",
+      "sprintId": "sprint-5",
+      "projectId": "project-2",
+      "type": "STORY",
+      "createdAt": "2024-04-04T12:15:00.000Z",
+      "updatedAt": "2024-04-18T16:45:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "issue-15",
+      "key": "ECA-5",
+      "title": "hi",
+      "description": "ksfjfs",
+      "storyPoint": 0,
+      "type": "TASK",
+      "statusId": "st-7",
+      "assignee": "user-1",
+      "epicId": null,
+      "projectId": "project-2",
+      "sprintId": null,
+      "createdAt": "2024-04-20T10:00:00.000Z",
+      "updatedAt": "2024-04-20T10:00:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "title": "zaid",
+      "description": "",
+      "storyPoints": 0,
+      "type": "TASK",
+      "statusId": "st-1",
+      "epicId": null,
+      "assignee": null,
+      "projectId": "project-1",
+      "id": "fLaTUT2",
+      "sprintId": "sprint-active-1"
+    },
+    {
+      "id": "cb06",
+      "title": "zaid",
+      "description": "useDashboardData.js:4 Uncaught SyntaxError: The requested module '/src/store/authstore.js' does not provide an export named 'useAuthStore' (at useDashboardData.js:4:10)",
+      "storyPoints": 3,
+      "type": "STORY",
+      "statusId": "d7b2",
+      "epicId": "8014",
+      "assignee": "user-1",
+      "projectId": "eee2",
+      "sprintId": "9b22",
+      "status": "d7b2"
+    },
+    {
+      "id": "d0b3",
+      "title": "HI",
+      "description": "",
+      "storyPoints": 0,
+      "type": "TASK",
+      "statusId": "aa7a",
+      "epicId": null,
+      "assignee": "user-1",
+      "projectId": "eee2",
+      "sprintId": "9b22"
+    },
+    {
+      "id": "29eb",
+      "title": "test",
+      "description": "mns sadhj sjahd hjsdjsd jhsdja hsjdj hj",
+      "storyPoints": 0,
+      "type": "TASK",
+      "priority": "MEDIUM",
+      "statusId": "b0ff",
+      "epicId": null,
+      "assignee": "user-1",
+      "projectId": "535a",
+      "key": "TESTT-1",
+      "sprintId": null
+    },
+    {
+      "id": "82dd",
+      "title": "teat2",
+      "description": "",
+      "storyPoints": 0,
+      "type": "TASK",
+      "priority": "MEDIUM",
+      "statusId": "2d8d",
+      "epicId": null,
+      "assignee": null,
+      "projectId": "535a",
+      "key": "TESTT-2"
+    },
+    {
+      "id": "46d1",
+      "title": "hi",
+      "description": "",
+      "storyPoint": 1,
+      "statusId": "c6dc",
+      "sprintId": "71cd",
+      "assignee": null,
+      "storyPoints": 1,
+      "type": "Task",
+      "priority": "MEDIUM",
+      "epicId": null
+    },
+    {
+      "id": "140d",
+      "title": "teat",
+      "description": "",
+      "storyPoint": 1,
+      "statusId": "2d8d",
+      "sprintId": null,
+      "assignee": null
+    },
+    {
+      "id": "e8e5",
+      "title": "fd",
+      "description": "",
+      "storyPoint": 1,
+      "statusId": "e5da",
+      "sprintId": null,
+      "assignee": null
+    },
+    {
+      "id": "299d",
+      "title": "sda",
+      "description": "",
+      "storyPoint": 1,
+      "statusId": "c6dc",
+      "sprintId": "3ba4",
+      "assignee": null,
+      "projectId": "535a",
+      "key": "TESTT-3",
+      "storyPoints": 1,
+      "type": "Task",
+      "priority": "MEDIUM",
+      "epicId": null
+    },
+    {
+      "id": "13fc",
+      "title": "test44",
+      "description": "",
+      "storyPoint": 1,
+      "statusId": "b0ff",
+      "sprintId": null,
+      "assignee": null,
+      "projectId": "535a",
+      "key": "TESTT-4"
+    },
+    {
+      "id": "34de",
+      "title": "test6",
+      "description": "",
+      "storyPoint": 1,
+      "statusId": "2d8d",
+      "sprintId": "3ba4",
+      "assignee": null,
+      "projectId": "535a",
+      "key": "TESTT-5"
+    },
+    {
+      "id": "6ca4",
+      "title": "done",
+      "description": "",
+      "storyPoint": 1,
+      "statusId": "e5da",
+      "sprintId": null,
+      "assignee": null,
+      "projectId": "535a",
+      "key": "TESTT-6"
+    },
+    {
+      "id": "a05f",
+      "title": "hi",
+      "description": "",
+      "storyPoint": 1,
+      "statusId": "b0ff",
+      "sprintId": null,
+      "assignee": null,
+      "projectId": "535a",
+      "key": "TESTT-7"
+    },
+    {
+      "id": "3461",
+      "title": "sajhdkjhsd",
+      "description": "",
+      "storyPoint": 1,
+      "statusId": "b0ff",
+      "sprintId": null,
+      "assignee": null,
+      "projectId": "535a",
+      "key": "TESTT-8"
+    },
+    {
+      "id": "b95d",
+      "title": "jhsjkd",
+      "description": "",
+      "storyPoint": 1,
+      "statusId": "2d8d",
+      "sprintId": "3ba4",
+      "assignee": null,
+      "projectId": "535a",
+      "key": "TESTT-9"
+    },
+    {
+      "id": "8e67",
+      "title": "jhsdj",
+      "description": "",
+      "storyPoint": 1,
+      "statusId": "e5da",
+      "sprintId": null,
+      "assignee": null,
+      "projectId": "535a",
+      "key": "TESTT-10"
+    },
+    {
+      "id": "ed4e",
+      "title": "hjj",
+      "description": "",
+      "storyPoint": 1,
+      "statusId": "c6dc",
+      "sprintId": null,
+      "assignee": null,
+      "projectId": "535a",
+      "key": "TESTT-11"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "notif-1",
+      "userId": "user-1",
+      "projectId": "project-1",
+      "type": "ISSUE_ASSIGNED",
+      "title": "New Issue Assignment",
+      "message": "You were assigned to issue SPR-5: Implement Email Notifications",
+      "read": false,
+      "createdAt": "2024-05-28T14:30:00.000Z",
+      "updatedAt": "2024-05-28T14:30:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "notif-2",
+      "userId": "user-2",
+      "projectId": "project-1",
+      "type": "ISSUE_COMMENTED",
+      "title": "New Comment",
+      "message": "New comment added to issue SPR-2: Implement JWT Authentication",
+      "read": true,
+      "createdAt": "2024-05-27T10:15:00.000Z",
+      "updatedAt": "2024-05-27T16:20:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "notif-3",
+      "userId": "user-3",
+      "projectId": "project-1",
+      "type": "SPRINT_STARTED",
+      "title": "Sprint Started",
+      "message": "Sprint 2 - Core Features has started",
+      "read": true,
+      "createdAt": "2024-03-15T09:00:00.000Z",
+      "updatedAt": "2024-03-15T11:30:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "notif-4",
+      "userId": "user-1",
+      "projectId": "project-1",
+      "type": "ISSUE_STATUS_CHANGED",
+      "title": "Issue Status Updated",
+      "message": "Issue SPR-3: Create Project Dashboard UI moved to In Development",
+      "read": false,
+      "createdAt": "2024-05-28T11:45:00.000Z",
+      "updatedAt": "2024-05-28T11:45:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "notif-5",
+      "userId": "user-2",
+      "projectId": "project-2",
+      "type": "PROJECT_MEMBER_ADDED",
+      "title": "Added to Project",
+      "message": "You have been added to project: E-Commerce Mobile App",
+      "read": true,
+      "createdAt": "2024-03-15T12:30:00.000Z",
+      "updatedAt": "2024-03-16T09:15:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "notif-6",
+      "userId": "user-4",
+      "projectId": "project-2",
+      "type": "ISSUE_ASSIGNED",
+      "title": "New Issue Assignment",
+      "message": "You were assigned to issue ECA-3: Implement Product Search",
+      "read": false,
+      "createdAt": "2024-05-29T13:20:00.000Z",
+      "updatedAt": "2024-05-29T13:20:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "notif-7",
+      "userId": "user-5",
+      "projectId": null,
+      "type": "EPIC_CREATED",
+      "title": "New Epic Created",
+      "message": "Epic HMS-EPIC-5: Patient Management System has been created",
+      "read": false,
+      "createdAt": "2024-05-30T15:45:00.000Z",
+      "updatedAt": "2024-05-30T15:45:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "notif-8",
+      "userId": "user-3",
+      "projectId": "project-1",
+      "type": "SPRINT_ENDED",
+      "title": "Sprint Completed",
+      "message": "Sprint 1 - Authentication Setup has been completed",
+      "read": true,
+      "createdAt": "2024-03-14T18:00:00.000Z",
+      "updatedAt": "2024-03-15T08:30:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "notif-9",
+      "userId": "user-1",
+      "projectId": "project-1",
+      "type": "ISSUE_COMMENTED",
+      "title": "New Comment",
+      "message": "Zaid Soman commented on issue SPR-4: Implement Drag & Drop for Kanban Board",
+      "read": false,
+      "createdAt": "2024-06-01T16:22:00.000Z",
+      "updatedAt": "2024-06-01T16:22:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "notif-10",
+      "userId": "user-2",
+      "projectId": "project-2",
+      "type": "ISSUE_STATUS_CHANGED",
+      "title": "Issue Status Updated",
+      "message": "Issue ECA-1: Setup User Authentication moved to Done",
+      "read": true,
+      "createdAt": "2024-04-15T14:30:00.000Z",
+      "updatedAt": "2024-04-15T16:45:00.000Z",
+      "deletedAt": null
+    }
+  ],
+  "comments": [
+    {
+      "id": "comment-1",
+      "issueId": "issue-1",
+      "userId": "user-2",
+      "content": "Great work on the registration form! The validation looks solid. Just a minor suggestion - maybe we could add password strength indicator?",
+      "createdAt": "2024-03-08T14:20:00.000Z",
+      "updatedAt": "2024-03-08T14:20:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "comment-2",
+      "userId": "user-1",
+      "issueId": "issue-1",
+      "content": "Thanks for the feedback! I'll add the password strength indicator in the next iteration.",
+      "createdAt": "2024-03-08T15:10:00.000Z",
+      "updatedAt": "2024-03-08T15:10:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "comment-3",
+      "issueId": "issue-2",
+      "userId": "user-3",
+      "content": "The JWT implementation looks good. Have you considered adding refresh token rotation for better security?",
+      "createdAt": "2024-03-10T11:30:00.000Z",
+      "updatedAt": "2024-03-10T11:30:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "comment-4",
+      "issueId": "issue-3",
+      "userId": "user-1",
+      "content": "The dashboard UI is coming along nicely. The charts and metrics provide great insights. Consider adding filters for different time ranges.",
+      "createdAt": "2024-05-25T16:45:00.000Z",
+      "updatedAt": "2024-05-25T16:45:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "comment-5",
+      "issueId": "issue-4",
+      "userId": "user-2",
+      "content": "The drag and drop functionality works perfectly! Smooth animations and great user experience.",
+      "createdAt": "2024-06-01T16:22:00.000Z",
+      "updatedAt": "2024-06-01T16:22:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "comment-6",
+      "issueId": "issue-5",
+      "userId": "user-4",
+      "content": "Email notifications are working well. Should we add support for digest emails as well?",
+      "createdAt": "2024-05-20T09:15:00.000Z",
+      "updatedAt": "2024-05-20T09:15:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "comment-7",
+      "issueId": "issue-7",
+      "userId": "user-3",
+      "content": "The search functionality is fast and accurate. Great implementation of the indexing strategy!",
+      "createdAt": "2024-04-25T13:40:00.000Z",
+      "updatedAt": "2024-04-25T13:40:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "comment-8",
+      "issueId": "issue-10",
+      "userId": "user-1",
+      "content": "The product catalog is well-structured. The filtering and sorting options work seamlessly.",
+      "createdAt": "2024-04-10T10:30:00.000Z",
+      "updatedAt": "2024-04-10T10:30:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "comment-9",
+      "issueId": "issue-12",
+      "userId": "user-5",
+      "content": "Payment gateway integration is solid. All test cases are passing. Ready for production deployment.",
+      "createdAt": "2024-04-20T14:50:00.000Z",
+      "updatedAt": "2024-04-20T14:50:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "comment-10",
+      "issueId": "issue-15",
+      "userId": "user-2",
+      "content": "The patient dashboard provides comprehensive health insights. The data visualization is excellent.",
+      "createdAt": "2024-05-15T11:20:00.000Z",
+      "updatedAt": "2024-05-15T11:20:00.000Z",
+      "deletedAt": null
+    }
+  ],
+  "issue_links": [
+    {
+      "id": "link-1",
+      "fromIssueId": "issue-1",
+      "toIssueId": "issue-2",
+      "linkType": "BLOCKS",
+      "createdAt": "2024-03-02T10:00:00.000Z",
+      "updatedAt": "2024-03-02T10:00:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "link-2",
+      "fromIssueId": "issue-3",
+      "toIssueId": "issue-4",
+      "linkType": "RELATES_TO",
+      "createdAt": "2024-03-20T14:15:00.000Z",
+      "updatedAt": "2024-03-20T14:15:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "link-3",
+      "fromIssueId": "issue-2",
+      "toIssueId": "issue-5",
+      "linkType": "DEPENDS_ON",
+      "createdAt": "2024-03-12T16:30:00.000Z",
+      "updatedAt": "2024-03-12T16:30:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "link-4",
+      "fromIssueId": "issue-6",
+      "toIssueId": "issue-7",
+      "linkType": "BLOCKS",
+      "createdAt": "2024-04-05T11:20:00.000Z",
+      "updatedAt": "2024-04-05T11:20:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "link-5",
+      "fromIssueId": "issue-8",
+      "toIssueId": "issue-9",
+      "linkType": "RELATES_TO",
+      "createdAt": "2024-04-12T13:45:00.000Z",
+      "updatedAt": "2024-04-12T13:45:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "link-6",
+      "fromIssueId": "issue-10",
+      "toIssueId": "issue-11",
+      "linkType": "DEPENDS_ON",
+      "createdAt": "2024-04-08T09:30:00.000Z",
+      "updatedAt": "2024-04-08T09:30:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "link-7",
+      "fromIssueId": "issue-11",
+      "toIssueId": "issue-12",
+      "linkType": "BLOCKS",
+      "createdAt": "2024-04-15T15:10:00.000Z",
+      "updatedAt": "2024-04-15T15:10:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "link-8",
+      "fromIssueId": "issue-13",
+      "toIssueId": "issue-14",
+      "linkType": "RELATES_TO",
+      "createdAt": "2024-05-05T10:25:00.000Z",
+      "updatedAt": "2024-05-05T10:25:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "link-9",
+      "fromIssueId": "issue-14",
+      "toIssueId": "issue-15",
+      "linkType": "DEPENDS_ON",
+      "createdAt": "2024-05-12T14:40:00.000Z",
+      "updatedAt": "2024-05-12T14:40:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "link-10",
+      "fromIssueId": "issue-4",
+      "toIssueId": "issue-6",
+      "linkType": "RELATES_TO",
+      "createdAt": "2024-03-25T16:20:00.000Z",
+      "updatedAt": "2024-03-25T16:20:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "link-7",
+      "fromIssueId": "issue-11",
+      "toIssueId": "issue-12",
+      "linkType": "BLOCKS",
+      "createdAt": "2024-04-15T15:10:00.000Z",
+      "updatedAt": "2024-04-15T15:10:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "link-8",
+      "fromIssueId": "issue-13",
+      "toIssueId": "issue-14",
+      "linkType": "RELATES_TO",
+      "createdAt": "2024-05-05T10:25:00.000Z",
+      "updatedAt": "2024-05-05T10:25:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "link-9",
+      "fromIssueId": "issue-14",
+      "toIssueId": "issue-15",
+      "linkType": "DEPENDS_ON",
+      "createdAt": "2024-05-12T14:40:00.000Z",
+      "updatedAt": "2024-05-12T14:40:00.000Z",
+      "deletedAt": null
+    },
+    {
+      "id": "link-10",
+      "fromIssueId": "issue-4",
+      "toIssueId": "issue-6",
+      "linkType": "RELATES_TO",
+      "createdAt": "2024-03-25T16:20:00.000Z",
+      "updatedAt": "2024-03-25T16:20:00.000Z",
+      "deletedAt": null
+    }
+  ]
+}
