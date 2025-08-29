@@ -12,7 +12,10 @@ export class StatusController {
   constructor(@inject(StatusService) private service: StatusService) {}
 
   async create(req: Request, res: Response, next: NextFunction) {
-    const dto = plainToInstance(CreateStatusDto, req.body, {
+    const dto = plainToInstance(CreateStatusDto, {
+      ...req.body,
+      projectId: req.params.projectId
+    }, {
       excludeExtraneousValues: true,
     });
 
@@ -31,7 +34,10 @@ export class StatusController {
   }
 
   async update(req: Request, res: Response, next: NextFunction) {
-    const dto = plainToInstance(UpdateStatusDto, req.body, {
+    const dto = plainToInstance(UpdateStatusDto, {
+      ...req.body,
+      projectId: req.params.projectId
+    }, {
       excludeExtraneousValues: true,
     });
 

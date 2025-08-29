@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import Portal from "../ui/Portal";
 import { createStatus } from "../../api/statuses";
+import { STATUS_TYPES } from "../board/StatusTypeUtils";
 
 export default function CreateStatusModal({
   onClose,
@@ -11,14 +12,16 @@ export default function CreateStatusModal({
   onCreate,
 }) {
   const [name, setName] = useState("");
-  const [type, setType] = useState("BACKLOG");
+  const [type, setType] = useState(STATUS_TYPES.BACKLOG); // Default to BACKLOG
   const [loading, setLoading] = useState(false);
 
   const statusTypes = [
-    { value: "BACKLOG", label: "Backlog" },
-    { value: "IN_PROGRESS", label: "In Progress" },
-    { value: "DONE", label: "Done" },
-  ];  const handleCreate = async () => {
+    { value: STATUS_TYPES.BACKLOG, label: "Backlog" },
+    { value: STATUS_TYPES.IN_PROGRESS, label: "In Progress" },
+    { value: STATUS_TYPES.DONE, label: "Done" },
+  ];
+
+  const handleCreate = async () => {
     if (!name.trim()) return;
 
     setLoading(true);
@@ -27,7 +30,6 @@ export default function CreateStatusModal({
         name: name.trim(),
         type: type,
         columnId: columnId,
-        order: 999, // Will be adjusted by backend
       }, projectId);
 
       // Call both callback functions if they exist
@@ -40,7 +42,7 @@ export default function CreateStatusModal({
       }
 
       setName("");
-      setType("BACKLOG");
+      setType(STATUS_TYPES.BACKLOG); // Reset to BACKLOG
       onClose();
     } catch (err) {
       console.error("Failed to create status", err);
@@ -71,7 +73,7 @@ export default function CreateStatusModal({
             />{" "}
             <select
               value={type}
-              onChange={(e) => setType(e.target.value)}
+              onChange={(e) => setType(Number(e.target.value))}
               className="w-full px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white text-sm"
             >
               {statusTypes.map((statusType) => (

@@ -17,6 +17,11 @@ export class CreateStatusDto {
   @IsUUID()
   @Expose()
   columnId!: string;
+
+  @IsNotEmpty()
+  @IsUUID()
+  @Expose()
+  projectId!: string;
 }
 
 export class UpdateStatusDto {
@@ -39,6 +44,11 @@ export class UpdateStatusDto {
   @IsUUID()
   @Expose()
   columnId!: string;
+
+  @IsNotEmpty()
+  @IsUUID()
+  @Expose()
+  projectId!: string;
 }
 
 export class StatusResponseDto {
@@ -46,6 +56,7 @@ export class StatusResponseDto {
   name!: string;
   type!: StatusType;
   columnId!: string;
+  projectId!: string;
 
   constructor(partial: Partial<StatusResponseDto>) {
     Object.assign(this, partial);

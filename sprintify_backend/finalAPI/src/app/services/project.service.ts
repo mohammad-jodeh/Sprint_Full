@@ -40,13 +40,14 @@ export class ProjectService {
       project.id
     );
     const statusConfig: CreateStatusDto[] = [
-      { name: "To Do", type: StatusType.BACKLOG, columnId: columns[0].id },
+      { name: "To Do", type: StatusType.BACKLOG, columnId: columns[0].id, projectId: project.id },
       {
         name: "In Progress",
         type: StatusType.IN_PROGRESS,
         columnId: columns[1].id,
+        projectId: project.id,
       },
-      { name: "Done", type: StatusType.DONE, columnId: columns[2].id },
+      { name: "Done", type: StatusType.DONE, columnId: columns[2].id, projectId: project.id },
     ];
     const statuses = await this.statusService.createDefaultStatuses(
       statusConfig
