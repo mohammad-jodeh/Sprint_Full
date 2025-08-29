@@ -58,16 +58,25 @@ export default function CreateIssueModal({ onClose, onCreate, defaultSprintId })
         const members = await getProjectMembers(projectId);
         // Handle the correct response structure: { memberships: [...], success: true }
         const memberships = members.memberships || members.data?.memberships || members;
-        const users = memberships
-          .map((membership) => membership.user)
-          .filter((user) => user && user.id);
+        const users = Array.isArray(memberships)
+          ? memberships
+              .map((membership) => membership.user)
+              .filter((user) => user && user.id)
+          : [];
         setUsers(users);
 
         // Fetch columns and statuses for this project
         const columns = await fetchBoardColumns(projectId);
-        const columnIds = columns.map((col) => col.id);
+        const columnIds = Array.isArray(columns) ? columns.map((col) => col.id) : [];
         const allStatuses = await fetchStatuses({ projectId });
-        setStatuses(allStatuses.filter((s) => columnIds.includes(s.columnId)));
+        const filteredStatuses = Array.isArray(allStatuses) 
+          ? allStatuses.filter((s) => columnIds.includes(s.columnId))
+          : [];
+        setStatuses(filteredStatuses);
+        
+        // Log status information for debugging
+        console.log("Fetched statuses:", allStatuses);
+        console.log("Filtered statuses:", filteredStatuses);
 
         // Fetch epics for this project
         const epicsData = await fetchEpics(projectId);

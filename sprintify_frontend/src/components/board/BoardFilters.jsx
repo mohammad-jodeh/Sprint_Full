@@ -71,14 +71,14 @@ const LoadingState = () => (
 
 // User filters section component
 const UserFiltersSection = ({
-  users,
+  users = [],
   selectedUsers,
   showUnassigned,
   onUserToggle,
   onUnassignedToggle,
 }) => (
   <div className="flex items-center gap-2">
-    {users.map((member) => {
+    {Array.isArray(users) && users.map((member) => {
       const user = member.user || member;
       const userId = user.id || member.userId;
       const isSelected = selectedUsers.includes(userId);
