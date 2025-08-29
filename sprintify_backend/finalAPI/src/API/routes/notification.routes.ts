@@ -25,6 +25,13 @@ export class NotificationRoutes extends BaseRoute {
       controller.getUnreadCount.bind(controller)
     );
 
+    // Get specific notification by ID
+    this.router.get(
+      "/:id",
+      authenticate,
+      controller.getNotificationById.bind(controller)
+    );
+
 
     // Mark notification as read
     this.router.patch(

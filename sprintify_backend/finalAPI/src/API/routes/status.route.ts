@@ -7,7 +7,7 @@ import { authenticate } from "../middlewares/auth.middleware";
 import { restrictTo } from "../middlewares/permissions.middleware";
 import { restrictTokens } from "../middlewares/tokenTypes.middleware";
 
-export class BoardColumnRoutes extends BaseRoute {
+export class StatusRoutes extends BaseRoute {
   public path = "/:projectId/status";
 
   protected initRoutes(): void {
