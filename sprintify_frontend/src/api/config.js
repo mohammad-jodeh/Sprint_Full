@@ -21,7 +21,11 @@ protectedApi.interceptors.request.use((config) => {
   const token = useAuthStore.getState().token;
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
-    console.log("🔑 Sending token:", token.substring(0, 50) + "...");
+    // Only log token on first use or when it changes (reduce spam)
+    if (!protectedApi.lastTokenLogged || protectedApi.lastTokenLogged !== token.substring(0, 20)) {
+      console.log("🔑 Auth token configured for API requests");
+      protectedApi.lastTokenLogged = token.substring(0, 20);
+    }
   } else {
     console.log("❌ No token found in auth store");
   }

@@ -4,7 +4,8 @@ import { fetchTasks } from "../api/tasks";
 import { fetchProjectById } from "../api/project"; // project replaces board
 import { getProjectMembers } from "../api/projectMembers";
 import { fetchBoardColumns } from "../api/boardColumns";
-import api from "../api/config";
+import { fetchSprints } from "../api/sprints";
+import { fetchEpics } from "../api/epics";
 
 /**
  * Helper function to determine the active sprint from a list of sprints
@@ -69,10 +70,10 @@ export function useBoardData(projectId) {
           fetchProjectById(projectId),
           fetchBoardColumns(projectId),
           fetchStatuses({ projectId }),
-          api.get(`/sprints?projectId=${projectId}`),
+          fetchSprints(projectId),
           fetchTasks(projectId, { includeRelated: true }),
           getProjectMembers(projectId),
-          api.get(`/epics?projectId=${projectId}`),
+          fetchEpics(projectId),
         ]);
 
         // Filter statuses for this project based on column relationship
@@ -83,8 +84,8 @@ export function useBoardData(projectId) {
         );
 
         // Determine all active sprints and set the first one as default
-        const activeSprintsData = getActiveSprints(sprintsData.data);
-        const primaryActiveSprint = getActiveSprint(sprintsData.data);
+        const activeSprintsData = getActiveSprints(sprintsData);
+        const primaryActiveSprint = getActiveSprint(sprintsData);
 
         // Return all project issues (filtering will be done in Board component)
         const allIssues = allIssueData;
@@ -101,7 +102,7 @@ export function useBoardData(projectId) {
         setIssues(allIssues);
         setActiveSprint(primaryActiveSprint);
         setActiveSprints(activeSprintsData);
-        setEpics(epicsData.data || []);
+        setEpics(epicsData || []);
       } catch (err) {
         console.error("Failed to load board data:", err);
       } finally {

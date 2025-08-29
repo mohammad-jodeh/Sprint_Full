@@ -108,7 +108,19 @@ export default function CreateIssueModal({ onClose, onCreate, defaultSprintId })
       onClose();
     } catch (error) {
       console.error("Failed to create issue:", error);
-      const errorMessage = error.response?.data?.message || error.message || "Failed to create issue";
+      // Provide better error messages based on the type of error
+      let errorMessage = "Failed to create issue";
+      
+      if (error.response?.status === 500) {
+        errorMessage = "Server error occurred. Please try again or contact support.";
+      } else if (error.response?.status === 404) {
+        errorMessage = "Project or required resources not found. Please refresh and try again.";
+      } else if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
       toast.error(errorMessage);
     } finally {
       setSaving(false);
