@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import api from "../api/config";
 import { useDataRefresh } from "./useDataRefresh";
 import useAuthStore from "../store/authstore";
+import { fetchProjects } from "../api/projects";
 
 const STATUS_TYPE_LABELS = {
   0: "To Do",
@@ -22,22 +23,18 @@ export default function useDashboardData() {
 
     setLoading(true);
     try {
-      const [issuesRes, projectsRes, statusesRes, membersRes] =
+      const [issuesRes, projectsRes, statusesRes] =
         await Promise.all([
           api.get("/issues"),
-          api.get("/projects"),
+          fetchProjects(), // This returns only projects the user has access to
           api.get("/statuses"),
-          api.get("/project_members"),
         ]);
       const issues = Array.isArray(issuesRes.data) ? issuesRes.data : [];
-      const projects = Array.isArray(projectsRes.data) ? projectsRes.data : [];
+      const projects = Array.isArray(projectsRes.projects) ? projectsRes.projects : [];
       const statuses = Array.isArray(statusesRes.data) ? statusesRes.data : [];
-      const members = Array.isArray(membersRes.data) ? membersRes.data : [];
 
-      // Get user's accessible projects
-      const userProjectIds = members
-        .filter((member) => String(member.userId) === String(user.id))
-        .map((member) => String(member.projectId));
+      // Get user's accessible projects - already filtered by backend
+      const userProjectIds = projects.map((project) => String(project.id));
 
       // Filter issues to only include those from projects where user is a member
       const userIssues = issues.filter((issue) =>
@@ -68,19 +65,15 @@ export default function useDashboardData() {
         .map((name) => ({ name, value: typeCount[name] }));
       setStatusData(statusChartData);
 
-      // Project issues chart
-      const accessibleProjects = projects.filter((project) =>
-        userProjectIds.includes(String(project.id))
-      );
-
+      // Project issues chart - using already filtered projects
       const projectMap = {};
-      accessibleProjects.forEach((p) => {
+      projects.forEach((p) => {
         projectMap[String(p.id)] = p.name;
       });
 
       // Initialize all accessible projects with 0 issues
       const projectGroup = {};
-      accessibleProjects.forEach((project) => {
+      projects.forEach((project) => {
         projectGroup[project.name] = 0;
       });
 

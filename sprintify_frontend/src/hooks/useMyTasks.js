@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import api from "../api/config";
 import { fetchIssueByUserId } from "../api/issues";
 import useAuthStore from "../store/authstore";
+import { fetchProjects } from "../api/projects";
 
 export default function useMyTasks() {
   const { user } = useAuthStore();
@@ -13,16 +14,14 @@ export default function useMyTasks() {
 
     try {
       setLoading(true);
-      // Fetch statuses and project membership
-      const [statusRes, membersRes] = await Promise.all([
+      // Fetch statuses and user's accessible projects
+      const [statusRes, projectsRes] = await Promise.all([
         api.get(`/statuses`),
-        api.get(`/project_members`),
+        fetchProjects(),
       ]);
-      const members = Array.isArray(membersRes.data) ? membersRes.data : [];
-      // Determine projects where current user is a member
-      const userProjectIds = members
-        .filter((m) => String(m.userId) === String(user.id))
-        .map((m) => String(m.projectId));
+      const userProjects = Array.isArray(projectsRes.projects) ? projectsRes.projects : [];
+      // Get project IDs that the user has access to
+      const userProjectIds = userProjects.map((p) => String(p.id));
       // Fetch issues for each project assigned to this user
       const issueLists = await Promise.all(
         userProjectIds.map((projId) => fetchIssueByUserId(projId, user.id))
