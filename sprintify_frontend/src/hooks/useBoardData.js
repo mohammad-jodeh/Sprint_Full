@@ -68,9 +68,9 @@ export function useBoardData(projectId) {
         ] = await Promise.all([
           fetchProjectById(projectId),
           fetchBoardColumns(projectId),
-          api.get("/statuses"),
+          fetchStatuses({ projectId }),
           api.get(`/sprints?projectId=${projectId}`),
-          fetchTasks({ projectId, includeRelated: true }),
+          fetchTasks(projectId, { includeRelated: true }),
           getProjectMembers(projectId),
           api.get(`/epics?projectId=${projectId}`),
         ]);
@@ -78,7 +78,7 @@ export function useBoardData(projectId) {
         // Filter statuses for this project based on column relationship
         const projectColumns = columnsData;
         const columnIds = projectColumns.map((col) => col.id);
-        const statusData = allStatuses.data.filter((status) =>
+        const statusData = allStatuses.filter((status) =>
           columnIds.includes(status.columnId)
         );
 

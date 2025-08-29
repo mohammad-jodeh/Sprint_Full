@@ -126,7 +126,7 @@ export default function EditIssueModal({
         // Always fetch statuses as they're needed for the form
         const columns = await fetchBoardColumns(projectId);
         const columnIds = columns.map((col) => col.id);
-        const allStatuses = await fetchStatuses();
+        const allStatuses = await fetchStatuses({ projectId });
         setStatuses(allStatuses.filter((s) => columnIds.includes(s.columnId)));
       } catch (error) {
         console.error("Failed to load project data:", error);

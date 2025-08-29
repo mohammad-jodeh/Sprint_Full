@@ -4,7 +4,7 @@ import { protectedApi } from "./config";
 export const fetchEpics = async (projectId, params = {}) => {
   try {
     const response = await protectedApi.get(`/${projectId}/epic`, { params });
-    return response.data;
+    return response.data.epics || response.data.data?.epics || response.data;
   } catch (error) {
     console.error('Failed to fetch epics:', error);
     throw error;

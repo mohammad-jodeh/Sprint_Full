@@ -66,7 +66,7 @@ export default function CreateIssueModal({ onClose, onCreate, defaultSprintId })
         // Fetch columns and statuses for this project
         const columns = await fetchBoardColumns(projectId);
         const columnIds = columns.map((col) => col.id);
-        const allStatuses = await fetchStatuses();
+        const allStatuses = await fetchStatuses({ projectId });
         setStatuses(allStatuses.filter((s) => columnIds.includes(s.columnId)));
 
         // Fetch epics for this project

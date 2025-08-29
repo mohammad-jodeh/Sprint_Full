@@ -117,7 +117,7 @@ const AIChatAssistant = ({ projectId, isOpen, onClose }) => {
         ]);
 
       // Get all statuses for the project
-      const allStatuses = await fetchStatuses();
+      const allStatuses = await fetchStatuses({ projectId });
       const columnIds = columnsData.map((col) => col.id);
       const projectStatuses = allStatuses.filter((status) =>
         columnIds.includes(status.columnId)
