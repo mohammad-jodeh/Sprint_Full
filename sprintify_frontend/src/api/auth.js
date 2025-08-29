@@ -1,24 +1,59 @@
 import api, { baseUrl } from "./config";
 
+// Helper function to determine if we're using json-server
+const isJsonServer = () => baseUrl.includes('3001');
+
 export const login = async (email, password) => {
   try {
-    const response = await api.post("/user/login", {
-      email,
-      password,
-    });
+    if (isJsonServer()) {
+      // Mock login for json-server development
+      const response = await api.get("/users");
+      const users = response.data;
+      const user = users.find(u => u.email === email && u.password === password);
+      
+      if (!user) {
+        throw new Error("Invalid credentials");
+      }
 
-    const { user, token, success } = response.data;
+      // Create a simple mock token
+      const mockToken = btoa(JSON.stringify({ 
+        userId: user.id, 
+        email: user.email, 
+        fullName: user.fullName,
+        exp: Date.now() + 24 * 60 * 60 * 1000 // 24 hours
+      }));
 
-    if (!success || !token) {
-      throw new Error("Login failed");
+      return {
+        success: true,
+        token: mockToken,
+        user: {
+          id: user.id,
+          email: user.email,
+          fullName: user.fullName,
+          image: user.image,
+          isEmailVerified: user.isEmailVerified
+        },
+        message: "Login successful",
+      };
+    } else {
+      const response = await api.post("/user/login", {
+        email,
+        password,
+      });
+
+      const { user, token, success } = response.data;
+
+      if (!success || !token) {
+        throw new Error("Login failed");
+      }
+
+      return {
+        success: true,
+        token: token,
+        user: user,
+        message: "Login successful",
+      };
     }
-
-    return {
-      success: true,
-      token: token,
-      user: user,
-      message: "Login successful",
-    };
   } catch (error) {
     if (error.response) {
       throw new Error(error.response.data?.message || "Login failed");
