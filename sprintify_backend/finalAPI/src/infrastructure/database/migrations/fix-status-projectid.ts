@@ -15,6 +15,9 @@ export async function fixStatusProjectIdMigration(): Promise<void> {
   try {
     console.info("🔧 Starting status projectId migration...");
     
+    // Start a transaction for safety
+    await queryRunner.startTransaction();
+    
     // Check if there are any status records with null projectId
     const nullProjectIdStatuses = await queryRunner.query(
       `SELECT id FROM status WHERE "projectId" IS NULL`
@@ -22,6 +25,7 @@ export async function fixStatusProjectIdMigration(): Promise<void> {
     
     if (nullProjectIdStatuses.length === 0) {
       console.info("✅ No status records with null projectId found. Migration skipped.");
+      await queryRunner.commitTransaction();
       return;
     }
     
@@ -35,25 +39,36 @@ export async function fixStatusProjectIdMigration(): Promise<void> {
     if (firstProject.length === 0) {
       // If no projects exist, delete orphaned statuses as they cannot be valid
       console.warn("⚠️  No projects found. Deleting orphaned status records...");
-      await queryRunner.query(`DELETE FROM status WHERE "projectId" IS NULL`);
-      console.info("✅ Orphaned status records deleted.");
+      const deleteResult = await queryRunner.query(`DELETE FROM status WHERE "projectId" IS NULL`);
+      console.info(`✅ ${deleteResult.affectedRows || nullProjectIdStatuses.length} orphaned status records deleted.`);
     } else {
       // Assign orphaned statuses to the first available project
       const projectId = firstProject[0].id;
       console.info(`🔄 Assigning orphaned statuses to project: ${projectId}`);
       
-      await queryRunner.query(
+      const updateResult = await queryRunner.query(
         `UPDATE status SET "projectId" = $1 WHERE "projectId" IS NULL`,
         [projectId]
       );
       
-      console.info("✅ Orphaned status records updated with projectId.");
+      console.info(`✅ ${updateResult.affectedRows || nullProjectIdStatuses.length} orphaned status records updated with projectId.`);
     }
     
+    // Commit the transaction
+    await queryRunner.commitTransaction();
     console.info("✅ Status projectId migration completed successfully.");
     
   } catch (error) {
     console.error("❌ Error during status projectId migration:", error);
+    
+    // Rollback transaction on error
+    try {
+      await queryRunner.rollbackTransaction();
+      console.info("🔄 Transaction rolled back successfully.");
+    } catch (rollbackError) {
+      console.error("❌ Failed to rollback transaction:", rollbackError);
+    }
+    
     throw error;
   } finally {
     await queryRunner.release();
