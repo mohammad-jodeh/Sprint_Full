@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { fetchProjectWithDetails } from "../../api/projects";
 import { fetchTasks, fetchProjectTaskStatistics } from "../../api/tasks";
 import { User2Icon, BarChart2, Activity, Loader2 } from "lucide-react";
-import ProjectBarChart from "../../components/charts/ProjectBarChart";
+import ProjectBarChart from "../../components/Charts/ProjectBarChart";
 import { fetchSprints } from "../../api/sprints";
 import { useProjectRole } from "../../hooks/useProjectRole";
 
