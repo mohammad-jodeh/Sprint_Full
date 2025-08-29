@@ -121,6 +121,10 @@ const SprintBacklog = ({ sprint, onBack }) => {
 
   const getTypeIcon = (type) => {
     const icons = {
+      Task: "📝",
+      Bug: "🐞",
+      Story: "📘",
+      // Keep old values for backward compatibility
       TASK: "📝",
       BUG: "🐞",
       STORY: "📘",

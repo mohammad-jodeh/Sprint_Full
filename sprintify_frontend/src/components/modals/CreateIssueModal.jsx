@@ -10,9 +10,9 @@ import { fetchStatuses } from "../../api/statuses";
 import { fetchEpics } from "../../api/epics";
 
 const typeOptions = [
-  { label: "TASK", icon: "📝", value: "TASK" },
-  { label: "BUG", icon: "🐞", value: "BUG" },
-  { label: "STORY", icon: "📘", value: "STORY" },
+  { label: "TASK", icon: "📝", value: "Task" },
+  { label: "BUG", icon: "🐞", value: "Bug" },
+  { label: "STORY", icon: "📘", value: "Story" },
 ];
 
 const priorityOptions = [
@@ -41,7 +41,7 @@ export default function CreateIssueModal({ onClose, onCreate, defaultSprintId })
     title: "",
     description: "",
     storyPoint: 0,
-    type: "TASK",
+    type: "Task",
     issuePriority: "MEDIUM",
     statusId: "",
     assignee: "",
