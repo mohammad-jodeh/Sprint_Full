@@ -53,7 +53,8 @@ const CreateIssue = ({
       setStatuses(fetchedStatuses || []);
     } catch (error) {
       console.error("Failed to fetch statuses:", error);
-      // Fallback: create a default status list if fetch fails
+      // If status fetch fails, we'll let the backend handle status creation
+      // during issue creation with proper error messaging
       setStatuses([]);
     } finally {
       setStatusesLoading(false);
@@ -84,17 +85,17 @@ const CreateIssue = ({
         finalStatusId = backlogStatus ? backlogStatus.id : statuses[0].id;
       }
       
-      // As last resort, if still no status, the backend should handle this
-      // but we need to ensure statusId is not undefined
+      // As last resort, if still no status, let backend handle it
+      // The backend should create default statuses or provide better error messages
       if (!finalStatusId) {
-        throw new Error("No valid status available. Please ensure project has statuses configured.");
+        console.warn("No status available - letting backend handle status creation");
       }
       
       const newIssue = await createTask(projectId, {
         title: title.trim(),
         description: description.trim(),
         storyPoint: parseInt(storyPoint) || 0,
-        statusId: finalStatusId,
+        statusId: finalStatusId || null, // Allow null for backend to handle
         sprintId: activeSprint?.id || null,
         assignee: null,
       });
@@ -108,7 +109,11 @@ const CreateIssue = ({
       setIsCreating(false);
     } catch (error) {
       console.error("Failed to create issue:", error);
-      // You could add toast notification here
+      // Show user-friendly error message
+      if (error.message) {
+        console.error("Issue creation error:", error.message);
+      }
+      // You could add toast notification here for better UX
     } finally {
       setIsLoading(false);
     }

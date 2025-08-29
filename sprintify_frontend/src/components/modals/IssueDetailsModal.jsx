@@ -4,7 +4,7 @@ import BaseModal from "../ui/BaseModal";
 import EditIssueModal from "./EditIssueModal";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
 import { X, FileText, Trash2, Edit3, User2 } from "lucide-react";
-import api from "../../api/config";
+import { fetchEpics } from "../../api/epics";
 import toast from "react-hot-toast";
 import { useProjectRole } from "../../hooks/useProjectRole";
 import { can, PERMISSIONS } from "../../utils/permission";
@@ -33,9 +33,8 @@ export default function IssueDetailsModal({
   useEffect(() => {
     // Fetch project-specific epics for the edit modal (only if not provided)
     if (projectId && !providedEpics?.length) {
-      api
-        .get(`/epics?projectId=${projectId}`)
-        .then((res) => setEpics(res.data))
+      fetchEpics(projectId)
+        .then((epicsData) => setEpics(epicsData))
         .catch(() => toast.error("Failed to fetch epics"));
     } else if (providedEpics?.length) {
       setEpics(providedEpics);
