@@ -4,6 +4,8 @@ import {
   StatusType, 
   ProjectPermission, 
   IssuePriority,
+  NotificationType,
+  NotificationPriority,
   generateTimestamp 
 } from './types.js';
 
@@ -304,6 +306,88 @@ export const issues = [
   }
 ];
 
+// Comments (following backend comment structure)
+export const comments = [
+  {
+    id: "comment-1",
+    issueId: "issue-1",
+    userId: "user-2",
+    content: "Great work on the project structure! The organization looks solid.",
+    ...baseTimestamps
+  },
+  {
+    id: "comment-2",
+    issueId: "issue-1", 
+    userId: "user-1",
+    content: "Thanks! I tried to follow best practices for scalability.",
+    ...baseTimestamps
+  },
+  {
+    id: "comment-3",
+    issueId: "issue-4",
+    userId: "user-2",
+    content: "The drag and drop functionality works perfectly! Smooth animations.",
+    ...baseTimestamps
+  }
+];
+
+// Issue Links/Relations (following backend issue relation structure)
+export const issueLinks = [
+  {
+    id: "link-1",
+    fromIssueId: "issue-1",
+    toIssueId: "issue-2", 
+    linkType: "BLOCKS",
+    ...baseTimestamps
+  },
+  {
+    id: "link-2",
+    fromIssueId: "issue-3",
+    toIssueId: "issue-4",
+    linkType: "RELATES_TO",
+    ...baseTimestamps
+  },
+  {
+    id: "link-3",
+    fromIssueId: "issue-2",
+    toIssueId: "issue-5",
+    linkType: "DEPENDS_ON", 
+    ...baseTimestamps
+  }
+];
+
+// Notifications (following Notification entity)
+export const notifications = [
+  {
+    id: "notif-1",
+    title: "Issue Assignment",
+    message: "You were assigned to issue SP-1: Setup project structure",
+    type: NotificationType.ISSUE_UPDATED,
+    priority: NotificationPriority.MEDIUM,
+    recipientId: "user-1",
+    senderId: "user-2",
+    isRead: false,
+    metadata: { issueId: "issue-1" },
+    actionUrl: "/issues/issue-1",
+    emailSent: false,
+    ...baseTimestamps
+  },
+  {
+    id: "notif-2",
+    title: "Sprint Update",
+    message: "Sprint 1 (Active) has been updated",
+    type: NotificationType.SPRINT_UPDATED,
+    priority: NotificationPriority.LOW,
+    recipientId: "user-2", 
+    senderId: "user-1",
+    isRead: true,
+    metadata: { sprintId: "sprint-1" },
+    actionUrl: "/sprints/sprint-1",
+    emailSent: true,
+    ...baseTimestamps
+  }
+];
+
 // Normalized data structure matching backend entities
 export const normalizedData = {
   // Main entities
@@ -315,6 +399,9 @@ export const normalizedData = {
   sprints,
   epics,
   issues,
+  comments,
+  issueLinks,
+  notifications,
   
   // Computed/helper data for UI
   currentProject: projects[0],
@@ -361,6 +448,28 @@ export const getStatusById = (statusId) => {
   return statuses.find(status => status.id === statusId);
 };
 
+export const getCommentsForIssue = (issueId) => {
+  return comments.filter(comment => comment.issueId === issueId);
+};
+
+export const getLinksForIssue = (issueId) => {
+  return issueLinks.filter(link => 
+    link.fromIssueId === issueId || link.toIssueId === issueId
+  );
+};
+
+export const getNotificationsForUser = (userId) => {
+  return notifications.filter(notification => 
+    notification.recipientId === userId
+  );
+};
+
+export const getUnreadNotificationsForUser = (userId) => {
+  return notifications.filter(notification => 
+    notification.recipientId === userId && !notification.isRead
+  );
+};
+
 // Enriched data functions (adding relations)
 export const getIssuesWithRelations = () => {
   return issues.map(issue => ({
@@ -369,7 +478,9 @@ export const getIssuesWithRelations = () => {
     sprint: issue.sprintId ? getSprintById(issue.sprintId) : null,
     epic: issue.epicId ? getEpicById(issue.epicId) : null,
     status: getStatusById(issue.statusId),
-    column: getColumnById(getStatusById(issue.statusId)?.columnId)
+    column: getColumnById(getStatusById(issue.statusId)?.columnId),
+    comments: getCommentsForIssue(issue.id),
+    links: getLinksForIssue(issue.id)
   }));
 };
 
@@ -387,6 +498,9 @@ export const getBoardData = () => {
     columns: getColumnsWithStatuses(),
     issues: getIssuesWithRelations(),
     sprints,
-    epics
+    epics,
+    comments,
+    issueLinks,
+    notifications
   };
 };
