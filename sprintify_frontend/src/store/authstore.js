@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import api from "../api/config";
 import { getRoleFromPermission } from "../utils/backendPermission";
+import { getProjectMembers } from "../api/projectMembers";
 
 function decodeToken(token) {
   if (!token) return null;
@@ -95,12 +96,14 @@ const useAuthStore = create(
         set({ projectRoleLoading: true, projectRoleError: null });
 
         try {
-          const response = await api.get(`/project_members/${projectId}`);
-          const members = response.data.members || response.data || [];
+          const response = await getProjectMembers(projectId);
+          // Handle the response format from the backend
+          const members = response.memberships || response.members || response || [];
           const projectMember = members.find(
-            (member) => member.userId === state.user.id
+            (membership) => membership.user?.id === state.user.id || membership.userId === state.user.id
           );          if (projectMember) {
-            const roleString = getRoleFromPermission(projectMember.permission);
+            // Convert API permission (0, 1, 2) to role string by adding 1 to match frontend expectations
+            const roleString = getRoleFromPermission(projectMember.permission + 1);
             set({
               currentProjectId: projectId,
               currentProjectRole: roleString,

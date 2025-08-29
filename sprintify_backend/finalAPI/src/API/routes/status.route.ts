@@ -13,18 +13,35 @@ export class StatusRoutes extends BaseRoute {
   protected initRoutes(): void {
     const controller = container.resolve(StatusController);
 
-    this.router.use(
+    this.router.post(
+      "/",
       authenticate,
       restrictTokens(Token.ACCESS),
-      restrictTo(ProjectPermission.MODERATOR)
+      restrictTo(ProjectPermission.MODERATOR),
+      controller.create.bind(controller)
     );
 
-    this.router.post("/", controller.create.bind(controller));
+    this.router.patch(
+      "/",
+      authenticate,
+      restrictTokens(Token.ACCESS),
+      restrictTo(ProjectPermission.MODERATOR),
+      controller.update.bind(controller)
+    );
 
-    this.router.patch("/", controller.update.bind(controller));
+    this.router.delete(
+      "/:id",
+      authenticate,
+      restrictTokens(Token.ACCESS),
+      restrictTo(ProjectPermission.MODERATOR),
+      controller.delete.bind(controller)
+    );
 
-    this.router.delete("/:id", controller.delete.bind(controller));
-
-    this.router.get("/", controller.find.bind(controller));
+    this.router.get(
+      "/",
+      authenticate,
+      restrictTokens(Token.ACCESS),
+      controller.find.bind(controller)
+    );
   }
 }
