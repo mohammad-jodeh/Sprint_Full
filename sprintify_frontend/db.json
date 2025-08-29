@@ -741,7 +741,7 @@
       "statusId": "st-1",
       "assignee": "user-4",
       "epicId": "epic-1",
-      "sprintId": null,
+      "sprintId": "sprint-1",
       "projectId": "project-1",
       "type": "STORY",
       "createdAt": "2024-04-01T13:45:00.000Z",
