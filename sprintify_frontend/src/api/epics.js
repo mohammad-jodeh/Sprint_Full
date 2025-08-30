@@ -1,19 +1,10 @@
-import { protectedApi, baseUrl } from "./config";
-
-// Helper function to determine if we're using json-server
-const isJsonServer = () => baseUrl.includes('3001');
+import { protectedApi } from "./config";
 
 // Fetch all epics for a project
 export const fetchEpics = async (projectId, params = {}) => {
   try {
-    if (isJsonServer()) {
-      const response = await protectedApi.get(`/epics`);
-      const projectEpics = response.data.filter(epic => epic.projectId === projectId);
-      return projectEpics;
-    } else {
-      const response = await protectedApi.get(`/${projectId}/epic`, { params });
-      return response.data.epics || response.data.data?.epics || response.data;
-    }
+    const response = await protectedApi.get(`/${projectId}/epic`, { params });
+    return response.data.epics || response.data.data?.epics || response.data;
   } catch (error) {
     console.error('Failed to fetch epics:', error);
     throw error;
