@@ -3,7 +3,7 @@ import useAuthStore from "../store/authstore";
 
 // Use environment variable or default to json-server for development
 const USE_JSON_SERVER = import.meta.env.VITE_USE_JSON_SERVER !== 'false';
-export const baseUrl =  "http://localhost:4000/api/v1";
+export const baseUrl = USE_JSON_SERVER ? "http://localhost:3001" : "http://localhost:4000/api/v1";
 
 const api = axios.create({
   baseURL: baseUrl,

@@ -75,13 +75,16 @@ const useProjectRoleStore = create(
 
           const response = await getProjectMembers(projectId);
           
-          const projectMember = response.memberships.find(
-            (membership) => membership.user.id === userId
+          const projectMember = response.members.find(
+            (membership) => membership.userId === userId
           );
 
           if (projectMember) {
-            // Convert API permission (0, 1, 2) to role string
-            const roleString = getRoleFromPermission(projectMember.permission + 1); // Add 1 to convert 0,1,2 to 1,2,3
+            // Permission is already a string like "ADMINISTRATOR", "MODERATOR", "MEMBER"
+            const roleString = typeof projectMember.permission === 'string' 
+              ? projectMember.permission 
+              : (projectMember.permission === 2 ? "ADMINISTRATOR" : 
+                 projectMember.permission === 1 ? "MODERATOR" : "MEMBER");
             get().setProjectRole(projectId, roleString);
             return roleString;
           } else {

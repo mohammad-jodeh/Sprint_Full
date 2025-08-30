@@ -1,10 +1,19 @@
-import { protectedApi } from "./config";
+import { protectedApi, baseUrl } from "./config";
+
+// Helper function to determine if we're using json-server
+const isJsonServer = () => baseUrl.includes('3001');
 
 // Fetch tasks (which are issues in the backend) for a project
 export const fetchTasks = async (projectId, params = {}) => {
   try {
-    const response = await protectedApi.get(`/${projectId}/issues`, { params });
-    return response.data.data?.issues || response.data.issues || response.data;
+    if (isJsonServer()) {
+      const response = await protectedApi.get(`/issues`);
+      const projectIssues = response.data.filter(issue => issue.projectId === projectId);
+      return projectIssues;
+    } else {
+      const response = await protectedApi.get(`/${projectId}/issues`, { params });
+      return response.data.data?.issues || response.data.issues || response.data;
+    }
   } catch (error) {
     console.error('Failed to fetch tasks:', error);
     throw error;
@@ -36,8 +45,13 @@ export const createTask = async (projectId, taskData) => {
 // Update task
 export const updateTask = async (projectId, taskId, updates) => {
   try {
-    const response = await protectedApi.patch(`/${projectId}/issues/${taskId}`, updates);
-    return response.data;
+    if (isJsonServer()) {
+      const response = await protectedApi.patch(`/issues/${taskId}`, updates);
+      return response.data;
+    } else {
+      const response = await protectedApi.patch(`/${projectId}/issues/${taskId}`, updates);
+      return response.data;
+    }
   } catch (error) {
     console.error('Failed to update task:', error);
     throw error;

@@ -1,10 +1,19 @@
-import { protectedApi } from "./config";
+import { protectedApi, baseUrl } from "./config";
+
+// Helper function to determine if we're using json-server
+const isJsonServer = () => baseUrl.includes('3001');
 
 // Get board columns for a project
 export const fetchBoardColumns = async (projectId) => {
   try {
-    const response = await protectedApi.get(`/${projectId}/board-columns`);
-    return response.data.columns; // Extract columns array from response
+    if (isJsonServer()) {
+      const response = await protectedApi.get(`/columns`);
+      const projectColumns = response.data.filter(column => column.projectId === projectId);
+      return projectColumns;
+    } else {
+      const response = await protectedApi.get(`/${projectId}/board-columns`);
+      return response.data.columns; // Extract columns array from response
+    }
   } catch (error) {
     if (error.response) {
       throw new Error(
