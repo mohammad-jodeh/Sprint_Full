@@ -1,9 +1,26 @@
-import { protectedApi } from "./config";
+import { protectedApi, baseUrl } from "./config";
+
+// Helper function to determine if we're using json-server
+const isJsonServer = () => baseUrl.includes('3001');
 
 export const fetchStatuses = async (params = {}) => {
   const { projectId, ...otherParams } = params;
   
-  if (projectId) {
+  if (isJsonServer()) {
+    // For json-server, get all statuses and filter by related columns
+    const [statusesResponse, columnsResponse] = await Promise.all([
+      protectedApi.get("/statuses"),
+      protectedApi.get("/columns")
+    ]);
+    
+    const allStatuses = statusesResponse.data;
+    const projectColumns = columnsResponse.data.filter(col => col.projectId === projectId);
+    const columnIds = projectColumns.map(col => col.id);
+    
+    // Filter statuses that belong to this project's columns
+    const projectStatuses = allStatuses.filter(status => columnIds.includes(status.columnId));
+    return projectStatuses;
+  } else if (projectId) {
     // Use the project-specific endpoint
     const response = await protectedApi.get(`/${projectId}/status`, { params: otherParams });
     return response.data.data?.statuses || response.data.statuses || response.data;
