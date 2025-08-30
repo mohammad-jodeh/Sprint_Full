@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "../api/config";
+import { protectedApi } from "../api/config";
 import { useDataRefresh } from "./useDataRefresh";
 import useAuthStore from "../store/authstore";
 import { fetchProjects } from "../api/projects";
@@ -25,7 +25,7 @@ export default function useDashboardData() {
     try {
       const [issuesRes, projectsRes] =
         await Promise.all([
-          api.get(`/issues/${user.id}`), // Fixed: use user-specific endpoint
+          protectedApi.get(`/issues/${user.id}`), // Fixed: use protectedApi for authentication
           fetchProjects(), // This returns only projects the user has access to
         ]);
       const issues = Array.isArray(issuesRes.data) ? issuesRes.data : [];

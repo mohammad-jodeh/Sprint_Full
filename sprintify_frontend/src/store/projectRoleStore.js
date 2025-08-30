@@ -44,6 +44,7 @@ const useProjectRoleStore = create(
               ...state.projectRoles[projectId],
               loading: false,
               error,
+              lastFetched: Date.now(), // Add timestamp for error caching
             },
           },
         })),
@@ -70,20 +71,35 @@ const useProjectRoleStore = create(
           }
         }
 
+        // Prevent repeated calls for recent errors (wait 30 seconds before retry)
+        if (existingRole && existingRole.error && existingRole.lastFetched) {
+          const thirtySecondsAgo = Date.now() - 30 * 1000;
+          if (existingRole.lastFetched > thirtySecondsAgo) {
+            console.warn(`Skipping repeated getProjectMembers call due to recent error for project ${projectId}`);
+            return null;
+          }
+        }
+
+        // Prevent concurrent calls for the same project
+        if (existingRole && existingRole.loading) {
+          console.warn(`Already loading project role for project ${projectId}`);
+          return null;
+        }
+
         try {
           get().setProjectLoading(projectId, true);
 
           const response = await getProjectMembers(projectId);
           
-          // Add safety check for response.members
-          if (!response || !response.members || !Array.isArray(response.members)) {
+          // Add safety check for response.memberships (backend returns memberships, not members)
+          if (!response || !response.memberships || !Array.isArray(response.memberships)) {
             console.error("Invalid response from getProjectMembers:", response);
             get().setProjectError(projectId, "Invalid response from server");
             return null;
           }
           
-          const projectMember = response.members.find(
-            (membership) => membership.userId === userId
+          const projectMember = response.memberships.find(
+            (membership) => membership.user && (membership.user.id === userId || membership.user === userId)
           );
 
           if (projectMember) {

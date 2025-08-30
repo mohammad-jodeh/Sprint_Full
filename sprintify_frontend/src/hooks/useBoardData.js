@@ -128,10 +128,11 @@ export function useBoardData(projectId) {
         // Return all project issues (filtering will be done in Board component)
         const allIssues = allIssueData;
 
-        // Add members to project object
+        // Add members to project object (handle correct response format)
+        const members = projectMembersData?.memberships || projectMembersData?.members || projectMembersData || [];
         const projectWithMembers = {
           ...proj,
-          members: projectMembersData || [],
+          members: members,
         };
 
         setProject(projectWithMembers);

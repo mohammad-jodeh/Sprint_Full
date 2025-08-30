@@ -31,11 +31,13 @@ export const useFilterData = (projectId) => {
         } else if (projectId) {
           // Fallback to API data
           const [membersRes, sprintsRes] = await Promise.all([
-            getProjectMembers(projectId).catch(() => []),
+            getProjectMembers(projectId).catch(() => ({ memberships: [] })),
             fetchSprints(projectId).catch(() => []),
           ]);
 
-          setAvailableUsers(membersRes || []);
+          // Extract members from the response structure (backend returns memberships)
+          const members = membersRes?.memberships || [];
+          setAvailableUsers(members);
 
           const activeSprints = (sprintsRes || []).filter((sprint) => {
             const now = new Date();
