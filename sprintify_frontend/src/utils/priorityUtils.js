@@ -51,8 +51,8 @@ export const getPriorityLabel = (priority) => {
 
 export const sortByPriority = (issues, ascending = false) => {
   return [...issues].sort((a, b) => {
-    const aPriority = getPriorityConfig(a.priority || "MEDIUM").sortOrder;
-    const bPriority = getPriorityConfig(b.priority || "MEDIUM").sortOrder;
+    const aPriority = getPriorityConfig(a.issuePriority || a.priority || "MEDIUM").sortOrder;
+    const bPriority = getPriorityConfig(b.issuePriority || b.priority || "MEDIUM").sortOrder;
     return ascending ? aPriority - bPriority : bPriority - aPriority;
   });
 };

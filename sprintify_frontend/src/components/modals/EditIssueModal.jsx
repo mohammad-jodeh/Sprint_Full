@@ -76,7 +76,7 @@ export default function EditIssueModal({
         description: issue.description || "",
         storyPoint: issue.storyPoint || issue.storyPoints || 0,
         type: issue.type || "Task",
-        priority: issue.priority || "MEDIUM",
+        priority: issue.issuePriority || issue.priority || "MEDIUM",
         statusId: resolveStatusId(),
         assigneeId: String(issue.assigneeUser?.id || issue.assignee || ""),
         epicId: String(issue.epic?.id || issue.epicId || ""),
@@ -183,11 +183,13 @@ export default function EditIssueModal({
       const payload = {
         ...form,
         assignee: form.assigneeId || null, // Convert assigneeId to assignee for database
+        issuePriority: form.priority, // Convert priority to issuePriority for backend
         epicId: form.epicId || null, // Ensure epicId is included
         sprintId: form.sprintId || null, // Include sprintId
       };
-      // Remove assigneeId from payload since we're using assignee
+      // Remove frontend-only fields from payload
       delete payload.assigneeId;
+      delete payload.priority;
       const res = await updateIssue(projectId, issue.id, payload);
       toast.success("Issue updated");
       if (onSave) {
