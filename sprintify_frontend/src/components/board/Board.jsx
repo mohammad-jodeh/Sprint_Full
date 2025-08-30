@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import BoardHeader from "./BoardHeader";
 import BoardContent from "./BoardContent";
+import SprintBoard from "./SprintBoard";
 import { useBoardStore } from "../../store/boardStore";
 import { useProjectRole } from "../../hooks/useProjectRole";
 import { can, PERMISSIONS } from "../../utils/permission";
@@ -22,6 +23,9 @@ const Board = ({
   const storeBoard = useBoardStore((state) => state.board);
   const storeFilters = useBoardStore((state) => state.filters);
   const storeSetFilters = useBoardStore((state) => state.setFilters);
+
+  // Add view toggle state
+  const [viewMode, setViewMode] = useState("kanban"); // "kanban" or "sprint"
 
   // Use props if provided, otherwise fall back to store
   const board = useMemo(() => {
@@ -177,24 +181,37 @@ const Board = ({
           activeSprints={activeSprints}
           availableUsers={boardData?.members || []}
           availableSprints={activeSprints || []}
+          viewMode={viewMode}
+          setViewMode={setViewMode}
         />
-        {/* Board Content */}{" "}
-        <BoardContent
-          board={board}
-          isAnimated={isAnimated}
-          canConfigureBoard={canConfigureBoard}
-          canCreateTask={canCreateTask}
-          issues={filteredIssues}
-          onMoveIssue={handleMoveIssue}
-          epics={epics}
-          onIssueClick={onIssueClick}
-          onIssueCreated={handleIssueCreated}
-          onColumnCreated={handleColumnCreated}
-          onColumnUpdated={handleColumnUpdated}
-          onColumnDeleted={handleColumnDeleted}
-          filters={filters}
-          activeSprints={activeSprints}
-        />
+        
+        {/* Board Content - Conditional based on view mode */}
+        {viewMode === "sprint" ? (
+          <SprintBoard
+            issues={board.issues || []}
+            setIssues={setIssues}
+            activeSprints={activeSprints || []}
+            onIssueClick={onIssueClick}
+            projectId={boardData?.id}
+          />
+        ) : (
+          <BoardContent
+            board={board}
+            isAnimated={isAnimated}
+            canConfigureBoard={canConfigureBoard}
+            canCreateTask={canCreateTask}
+            issues={filteredIssues}
+            onMoveIssue={handleMoveIssue}
+            epics={epics}
+            onIssueClick={onIssueClick}
+            onIssueCreated={handleIssueCreated}
+            onColumnCreated={handleColumnCreated}
+            onColumnUpdated={handleColumnUpdated}
+            onColumnDeleted={handleColumnDeleted}
+            filters={filters}
+            activeSprints={activeSprints}
+          />
+        )}
       </div>
     </div>
   );
