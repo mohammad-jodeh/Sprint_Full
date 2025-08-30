@@ -198,11 +198,11 @@ export default function IssueDetailsModal({
             </span>
             <span
               className={`inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium border ${
-                getPriorityConfig(issue.priority || "MEDIUM").color
+                getPriorityConfig(issue.issuePriority || issue.priority || "MEDIUM").color
               }`}
             >
-              {getPriorityConfig(issue.priority || "MEDIUM").icon}{" "}
-              {getPriorityConfig(issue.priority || "MEDIUM").label}
+              {getPriorityConfig(issue.issuePriority || issue.priority || "MEDIUM").icon}{" "}
+              {getPriorityConfig(issue.issuePriority || issue.priority || "MEDIUM").label}
             </span>
           </div>
           {/* Assignee */}

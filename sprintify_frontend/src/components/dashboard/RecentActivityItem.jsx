@@ -6,7 +6,7 @@ export default function RecentActivityItem({ issue }) {
           #{issue.id}: {issue.title}
         </p>
         <p className="text-xs text-gray-500 dark:text-gray-400">
-          Priority: {issue.priority} • Points: {issue.storyPoints || 0}
+          Priority: {issue.issuePriority || issue.priority} • Points: {issue.storyPoints || issue.storyPoint || 0}
         </p>
       </div>
       <span className="text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded">

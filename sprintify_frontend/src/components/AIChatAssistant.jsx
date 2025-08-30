@@ -344,7 +344,7 @@ const AIChatAssistant = ({ projectId, isOpen, onClose }) => {
           description: aiIssue.description || "",
           storyPoint: aiIssue.storyPoints || aiIssue.storyPoint || 3,
           type: aiIssue.type || "TASK",
-          priority: aiIssue.priority || "MEDIUM",
+          issuePriority: aiIssue.priority || "MEDIUM",
           statusId: statusId,
           assignee: aiIssue.assignee || null,
           epicId: epicId,
@@ -715,7 +715,8 @@ const AIChatAssistant = ({ projectId, isOpen, onClose }) => {
                   : selectedIssueForDetails.storyPoints <= 2
                   ? "Bug"
                   : "Task"),
-              priority:
+              issuePriority:
+                selectedIssueForDetails.issuePriority ||
                 selectedIssueForDetails.priority ||
                 (selectedIssueForDetails.storyPoints >= 5
                   ? "HIGH"
