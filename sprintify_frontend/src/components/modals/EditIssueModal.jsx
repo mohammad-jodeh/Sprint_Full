@@ -8,6 +8,7 @@ import { fetchBoardColumns } from "../../api/boardColumns";
 import { fetchStatuses } from "../../api/statuses";
 import { fetchEpics } from "../../api/epics";
 import { fetchSprints } from "../../api/sprints";
+import { updateIssue } from "../../api/issues";
 import api from "../../api/config";
 
 const priorityOptions = [
@@ -188,7 +189,7 @@ export default function EditIssueModal({
       };
       // Remove assigneeId from payload since we're using assignee
       delete payload.assigneeId;
-      const res = await api.patch(`/issues/${issue.id}`, payload);
+      const res = await updateIssue(projectId, issue.id, payload);
       toast.success("Issue updated");
       if (onSave) {
         const epic = epics.find((e) => e.id === form.epicId);

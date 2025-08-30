@@ -35,6 +35,11 @@ export default function CreateEpicModal({ onClose, onCreate }) {
       toast.error("Epic name is required");
       return;
     }
+    
+    if (!form.description.trim()) {
+      toast.error("Epic description is required");
+      return;
+    }
 
     setSaving(true);
     try {
@@ -101,12 +106,13 @@ export default function CreateEpicModal({ onClose, onCreate }) {
         {/* Description */}
         <div>
           <label className="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-1">
-            Description
+            Description <span className="text-red-500">*</span>
           </label>
           <textarea
             value={form.description}
             onChange={(e) => setForm({ ...form, description: e.target.value })}
             rows={3}
+            required
             className="w-full px-3 py-2 text-sm rounded-lg border bg-white text-gray-800 dark:bg-gray-800 dark:text-white border-gray-300 dark:border-gray-600 resize-none"
           />
         </div>
