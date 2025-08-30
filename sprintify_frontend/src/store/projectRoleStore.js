@@ -75,6 +75,13 @@ const useProjectRoleStore = create(
 
           const response = await getProjectMembers(projectId);
           
+          // Add safety check for response.members
+          if (!response || !response.members || !Array.isArray(response.members)) {
+            console.error("Invalid response from getProjectMembers:", response);
+            get().setProjectError(projectId, "Invalid response from server");
+            return null;
+          }
+          
           const projectMember = response.members.find(
             (membership) => membership.userId === userId
           );
