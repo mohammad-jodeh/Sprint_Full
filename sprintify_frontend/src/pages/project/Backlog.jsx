@@ -533,15 +533,15 @@ export default function Backlog() {
               : epics.find((e) => e.id === selectedEpic)?.name ||
                 "Unknown Epic"}
             {selectedEpic !== null && (
-              <button
+              <span
                 onClick={(e) => {
                   e.stopPropagation();
                   setSelectedEpic(null);
                 }}
-                className="ml-1 hover:bg-white/20 rounded-full p-1 transition-colors"
+                className="ml-1 hover:bg-white/20 rounded-full p-1 transition-colors cursor-pointer"
               >
                 <X size={14} />
-              </button>
+              </span>
             )}{" "}
           </button>
           <button
@@ -570,15 +570,15 @@ export default function Backlog() {
                 } Priority`
               : "All Priorities"}
             {selectedPriority && (
-              <button
+              <span
                 onClick={(e) => {
                   e.stopPropagation();
                   setSelectedPriority(null);
                 }}
-                className="ml-1 hover:bg-white/20 rounded-full p-1 transition-colors"
+                className="ml-1 hover:bg-white/20 rounded-full p-1 transition-colors cursor-pointer"
               >
                 <X size={14} />
-              </button>
+              </span>
             )}
           </button>
           <button
