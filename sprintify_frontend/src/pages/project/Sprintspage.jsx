@@ -10,7 +10,7 @@ import {
   List,
 } from "lucide-react";
 import { protectedApi } from "../../api/config";
-import { fetchSprints, deleteSprint as deleteSprintAPI } from "../../api/sprints";
+import { fetchSprints, deleteSprint as deleteSprintAPI, fetchSprintIssues } from "../../api/sprints";
 import { fetchIssues } from "../../api/issues";
 import EditSprintModal from "../../components/modals/EditSprintModal";
 import CreateSprintModal from "../../components/modals/CreateSprintModal";
@@ -25,6 +25,7 @@ const Sprintspage = () => {
   const { projectRole } = useProjectRole();
   const [sprints, setSprints] = useState([]);
   const [issues, setIssues] = useState([]);
+  const [sprintStats, setSprintStats] = useState({}); // Store sprint-specific statistics
   const [editing, setEditing] = useState(null);
   const [showCreate, setShowCreate] = useState(false);
   const [filter, setFilter] = useState("all");
@@ -66,17 +67,75 @@ const Sprintspage = () => {
       
       console.log("Loaded sprints:", sprints);
       console.log("Loaded issues:", issues);
+
+      // Load sprint-specific statistics
+      await loadSprintStats(sprints);
+      
     } catch (err) {
       console.error("Failed to load data:", err);
       setError(err.message || "Failed to load sprint data");
       setSprints([]);
       setIssues([]);
+      setSprintStats({});
     } finally {
       setLoading(false);
     }
   };
+
+  const loadSprintStats = async (sprints) => {
+    try {
+      const stats = {};
+      
+      // Load issues for each sprint to get accurate statistics
+      await Promise.all(
+        sprints.map(async (sprint) => {
+          try {
+            const sprintIssuesData = await fetchSprintIssues(projectId, sprint.id);
+            const sprintIssues = Array.isArray(sprintIssuesData) ? sprintIssuesData : sprintIssuesData?.data || [];
+            
+            const points = sprintIssues.reduce(
+              (sum, issue) => sum + (issue.storyPoints || issue.storyPoint || 0),
+              0
+            );
+            
+            stats[sprint.id] = {
+              count: sprintIssues.length,
+              points: points
+            };
+          } catch (err) {
+            console.error(`Failed to load stats for sprint ${sprint.id}:`, err);
+            // Fallback to filtering issues array
+            const fallbackIssues = issues.filter((i) => i.sprintId === sprint.id);
+            stats[sprint.id] = {
+              count: fallbackIssues.length,
+              points: fallbackIssues.reduce((sum, i) => sum + (i.storyPoints || i.storyPoint || 0), 0)
+            };
+          }
+        })
+      );
+      
+      setSprintStats(stats);
+    } catch (err) {
+      console.error("Failed to load sprint statistics:", err);
+      // Fallback to client-side filtering
+      const fallbackStats = {};
+      sprints.forEach(sprint => {
+        const sprintIssues = issues.filter((i) => i.sprintId === sprint.id);
+        fallbackStats[sprint.id] = {
+          count: sprintIssues.length,
+          points: sprintIssues.reduce((sum, i) => sum + (i.storyPoints || i.storyPoint || 0), 0)
+        };
+      });
+      setSprintStats(fallbackStats);
+    }
+  };
   const getStats = (sprintId) => {
-    // Ensure issues is an array before filtering
+    // Use preloaded sprint statistics if available
+    if (sprintStats[sprintId]) {
+      return sprintStats[sprintId];
+    }
+    
+    // Fallback to client-side filtering if stats not loaded yet
     if (!Array.isArray(issues)) {
       return { count: 0, points: 0 };
     }
@@ -97,6 +156,43 @@ const Sprintspage = () => {
     } catch (err) {
       console.error("Failed to toggle archive:", err);
       setError(err.response?.data?.message || "Failed to update sprint");
+    }
+  };
+
+  // Function to refresh sprint statistics when issues change
+  const refreshSprintStats = async (affectedSprintIds = []) => {
+    try {
+      const newStats = { ...sprintStats };
+      
+      // If no specific sprints provided, refresh all
+      const sprintsToRefresh = affectedSprintIds.length > 0 
+        ? sprints.filter(s => affectedSprintIds.includes(s.id))
+        : sprints;
+      
+      await Promise.all(
+        sprintsToRefresh.map(async (sprint) => {
+          try {
+            const sprintIssuesData = await fetchSprintIssues(projectId, sprint.id);
+            const sprintIssues = Array.isArray(sprintIssuesData) ? sprintIssuesData : sprintIssuesData?.data || [];
+            
+            const points = sprintIssues.reduce(
+              (sum, issue) => sum + (issue.storyPoints || issue.storyPoint || 0),
+              0
+            );
+            
+            newStats[sprint.id] = {
+              count: sprintIssues.length,
+              points: points
+            };
+          } catch (err) {
+            console.error(`Failed to refresh stats for sprint ${sprint.id}:`, err);
+          }
+        })
+      );
+      
+      setSprintStats(newStats);
+    } catch (err) {
+      console.error("Failed to refresh sprint statistics:", err);
     }
   };
 
@@ -267,6 +363,8 @@ const Sprintspage = () => {
               prev.map((s) => (s.id === updated.id ? updated : s))
             );
             setError(null);
+            // Refresh statistics for the updated sprint
+            refreshSprintStats([updated.id]);
           }}
           onError={setError}
         />
@@ -279,6 +377,11 @@ const Sprintspage = () => {
           onCreate={(newSprint) => {
             setSprints((prev) => [...prev, newSprint]);
             setError(null);
+            // Initialize statistics for the new sprint
+            setSprintStats(prev => ({
+              ...prev,
+              [newSprint.id]: { count: 0, points: 0 }
+            }));
           }}
           onError={setError}
         />
