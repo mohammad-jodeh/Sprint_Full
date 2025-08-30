@@ -45,7 +45,7 @@ export default function EditIssueModal({
   const [form, setForm] = useState({
     title: "",
     description: "",
-    storyPoints: 0,
+    storyPoint: 0,
     type: "Task",
     priority: "MEDIUM",
     statusId: "", // Changed from 'status' to 'statusId' to match CreateIssueModal
@@ -74,7 +74,7 @@ export default function EditIssueModal({
       setForm({
         title: issue.title || "",
         description: issue.description || "",
-        storyPoints: issue.storyPoint || issue.storyPoints || 0,
+        storyPoint: issue.storyPoint || issue.storyPoints || 0,
         type: issue.type || "Task",
         priority: issue.priority || "MEDIUM",
         statusId: resolveStatusId(),
@@ -160,8 +160,7 @@ export default function EditIssueModal({
         const updatedIssue = {
           ...issue,
           ...form,
-          storyPoints: form.storyPoints, // Keep consistent naming
-          storyPoint: form.storyPoints, // Transform back to AI format
+          storyPoint: form.storyPoint, // Use consistent naming to match backend
           statusId: form.statusId || null, // Use statusId directly as string
           status: selectedStatus?.name || form.status, // Use status name for display
           assigneeUser: users.find((u) => u.id === form.assigneeId) || null,
@@ -264,12 +263,12 @@ export default function EditIssueModal({
             <input
               type="number"
               min="0"
-              value={form.storyPoints}
+              value={form.storyPoint}
               onChange={(e) => {
                 const value = Math.max(0, +e.target.value);
                 setForm((prev) => ({
                   ...prev,
-                  storyPoints: value,
+                  storyPoint: value,
                 }));
               }}
               className="w-full px-3 py-2 text-sm rounded-lg border bg-white text-gray-800 dark:bg-gray-800 dark:text-white border-gray-300 dark:border-gray-600"
