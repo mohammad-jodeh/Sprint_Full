@@ -1,17 +1,9 @@
-import { protectedApi, baseUrl } from "./config";
-
-// Helper function to determine if we're using json-server
-const isJsonServer = () => baseUrl.includes('3001');
+import { protectedApi } from "./config";
 
 export const fetchProjects = async () => {
   try {
-    if (isJsonServer()) {
-      const response = await protectedApi.get("/projects");
-      return { data: response.data };
-    } else {
-      const response = await protectedApi.get("/project");
-      return response.data;
-    }
+    const response = await protectedApi.get("/project");
+    return response.data;
   } catch (error) {
     console.error('Failed to fetch projects:', error);
     throw error;
@@ -20,13 +12,8 @@ export const fetchProjects = async () => {
 
 export const fetchProjectById = async (id) => {
   try {
-    if (isJsonServer()) {
-      const response = await protectedApi.get(`/projects/${id}`);
-      return response.data;
-    } else {
-      const response = await protectedApi.get(`/project/${id}`);
-      return response.data;
-    }
+    const response = await protectedApi.get(`/project/${id}`);
+    return response.data;
   } catch (error) {
     console.error('Failed to fetch project:', error);
     throw error;

@@ -1,9 +1,8 @@
 import axios from "axios";
 import useAuthStore from "../store/authstore";
 
-// Use environment variable or default to json-server for development
-const USE_JSON_SERVER = import.meta.env.VITE_USE_JSON_SERVER !== 'false';
-export const baseUrl = USE_JSON_SERVER ? "http://localhost:3001" : "http://localhost:4000/api/v1";
+// Always use the backend API - JSON server support removed
+export const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:4000/api/v1";
 
 const api = axios.create({
   baseURL: baseUrl,
@@ -20,11 +19,6 @@ const protectedApi = axios.create({
 
 // Request interceptor for adding auth token
 protectedApi.interceptors.request.use((config) => {
-  // Skip auth headers for json-server
-  if (baseUrl.includes('3001')) {
-    return config;
-  }
-  
   const token = useAuthStore.getState().token;
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -43,11 +37,6 @@ protectedApi.interceptors.request.use((config) => {
 protectedApi.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Skip auth error handling for json-server
-    if (baseUrl.includes('3001')) {
-      return Promise.reject(error);
-    }
-    
     if (error.response?.status === 401) {
       // Token expired or invalid
       useAuthStore.getState().logout();
