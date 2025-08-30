@@ -44,6 +44,7 @@ const useProjectRoleStore = create(
               ...state.projectRoles[projectId],
               loading: false,
               error,
+              lastFetched: Date.now(), // Add timestamp for error caching
             },
           },
         })),
@@ -68,6 +69,21 @@ const useProjectRoleStore = create(
           if (existingRole.lastFetched > fiveMinutesAgo) {
             return existingRole.role;
           }
+        }
+
+        // Prevent repeated calls for recent errors (wait 30 seconds before retry)
+        if (existingRole && existingRole.error && existingRole.lastFetched) {
+          const thirtySecondsAgo = Date.now() - 30 * 1000;
+          if (existingRole.lastFetched > thirtySecondsAgo) {
+            console.warn(`Skipping repeated getProjectMembers call due to recent error for project ${projectId}`);
+            return null;
+          }
+        }
+
+        // Prevent concurrent calls for the same project
+        if (existingRole && existingRole.loading) {
+          console.warn(`Already loading project role for project ${projectId}`);
+          return null;
         }
 
         try {
