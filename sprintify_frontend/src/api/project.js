@@ -13,7 +13,7 @@ export const fetchProjects = async () => {
 export const fetchProjectById = async (id) => {
   try {
     const response = await protectedApi.get(`/project/${id}`);
-    return response.data;
+    return response.data?.project || response.data;
   } catch (error) {
     console.error('Failed to fetch project:', error);
     throw error;
