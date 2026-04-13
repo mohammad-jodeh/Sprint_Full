@@ -149,10 +149,10 @@ export const removeProjectMember = async (projectId, memberId) => {
 };
 
 // Update project member permissions
-export const updateProjectMember = async (projectId, memberId, memberData) => {
+export const updateProjectMember = async (projectId, memberData) => {
   try {
     const response = await protectedApi.patch(
-      `/${projectId}/members/${memberId}`,
+      `/${projectId}/members`,
       memberData
     );
     return response.data;

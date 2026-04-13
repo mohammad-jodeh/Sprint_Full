@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { X, Search, User, Mail, CheckCircle, AlertCircle } from "lucide-react";
 import { useParams } from "react-router-dom";
-import api from "../../api/config";
 import { getProjectMembers, addProjectMember } from "../../api/projectMembers";
 import { getUserByEmailOrId } from "../../api/getUserByEmailOrId";
 import Portal from "../ui/Portal";
@@ -85,14 +84,8 @@ export default function InviteTeamMemberModal({ onClose, onAdd }) {
           showCustomToast("User not found", "error");
         }
       } else {
-        // Search by name through all users
-        const response = await api.get("/users");
-        const filtered = response.data.filter(u => 
-          u.fullName.toLowerCase().includes(searchTerm.toLowerCase()) &&
-          u.id !== user?.id &&
-          !disabledIds.includes(u.id)
-        );
-        setSearchResults(filtered.slice(0, 10)); // Limit to 10 results
+        setSearchResults([]);
+        showCustomToast("Please search by email (name search is not supported by backend API)", "error");
       }
     } catch (error) {
       console.error("Search failed:", error);

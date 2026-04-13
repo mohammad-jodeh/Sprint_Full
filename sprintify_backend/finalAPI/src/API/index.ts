@@ -39,6 +39,9 @@ export class AppServer {
     this.app.get("/health-check", (_, res) => {
       res.send({ status: "ok" });
     });
+    this.app.get(`${this.apiPrefix}/health-check`, (_, res) => {
+      res.send({ status: "ok" });
+    });
 
     const routeFiles = await glob(
       path.resolve(__dirname, "routes/*.ts").replace(/\\/g, "/")
