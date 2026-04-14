@@ -18,12 +18,12 @@ const SprintBoard = ({
     };
 
     // Initialize groups for each active sprint
-    activeSprints.forEach(sprint => {
+    (activeSprints || []).forEach(sprint => {
       groups[sprint.id] = [];
     });
 
     // Group issues
-    issues.forEach(issue => {
+    (issues || []).forEach(issue => {
       if (!issue.sprintId) {
         groups.backlog.push(issue);
       } else if (groups[issue.sprintId]) {
@@ -50,41 +50,60 @@ const SprintBoard = ({
 
     const newSprintId = destination.droppableId === "backlog" ? null : destination.droppableId;
     const originalSprintId = source.droppableId === "backlog" ? null : source.droppableId;
+    
+    // Find the issue to update
+    const issueToUpdate = (issues || []).find(issue => issue.id === draggableId);
+    if (!issueToUpdate) {
+      toast.error("Issue not found");
+      return;
+    }
 
+    // Store original issues for potential revert
+    const originalIssues = issues;
+    
     // Optimistically update the UI
     setIssues((prev) =>
-      prev.map((issue) =>
+      (prev || []).map((issue) =>
         issue.id === draggableId ? { ...issue, sprintId: newSprintId } : issue
       )
     );
 
     try {
-      await updateIssue(projectId, draggableId, { sprintId: newSprintId });
+      const response = await updateIssue(projectId, draggableId, { sprintId: newSprintId });
+      
+      // Verify the response
+      if (!response) {
+        throw new Error("Invalid response from server");
+      }
+
+      // Update the issue state with the returned data from server
+      const updatedIssueData = response.data || response;
+      if (updatedIssueData && updatedIssueData.id) {
+        setIssues((prev) =>
+          (prev || []).map((issue) =>
+            issue.id === updatedIssueData.id ? updatedIssueData : issue
+          )
+        );
+      }
       
       if (newSprintId) {
-        const targetSprint = activeSprints.find(s => s.id === newSprintId);
+        const targetSprint = (activeSprints || []).find(s => s.id === newSprintId);
         toast.success(`Issue moved to ${targetSprint?.name || 'sprint'}`);
       } else {
         toast.success("Issue moved to backlog");
       }
     } catch (error) {
       console.error("Failed to move issue:", error);
-      toast.error("Failed to move issue");
+      toast.error(`Failed to move issue: ${error.message || 'Unknown error'}`);
       
-      // Revert the optimistic update
-      setIssues((prev) =>
-        prev.map((issue) =>
-          issue.id === draggableId
-            ? { ...issue, sprintId: originalSprintId }
-            : issue
-        )
-      );
+      // Revert the optimistic update to original state
+      setIssues(originalIssues);
     }
   };
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <div className="p-6">
+      <div className="p-6 min-h-screen bg-white dark:bg-gray-900">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
             Sprint Board
@@ -98,12 +117,12 @@ const SprintBoard = ({
           {/* Backlog Section */}
           <SprintBoardSection
             isBacklog={true}
-            issues={issuesBySprintAndBacklog.backlog}
+            issues={issuesBySprintAndBacklog.backlog || []}
             onIssueClick={onIssueClick}
           />
 
           {/* Active Sprint Sections */}
-          {activeSprints.map(sprint => (
+          {(activeSprints || []).map(sprint => (
             <SprintBoardSection
               key={sprint.id}
               sprint={sprint}
@@ -113,7 +132,7 @@ const SprintBoard = ({
           ))}
         </div>
 
-        {activeSprints.length === 0 && (
+        {(!activeSprints || activeSprints.length === 0) && (
           <div className="text-center py-12 text-gray-500 dark:text-gray-400">
             <div className="mb-4 text-4xl">🚀</div>
             <h3 className="text-lg font-medium mb-2">No Active Sprints</h3>

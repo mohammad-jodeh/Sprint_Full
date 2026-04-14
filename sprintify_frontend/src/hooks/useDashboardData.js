@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { protectedApi } from "../api/config";
-import { useDataRefresh } from "./useDataRefresh";
-import useAuthStore from "../store/authstore";
 import { fetchProjects } from "../api/projects";
+import { fetchTasks } from "../api/tasks";
+import useAuthStore from "../store/authstore";
 
 const STATUS_TYPE_LABELS = {
   0: "To Do",
@@ -23,77 +22,75 @@ export default function useDashboardData() {
 
     setLoading(true);
     try {
-      const [issuesRes, projectsRes] =
-        await Promise.all([
-          protectedApi.get(`/issues/${user.id}`), // Fixed: use protectedApi for authentication
-          fetchProjects(), // This returns only projects the user has access to
-        ]);
-      const issues = Array.isArray(issuesRes.data) ? issuesRes.data : [];
+      // Fetch all accessible projects
+      const projectsRes = await fetchProjects();
       const projects = Array.isArray(projectsRes.projects) ? projectsRes.projects : [];
+      
+      if (projects.length === 0) {
+        setStatusData([]);
+        setProjectIssueData([]);
+        setRecentIssues([]);
+        setIssueCount(0);
+        setLoading(false);
+        return;
+      }
 
-      // Get user's accessible projects - already filtered by backend
-      const userProjectIds = projects.map((project) => String(project.id));
+      // Fetch issues from each project
+      const allIssues = [];
+      const projectStats = {};
 
-      // Filter issues to only include those from projects where user is a member
-      const userIssues = issues.filter((issue) =>
-        userProjectIds.includes(String(issue.projectId))
-      );
-
-      // Update counts to use filtered issues
-      setIssueCount(userIssues.length);
-      setRecentIssues(userIssues.slice(-5).reverse());
-
-      // Build status type map from the issue data itself (status.type field)
-      const statusTypeMap = {};
-      userIssues.forEach((issue) => {
-        if (issue.status && issue.status.id) {
-          statusTypeMap[String(issue.status.id)] = issue.status.type;
+      for (const project of projects) {
+        try {
+          const issues = await fetchTasks(project.id);
+          const issueArray = Array.isArray(issues) ? issues : (issues?.data || []);
+          allIssues.push(...issueArray);
+          projectStats[project.name] = issueArray.length;
+        } catch (error) {
+          console.error(`Failed to fetch issues for project ${project.id}:`, error);
+          projectStats[project.name] = 0;
         }
-      });
+      }
 
-      const typeCount = {};
-      userIssues.forEach((issue) => {
+      // Calculate total issues
+      setIssueCount(allIssues.length);
+      setRecentIssues(allIssues.slice(-5).reverse());
+
+      // Build status distribution
+      const statusCount = {};
+      allIssues.forEach((issue) => {
         if (issue.status) {
-          const type = issue.status.type;
-          const label = STATUS_TYPE_LABELS[type] || "Unknown";
-          typeCount[label] = (typeCount[label] || 0) + 1;
+          const statusName = issue.status.name || (STATUS_TYPE_LABELS[issue.status.type] || "Unknown");
+          statusCount[statusName] = (statusCount[statusName] || 0) + 1;
         }
       });
 
-      // Ensure consistent order: To Do, In Progress, Done
-      const orderedStatuses = ["To Do", "In Progress", "Done"];
-      const statusChartData = orderedStatuses
-        .filter((status) => typeCount[status] > 0)
-        .map((name) => ({ name, value: typeCount[name] }));
+      // Format status data
+      const statusChartData = Object.entries(statusCount)
+        .map(([name, value]) => ({ name, value }))
+        .sort((a, b) => {
+          const order = ["To Do", "In Progress", "Done"];
+          return order.indexOf(a.name) - order.indexOf(b.name);
+        });
+      
       setStatusData(statusChartData);
 
-      // Project issues chart - using already filtered projects
-      const projectMap = {};
-      projects.forEach((p) => {
-        projectMap[String(p.id)] = p.name;
-      });
-
-      // Initialize all accessible projects with 0 issues
-      const projectGroup = {};
-      projects.forEach((project) => {
-        projectGroup[project.name] = 0;
-      });
-
-      // Count issues for each accessible project using filtered issues
-      userIssues.forEach((issue) => {
-        const id = String(issue.projectId);
-        const name = projectMap[id];
-        if (name) {
-          projectGroup[name] = (projectGroup[name] || 0) + 1;
-        }
-      });
-
-      const projectChartData = Object.entries(projectGroup).map(
-        ([project, issues]) => ({ project, issues })
-      );
+      // Format project data
+      const projectChartData = projects
+        .map((project) => ({
+          project: project.name,
+          issues: projectStats[project.name] || 0,
+        }))
+        .filter(p => p.issues > 0) // Only show projects with issues
+        .sort((a, b) => b.issues - a.issues); // Sort by issue count descending
+      
       setProjectIssueData(projectChartData);
     } catch (error) {
       console.error("Failed to fetch dashboard data:", error);
+      // Gracefully handle failure
+      setStatusData([]);
+      setProjectIssueData([]);
+      setRecentIssues([]);
+      setIssueCount(0);
     } finally {
       setLoading(false);
     }
@@ -101,14 +98,7 @@ export default function useDashboardData() {
 
   useEffect(() => {
     fetchData();
-  }, []);
-
-  // Listen for data refresh events (e.g., when projects are deleted)
-  useDataRefresh((eventType) => {
-    if (eventType === "projects" || eventType === "general") {
-      fetchData();
-    }
-  });
+  }, [user?.id]);
 
   return {
     statusData,

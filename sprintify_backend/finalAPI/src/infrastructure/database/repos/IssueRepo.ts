@@ -98,23 +98,35 @@ export class IssueRepo implements IIssueRepo {
     // Get total count
     const total = await query.getCount();
     
-    // Select only needed fields for performance
+    // Select all necessary fields for the frontend (including sprintId, statusId, assignee, epicId, description)
     query.select([
       "issue.id",
       "issue.key",
       "issue.title",
+      "issue.description",
       "issue.storyPoint",
       "issue.type",
       "issue.issuePriority",
+      "issue.statusId",
+      "issue.assignee",
+      "issue.sprintId",
+      "issue.epicId",
+      "issue.projectId",
       "status.id",
       "status.name",
+      "status.type",
       "assigneeUser.id",
       "assigneeUser.fullName",
+      "assigneeUser.email",
       "assigneeUser.image",
       "sprint.id",
       "sprint.name",
+      "sprint.startDate",
+      "sprint.endDate",
       "epic.id",
-      "epic.title"
+      "epic.key",
+      "epic.title",
+      "epic.description"
     ]);
 
     const issues = await query.getMany();
@@ -142,8 +154,38 @@ export class IssueRepo implements IIssueRepo {
   }
 
   async update(id: string, updateData: Partial<Issue>): Promise<Issue | null> {
-    await this.repo.update(id, updateData);
-    return await this.getById(id); // Assuming getById fetches the full entity
+    console.log("🔧 IssueRepo.update called with:", { id, updateData });
+    
+    // Log sprintId specifically since that's what we're tracking
+    if (updateData.sprintId !== undefined) {
+      console.log("💾 Updating sprintId to:", updateData.sprintId);
+    }
+    
+    // Get the existing issue first
+    const existingIssue = await this.repo.findOne({ where: { id } });
+    if (!existingIssue) {
+      console.error("❌ Issue not found:", id);
+      return null;
+    }
+
+    // Merge the updates into the existing issue
+    const mergedIssue = this.repo.merge(existingIssue, updateData);
+    
+    console.log("📝 Merged issue:", { id: mergedIssue.id, sprintId: mergedIssue.sprintId });
+
+    // Save the merged issue (this ensures all relations and fields are properly persisted)
+    const savedIssue = await this.repo.save(mergedIssue);
+    
+    console.log("✅ Issue saved to database with sprintId:", savedIssue.sprintId);
+
+    // Fetch the complete issue with all relations
+    const fullIssue = await this.getById(id);
+    
+    if (fullIssue) {
+      console.log("✅ Retrieved full issue from DB with sprintId:", fullIssue.sprintId);
+    }
+    
+    return fullIssue;
   }
 
   async generateIssueKey(projectId: string): Promise<string> {

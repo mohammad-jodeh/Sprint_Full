@@ -46,7 +46,14 @@ export const updateIssue = async (projectId, issueId, issueData) => {
       `/${projectId}/issues/${issueId}`,
       issueData
     );
-    return response.data;
+    
+    // Ensure we have data in the response
+    if (!response.data) {
+      throw new Error("Empty response from server");
+    }
+    
+    // Return the issue data from the response
+    return response.data.data || response.data;
   } catch (error) {
     if (error.response) {
       throw new Error(error.response.data?.message || "Failed to update issue");

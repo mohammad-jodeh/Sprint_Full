@@ -30,18 +30,22 @@ export const authenticate = (
     res
       .status(401)
       .json({ message: "Not authorized, token not found", success: false });
-    console.error('"Not authorized, token not found"');
+    console.error("❌ Request rejected: token not found");
     return;
   }
 
   try {
-    const decoded = jwt.verify(
-      token,
-      "secretKeyPlaceHolderWillReplaceLater"
-    ) as JwtPayload;
+    const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) {
+      console.error("🔴 CRITICAL: JWT_SECRET environment variable not set");
+      res.status(500).json({ message: "Server configuration error", success: false });
+      return;
+    }
+
+    const decoded = jwt.verify(token, jwtSecret) as JwtPayload;
 
     if (!decoded || !decoded.email) {
-      res.status(401).json({ message: "Not authorized, email not found" });
+      res.status(401).json({ message: "Not authorized, email not found", success: false });
       return;
     }
 
@@ -49,7 +53,13 @@ export const authenticate = (
 
     next();
   } catch (err) {
-    res.status(401).json({ message: "Not authorized, invalid token" });
+    if (err instanceof jwt.TokenExpiredError) {
+      res.status(401).json({ message: "Token expired, please login again", success: false });
+    } else if (err instanceof jwt.JsonWebTokenError) {
+      res.status(401).json({ message: "Not authorized, invalid token", success: false });
+    } else {
+      res.status(401).json({ message: "Not authorized", success: false });
+    }
     return;
   }
 };

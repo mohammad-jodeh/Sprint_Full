@@ -3,6 +3,7 @@ import { BaseRoute } from "./base.route";
 import { SprintController } from "../controllers/sprint.controller";
 import { IssueController } from "../controllers/issue.controller";
 import { authenticate } from "../middlewares/auth.middleware";
+import { authorizeProjectAccess } from "../middlewares/authorize-project.middleware";
 import { restrictTokens } from "../middlewares/tokenTypes.middleware";
 import { restrictTo } from "../middlewares/permissions.middleware";
 import { ProjectPermission } from "../../domain/types";
@@ -21,10 +22,13 @@ export class SprintRoutes extends BaseRoute {
     const controller = container.resolve(SprintController);
     const issueController = container.resolve(IssueController);
 
+    // Apply authentication and authorization to all sprint routes
+    this.router.use(authenticate);
+    this.router.use(authorizeProjectAccess);
+
     // Create sprint
     this.router.post(
       "/",
-      authenticate,
       restrictTokens(Token.ACCESS),
       restrictTo(ProjectPermission.MODERATOR),
       controller.create.bind(controller)
@@ -33,7 +37,6 @@ export class SprintRoutes extends BaseRoute {
     // Update sprint
     this.router.patch(
       "/:id",
-      authenticate,
       restrictTokens(Token.ACCESS),
       restrictTo(ProjectPermission.MODERATOR),
       controller.update.bind(controller)
@@ -42,7 +45,6 @@ export class SprintRoutes extends BaseRoute {
     // Delete sprint
     this.router.delete(
       "/:id",
-      authenticate,
       restrictTokens(Token.ACCESS),
       restrictTo(ProjectPermission.MODERATOR),
       controller.delete.bind(controller)
@@ -51,7 +53,6 @@ export class SprintRoutes extends BaseRoute {
     // Get all sprints for project
     this.router.get(
       "/",
-      authenticate,
       restrictTokens(Token.ACCESS),
       controller.find.bind(controller)
     );
@@ -59,7 +60,6 @@ export class SprintRoutes extends BaseRoute {
     // Get sprint by ID
     this.router.get(
       "/:id",
-      authenticate,
       restrictTokens(Token.ACCESS),
       controller.getById.bind(controller)
     );
@@ -67,7 +67,6 @@ export class SprintRoutes extends BaseRoute {
     // Get issues for a specific sprint
     this.router.get(
       "/:id/issues",
-      authenticate,
       restrictTokens(Token.ACCESS),
       issueController.getBySprint.bind(issueController)
     );

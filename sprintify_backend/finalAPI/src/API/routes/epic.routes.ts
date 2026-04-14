@@ -2,6 +2,7 @@ import { container } from "tsyringe";
 import { BaseRoute } from "./base.route";
 import { EpicController } from "../controllers/epic.controller";
 import { authenticate } from "../middlewares/auth.middleware";
+import { authorizeProjectAccess } from "../middlewares/authorize-project.middleware";
 import { restrictTokens } from "../middlewares/tokenTypes.middleware";
 import { Token } from "../enums/token";
 import { Router } from "express";
@@ -19,6 +20,7 @@ export class EpicRoutes extends BaseRoute {
     const controller = container.resolve(EpicController);
 
     this.router.use(authenticate);
+    this.router.use(authorizeProjectAccess);
     this.router.use(restrictTokens(Token.ACCESS));
 
     this.router.post("/", controller.create.bind(controller));

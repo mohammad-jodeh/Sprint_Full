@@ -6,9 +6,10 @@ import { updateTask } from "../api/tasks";
  * @param {Array} issues - The list of issues
  * @param {Function} setIssues - Function to update issues
  * @param {Array} columns - List of columns
+ * @param {String} projectId - The current project ID
  * @returns {Object} - Drag and drop handlers and state
  */
-export function useBoardDragDrop(issues, setIssues, columns) {
+export function useBoardDragDrop(issues, setIssues, columns, projectId) {
   const [activeId, setActiveId] = useState(null);
   const [activeDragData, setActiveDragData] = useState(null);
 
@@ -103,7 +104,7 @@ export function useBoardDragDrop(issues, setIssues, columns) {
         );
 
         // Update the task on the server
-        updateTask(issueId, { statusId: newStatusId }).catch((error) => {
+        updateTask(projectId, issueId, { statusId: newStatusId }).catch((error) => {
           console.error("Failed to update task status:", error);
           // Revert optimistic update on failure
           setIssues((prevIssues) =>

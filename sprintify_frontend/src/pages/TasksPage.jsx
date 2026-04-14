@@ -1,32 +1,35 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import useAuthStore from "../store/authstore";
 import { CircleDot, Hourglass, CheckCircle } from "lucide-react";
+import { protectedApi } from "../api/config";
 
 import StatusCard from "../components/tasks/StatusCard";
 import ProgressBar from "../components/tasks/ProgressBar";
 import TaskCard from "../components/tasks/TaskCard";
-import { fetchIssueByUserId } from "../api/issues";
 
 export default function TasksPage() {
-  const { user, currentProjectId } = useAuthStore();
+  const { user } = useAuthStore();
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [greeting, setGreeting] = useState("Welcome");
 
-  // fetch tasks for current user when project or user changes
+  // Fetch all assigned tasks for the current user across all projects
   const fetchTasks = useCallback(async () => {
-    if (!currentProjectId || !user?.id) return;
+    if (!user?.id) return;
     setLoading(true);
     try {
-      const issues = await fetchIssueByUserId(currentProjectId, user.id);
-      setTasks(issues);
+      // Fetch all issues assigned to the current user globally
+      const response = await protectedApi.get(`/issues/${user.id}`);
+      const issuesData = response.data?.data || response.data?.issues || [];
+      const issuesArray = Array.isArray(issuesData) ? issuesData : [];
+      setTasks(issuesArray);
     } catch (err) {
       console.error("Failed to load user issues:", err);
       setTasks([]);
     } finally {
       setLoading(false);
     }
-  }, [currentProjectId, user]);
+  }, [user?.id]);
 
   useEffect(() => {
     fetchTasks();
@@ -44,26 +47,28 @@ export default function TasksPage() {
     fetchTasks();
   };
 
-  // compute status counts and story point progress
+  // Compute status counts based on status.type (0=Todo, 1=In Progress, 2=Done)
   const statusCounts = useMemo(() => {
     const counts = { todo: 0, inProgress: 0, done: 0 };
     tasks.forEach((task) => {
-      if (task.statusId === 1) counts.todo++;
-      else if (task.statusId === 2) counts.inProgress++;
-      else if (task.statusId === 3) counts.done++;
+      if (task.status?.type !== undefined) {
+        if (task.status.type === 0) counts.todo++;
+        else if (task.status.type === 1) counts.inProgress++;
+        else if (task.status.type === 2) counts.done++;
+      }
     });
     return counts;
   }, [tasks]);
 
   const totalPoints = useMemo(
-    () => tasks.reduce((sum, t) => sum + (t.storyPoints || 0), 0),
+    () => tasks.reduce((sum, t) => sum + (t.storyPoint || 0), 0),
     [tasks]
   );
   const completedPoints = useMemo(
     () =>
       tasks
-        .filter((t) => t.statusId === 3)
-        .reduce((sum, t) => sum + (t.storyPoints || 0), 0),
+        .filter((t) => t.status?.type === 2)
+        .reduce((sum, t) => sum + (t.storyPoint || 0), 0),
     [tasks]
   );
 

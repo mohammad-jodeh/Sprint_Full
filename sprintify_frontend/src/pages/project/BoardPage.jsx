@@ -18,6 +18,7 @@ const BoardPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const {
     isLoading,
+    error,
     issues,
     setIssues,
     statuses,
@@ -67,6 +68,28 @@ const BoardPage = () => {
   };
   if (isLoading || roleLoading) {
     return <LoadingScreen message="Loading board..." />;
+  }
+
+  // Check for data loading errors
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen space-y-4">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+            Error Loading Board
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
+            {error}
+          </p>
+          <a
+            href="/dashboard/projects"
+            className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover"
+          >
+            Back to Projects
+          </a>
+        </div>
+      </div>
+    );
   }
 
   // Check if user has access to the project

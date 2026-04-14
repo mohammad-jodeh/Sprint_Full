@@ -63,7 +63,8 @@ const Board = ({
   const filters = storeFilters;
   const setFilters = storeSetFilters; // Apply filters to issues (including sprint filtering via filters)
   const filteredIssues = useMemo(() => {
-    if (!board.issues) return [];
+    // Ensure board.issues is an array
+    if (!Array.isArray(board.issues)) return [];
 
     let filtered = board.issues;
 
@@ -151,7 +152,14 @@ const Board = ({
 
     try {
       // Update the issue's status in the API
-      await updateTask(issueId, { statusId: targetStatusId });
+      // updateTask requires: projectId, issueId, updates
+      const projectId = board.project?.id;
+      if (!projectId) {
+        console.error("Project ID is not available");
+        return;
+      }
+      
+      await updateTask(projectId, issueId, { statusId: targetStatusId });
 
       // Update the local state immediately to reflect the change
       if (setIssues) {
@@ -168,6 +176,24 @@ const Board = ({
       // You could add a toast notification here to inform the user of the error
     }
   };
+
+  // Check if we have required data to render the board
+  const hasRequiredData = board?.columns && board.columns.length > 0 && board.issues;
+  
+  if (!hasRequiredData) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen space-y-4">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+            No Board Data
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400">
+            This project doesn't have any board columns configured yet.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative overflow-y-hidden">

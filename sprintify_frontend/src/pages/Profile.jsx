@@ -17,11 +17,6 @@ export default function Profile() {
   const navigate = useNavigate();
   const { user, updateUser, token, getUserFromToken } = useAuthStore();
 
-  // Debug: Log token info
-  console.log("🔍 Current token:", token?.substring(0, 100) + "...");
-  console.log("🔍 Decoded token:", getUserFromToken());
-  console.log("🔍 User object:", user);
-
   const [form, setForm] = useState({
     fullName: "",
     email: "",
@@ -54,8 +49,12 @@ export default function Profile() {
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setAvatar(URL.createObjectURL(file));
-      // Optionally upload avatar to backend here
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // Convert file to base64 for persistence
+        setAvatar(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
   };  const handleSave = async () => {
     setSaving(true);

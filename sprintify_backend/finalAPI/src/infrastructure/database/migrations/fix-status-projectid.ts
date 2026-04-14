@@ -19,9 +19,20 @@ export async function fixStatusProjectIdMigration(): Promise<void> {
     await queryRunner.startTransaction();
     
     // Check if there are any status records with null projectId
-    const nullProjectIdStatuses = await queryRunner.query(
-      `SELECT id FROM status WHERE "projectId" IS NULL`
-    );
+    let nullProjectIdStatuses;
+    try {
+      nullProjectIdStatuses = await queryRunner.query(
+        `SELECT id FROM status WHERE "projectId" IS NULL`
+      );
+    } catch (err: any) {
+      // If tables don't exist yet (first run), skip migration
+      if (err.code === '42P01') { // PostgreSQL error code for undefined table
+        console.info("ℹ️  Status table doesn't exist yet. Skipping migration (will run after schema sync).");
+        await queryRunner.rollbackTransaction();
+        return;
+      }
+      throw err;
+    }
     
     if (nullProjectIdStatuses.length === 0) {
       console.info("✅ No status records with null projectId found. Migration skipped.");

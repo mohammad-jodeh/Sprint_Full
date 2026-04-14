@@ -2,6 +2,7 @@ import { container } from "tsyringe";
 import { BaseRoute } from "./base.route";
 import { ProjectMembersController } from "../controllers/project-member.controller";
 import { authenticate } from "../middlewares/auth.middleware";
+import { authorizeProjectAccess } from "../middlewares/authorize-project.middleware";
 import { restrictTokens } from "../middlewares/tokenTypes.middleware";
 import { restrictTo } from "../middlewares/permissions.middleware";
 import { ProjectPermission } from "../../domain/types";
@@ -13,9 +14,11 @@ export class ProjectMembersRoutes extends BaseRoute {
   protected initRoutes(): void {
     const controller = container.resolve(ProjectMembersController);
 
+    // Apply authentication and project authorization to all project member routes
+    this.router.use(authenticate, authorizeProjectAccess);
+
     this.router.post(
       "",
-      authenticate,
       restrictTokens(Token.ACCESS),
       restrictTo(ProjectPermission.MODERATOR), // anyone with MODERATOR or higher can add members
       controller.add.bind(controller)
@@ -23,7 +26,6 @@ export class ProjectMembersRoutes extends BaseRoute {
 
     this.router.patch(
       "",
-      authenticate,
       restrictTokens(Token.ACCESS),
       restrictTo(ProjectPermission.MODERATOR),
       controller.update.bind(controller)
@@ -31,7 +33,6 @@ export class ProjectMembersRoutes extends BaseRoute {
 
     this.router.delete(
       "/:membershipId",
-      authenticate,
       restrictTokens(Token.ACCESS),
       restrictTo(ProjectPermission.MODERATOR),
       controller.remove.bind(controller)
@@ -39,7 +40,6 @@ export class ProjectMembersRoutes extends BaseRoute {
 
     this.router.get(
       "",
-      authenticate,
       restrictTokens(Token.ACCESS),
       controller.get.bind(controller)
     );

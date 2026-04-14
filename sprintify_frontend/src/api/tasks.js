@@ -4,7 +4,9 @@ import { protectedApi } from "./config";
 export const fetchTasks = async (projectId, params = {}) => {
   try {
     const response = await protectedApi.get(`/${projectId}/issues`, { params });
-    return response.data.data?.issues || response.data.issues || response.data;
+    // Backend returns: { message, data: [...], pagination: {...} }
+    const tasksArray = response.data.data || response.data.issues || [];
+    return Array.isArray(tasksArray) ? tasksArray : [];
   } catch (error) {
     console.error('Failed to fetch tasks:', error);
     throw error;

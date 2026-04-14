@@ -11,12 +11,15 @@ import { IUserRepo } from "../../domain/IRepos/IUserRepo";
 import { Issue } from "../../domain/entities";
 import { ServerError, NotFoundException } from "../exceptions"; 
 import { FindIssueQueryOptions } from "../../domain/option/issueQueryOptions"; 
+import { NotificationService } from "./notification.service";
+import { NotificationType, NotificationPriority } from "../../domain/types/enums";
 
 @injectable()
 export class IssueService {
   constructor(
     @inject("IIssueRepo") private issueRepo: IIssueRepo,
-    @inject("IUserRepo") private userRepo: IUserRepo
+    @inject("IUserRepo") private userRepo: IUserRepo,
+    private notificationService: NotificationService
   ) {}
 
   async create(userId: string, createIssueDto: CreateIssueDto): Promise<IssueFullResponseDto> {    
@@ -87,9 +90,34 @@ export class IssueService {
       throw new NotFoundException("Issue not found");
     }
 
+    // Store previous assignee to detect changes
+    const previousAssignee = existingIssue.assignee;
+
     const updatedIssue = await this.issueRepo.update(issueId, updateIssueDto);
     if (!updatedIssue) {
       throw new ServerError("Failed to update issue"); 
+    }
+
+    // Send notification if assignee changed
+    if (updateIssueDto.assignee && updateIssueDto.assignee !== previousAssignee) {
+      try {
+        await this.notificationService.create({
+          title: `Issue Assigned: ${updatedIssue.key}`,
+          message: `You have been assigned to "${updatedIssue.title}"`,
+          type: NotificationType.ISSUE_UPDATED,
+          priority: NotificationPriority.HIGH,
+          recipientId: updateIssueDto.assignee,
+          senderId: userId,
+          metadata: {
+            issueId: issueId,
+            projectId: updatedIssue.projectId,
+          },
+          actionUrl: `/projects/${updatedIssue.projectId}/board`,
+        });
+      } catch (error) {
+        console.error("Failed to send assignment notification:", error);
+        // Don't throw - notification failure shouldn't break the update
+      }
     }
 
     return plainToInstance(IssueFullResponseDto, updatedIssue, { excludeExtraneousValues: true });

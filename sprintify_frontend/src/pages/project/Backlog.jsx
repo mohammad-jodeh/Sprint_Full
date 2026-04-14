@@ -56,7 +56,17 @@ export default function Backlog() {
   const canDeleteTask = can(projectRole, PERMISSIONS.DELETE_TASK);
   // Data fetching and utilities
   const attachEpicsToIssues = (issues, epics) => {
+    if (!Array.isArray(issues)) {
+      console.error("attachEpicsToIssues: issues is not an array", issues);
+      return [];
+    }
+    
     return issues.map((issue) => {
+      if (!issue || !issue.id) {
+        console.warn("Invalid issue in attachEpicsToIssues:", issue);
+        return issue;
+      }
+      
       if (issue.epicId) {
         const epic = epics.find((e) => e.id === issue.epicId);
         if (epic) return { ...issue, epic };
@@ -65,14 +75,19 @@ export default function Backlog() {
       }
       return issue;
     });
-  };  const refreshData = async () => {
+  };  
+  
+  const refreshData = async () => {
     if (!projectId) return;
     try {
+      console.log("🔄 Refreshing backlog data for project:", projectId);
       const [issuesData, sprintsData, epicsData] = await Promise.all([
         fetchIssues(projectId),
         fetchSprints(projectId),
         fetchEpics(projectId),
       ]);
+
+      console.log("📦 Raw API responses:", { issuesData, sprintsData, epicsData });
 
       // Handle the API response structure
       const issuesArray = Array.isArray(issuesData) ? issuesData : 
@@ -80,12 +95,17 @@ export default function Backlog() {
                          issuesData?.issues ? issuesData.issues : [];
 
       const sprintsArray = Array.isArray(sprintsData) ? sprintsData : 
-                          sprintsData?.data ? sprintsData.data : 
+                          sprintsData?.data ? (Array.isArray(sprintsData.data) ? sprintsData.data : sprintsData.data.sprints || []) : 
                           sprintsData?.sprints ? sprintsData.sprints : [];
 
       const epicsArray = Array.isArray(epicsData) ? epicsData : 
                         epicsData?.data ? epicsData.data : 
                         epicsData?.epics ? epicsData.epics : [];
+
+      console.log("✅ Extracted arrays:", { issuesCount: issuesArray.length, sprintsCount: sprintsArray.length, epicsCount: epicsArray.length });
+      
+      // Log sprintId for first few issues to verify they have sprint assignments
+      console.log("📌 Sample issues sprintIds:", issuesArray.slice(0, 3).map(i => ({ id: i.id, title: i.title, sprintId: i.sprintId })));
 
       // Set the data without trying to fetch users/statuses separately
       // The backend should return complete issue data with populated relations
@@ -93,7 +113,7 @@ export default function Backlog() {
       setSprints(sprintsArray);
       setEpics(epicsArray);
     } catch (error) {
-      console.error("Failed to fetch data:", error);
+      console.error("❌ Failed to fetch data:", error);
       toast.error("Failed to fetch data");
     }
   };
@@ -113,9 +133,22 @@ export default function Backlog() {
   }, [projectId]);
   // Group issues by sprint or backlog
   const groupedIssues = useMemo(() => {
-    let filtered = issues.filter((i) =>
-      i.title.toLowerCase().includes(search.toLowerCase())
-    );
+    console.log("Grouping issues:", issues.length);
+    
+    // Validate issues array
+    if (!Array.isArray(issues)) {
+      console.error("Issues is not an array:", issues);
+      return { backlog: [] };
+    }
+    
+    let filtered = issues.filter((i) => {
+      // Validate each issue has required fields
+      if (!i || !i.id) {
+        console.warn("Invalid issue found:", i);
+        return false;
+      }
+      return i.title?.toLowerCase().includes(search.toLowerCase());
+    });
 
     // Apply epic filter
     if (selectedEpic === "no-epic") {
@@ -131,9 +164,18 @@ export default function Backlog() {
 
     const groups = { backlog: [] };
     sprints.forEach((s) => (groups[s.id] = []));
+    
+    console.log("📊 Grouping strategy - available sprints:", sprints.map(s => ({ id: s.id, name: s.name })));
+    
     filtered.forEach((issue) => {
       const key = issue.sprintId || "backlog";
-      if (groups[key]) groups[key].push(issue);
+      if (groups[key]) {
+        groups[key].push(issue);
+      } else {
+        console.warn("⚠️ Issue has sprintId that doesn't match any sprint:", issue.id, issue.sprintId, "Available sprint IDs:", Object.keys(groups));
+        // Add to backlog if sprint doesn't exist
+        groups.backlog.push(issue);
+      }
     });
 
     // Sort each group by priority (High -> Medium -> Low)
@@ -141,6 +183,7 @@ export default function Backlog() {
       groups[key] = sortByPriority(groups[key], false);
     });
 
+    console.log("Grouped issues:", Object.keys(groups).reduce((acc, key) => ({...acc, [key]: groups[key].length}), {}));
     return groups;
   }, [issues, sprints, search, selectedEpic, selectedPriority]);
   // Drag and drop handler
@@ -156,6 +199,8 @@ export default function Backlog() {
     const originalSprintId =
       source.droppableId === "backlog" ? null : source.droppableId;
     
+    console.log("🔄 Moving issue:", draggableId, "from sprint:", originalSprintId, "to sprint:", newSprintId);
+    
     // Optimistically update the UI
     setIssues((prev) =>
       prev.map((issue) =>
@@ -164,10 +209,40 @@ export default function Backlog() {
     );
     
     try {
-      await updateIssue(projectId, draggableId, { sprintId: newSprintId });
+      const response = await updateIssue(projectId, draggableId, { sprintId: newSprintId });
+      console.log("📡 Raw update response:", response);
+      
+      // Extract the actual issue data from response
+      // updateIssue returns: response.data.data || response.data
+      const updatedIssueData = response?.data || response;
+      console.log("📝 Extracted issue data:", updatedIssueData);
+      console.log("🔍 Backend returned sprintId:", updatedIssueData?.sprintId, "Expected:", newSprintId);
+      
+      if (!updatedIssueData || !updatedIssueData.id) {
+        console.error("❌ Invalid response - no id field:", updatedIssueData);
+        toast.error("Update failed - invalid response from server");
+        return;
+      }
+      
+      // CRITICAL: If backend didn't return sprintId, use the one we sent
+      if (updatedIssueData.sprintId === undefined || updatedIssueData.sprintId === null) {
+        console.warn("⚠️ Backend didn't return sprintId, using request value:", newSprintId);
+        updatedIssueData.sprintId = newSprintId;
+      }
+      
+      console.log("✅ Final issue to save with sprintId:", updatedIssueData.sprintId);
+      
+      setIssues((prev) => {
+        const updated = prev.map((issue) =>
+          issue.id === updatedIssueData.id ? updatedIssueData : issue
+        );
+        console.log("State updated - issue sprintId is now:", updatedIssueData.sprintId);
+        return updated;
+      });
+      
       toast.success("Issue moved successfully");
     } catch (error) {
-      console.error("Failed to move issue:", error);
+      console.error("❌ Failed to move issue:", error);
       toast.error("Failed to move issue");
       // Revert the optimistic update
       setIssues((prev) =>
@@ -503,6 +578,19 @@ export default function Backlog() {
 
   return (
     <div className="p-6 space-y-8 pb-24 min-h-screen bg-gradient-to-br from-gray-50 to-blue-50/30 dark:from-gray-900 dark:to-blue-900/10">
+      {/* Error boundary for data issues */}
+      {!issues ? (
+        <div className="text-center py-12">
+          <p className="text-red-600 dark:text-red-400">Error: Issues data is not available</p>
+          <button 
+            onClick={() => refreshData()}
+            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            Try Again
+          </button>
+        </div>
+      ) : (
+      <>
       <div className="flex flex-wrap justify-between items-center gap-4">
         <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-custom-600 bg-clip-text text-transparent">
           ⚡ Backlog
@@ -631,42 +719,51 @@ export default function Backlog() {
         <CreateIssueModal
           epics={epics}
           onClose={() => setSearchParams({})}
-          onCreate={async (newIssue) => {
+          onCreate={async (response) => {
             try {
-              const epic = epics.find((e) => e.id === newIssue.epicId);
-              const newIssueWithEpic = { ...newIssue, epic: epic || null };
-              setIssues((prev) => [...prev, newIssueWithEpic]);
+              // Extract the actual issue data from response structure
+              // Response structure: { message, data: {...}, epic }
+              const issueData = response?.data || response;
+              const epic = response?.epic || epics.find((e) => e.id === issueData?.epicId);
+              
+              // Ensure we have valid issue data
+              if (!issueData || !issueData.id) {
+                console.error("Invalid issue data received:", response);
+                toast.error("Created issue but received invalid data");
+                return;
+              }
+              
+              const newIssueWithEpic = { ...issueData, epic: epic || null };
+              console.log("Adding new issue to state:", newIssueWithEpic);
+              
+              setIssues((prev) => {
+                const updated = [...prev, newIssueWithEpic];
+                console.log("Issues after add:", updated.length);
+                return updated;
+              });
               setSearchParams({});
-              toast.success("Issue created successfully!");
+              
+              // Refresh data to ensure consistency with backend
               setTimeout(async () => {
                 try {
-                  const [refreshedResponse, usersRes, statusesRes] =
-                    await Promise.all([
-                      api.get(`/issues?projectId=${projectId}`),
-                      api.get("/users"),
-                      api.get("/statuses"),
-                    ]);
+                  console.log("Refreshing issues after creation...");
+                  const issuesData = await fetchIssues(projectId);
+                  console.log("Refresh response:", issuesData);
+                  
+                  // Handle the API response structure
+                  const issuesArray = Array.isArray(issuesData) ? issuesData : 
+                                     issuesData?.data ? (Array.isArray(issuesData.data) ? issuesData.data : issuesData.data.issues || []) : 
+                                     issuesData?.issues ? issuesData.issues : [];
 
-                  // Manually populate related data
-                  const issues = refreshedResponse.data.map((issue) => {
-                    const assigneeUser = issue.assignee
-                      ? usersRes.data.find((u) => u.id === issue.assignee)
-                      : null;
-                    const status = statusesRes.data.find(
-                      (s) => s.id === issue.statusId
-                    );
-
-                    return {
-                      ...issue,
-                      assigneeUser,
-                      status,
-                    };
-                  });
-
-                  setIssues(attachEpicsToIssues(issues, epics));
-                } catch {}
+                  console.log("Extracted issues array:", issuesArray.length);
+                  setIssues(attachEpicsToIssues(issuesArray, epics));
+                } catch (error) {
+                  console.error("Failed to refresh issues after creation:", error);
+                  // Continue with the optimistically added issue
+                }
               }, 500);
-            } catch {
+            } catch (error) {
+              console.error("Failed to create issue:", error);
               toast.error("Failed to create issue");
             }
           }}
@@ -688,35 +785,25 @@ export default function Backlog() {
               );
               setEditingIssue(null);
               toast.success("Issue updated successfully!");
+              
+              // Refresh data to ensure consistency with backend
               setTimeout(async () => {
                 try {
-                  const [refreshedResponse, usersRes, statusesRes] =
-                    await Promise.all([
-                      api.get(`/issues?projectId=${projectId}`),
-                      api.get("/users"),
-                      api.get("/statuses"),
-                    ]);
+                  const issuesData = await fetchIssues(projectId);
+                  
+                  // Handle the API response structure
+                  const issuesArray = Array.isArray(issuesData) ? issuesData : 
+                                     issuesData?.data ? (Array.isArray(issuesData.data) ? issuesData.data : issuesData.data.issues || []) : 
+                                     issuesData?.issues ? issuesData.issues : [];
 
-                  // Manually populate related data
-                  const issues = refreshedResponse.data.map((issue) => {
-                    const assigneeUser = issue.assignee
-                      ? usersRes.data.find((u) => u.id === issue.assignee)
-                      : null;
-                    const status = statusesRes.data.find(
-                      (s) => s.id === issue.statusId
-                    );
-
-                    return {
-                      ...issue,
-                      assigneeUser,
-                      status,
-                    };
-                  });
-
-                  setIssues(attachEpicsToIssues(issues, epics));
-                } catch {}
+                  setIssues(attachEpicsToIssues(issuesArray, epics));
+                } catch (error) {
+                  console.error("Failed to refresh issues after update:", error);
+                  // Continue with the optimistically updated issue
+                }
               }, 500);
-            } catch {
+            } catch (error) {
+              console.error("Failed to update issue:", error);
               toast.error("Failed to update issue");
             }
           }}
@@ -780,6 +867,8 @@ export default function Backlog() {
           onDelete={handleDeleteEpic}
           onUpdate={handleUpdateEpic}
         />
+      )}
+      </>
       )}
     </div>
   );

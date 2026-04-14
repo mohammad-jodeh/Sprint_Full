@@ -9,9 +9,9 @@ const SprintBoardSection = ({
   onIssueClick, 
   isBacklog = false 
 }) => {
-  const sectionId = isBacklog ? "backlog" : sprint.id;
-  const sectionTitle = isBacklog ? "Backlog" : sprint.name;
-  const issueCount = issues.length;
+  const sectionId = isBacklog ? "backlog" : sprint?.id || "unknown";
+  const sectionTitle = isBacklog ? "Backlog" : sprint?.name || "Sprint";
+  const issueCount = (issues || []).length;
 
   const formatDate = (dateString) => {
     if (!dateString) return "";
@@ -130,12 +130,12 @@ const SprintBoardSection = ({
               ${snapshot.isDraggingOver ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-300 dark:border-blue-600' : ''}
             `}
           >
-            {issues.map((issue, index) => (
+            {(issues || []).map((issue, index) => (
               <IssueCard key={issue.id} issue={issue} index={index} />
             ))}
             {provided.placeholder}
             
-            {issues.length === 0 && (
+            {(!issues || issues.length === 0) && (
               <div className="text-center py-8 text-gray-500 dark:text-gray-400">
                 <div className="mb-2">📝</div>
                 <div className="text-sm">

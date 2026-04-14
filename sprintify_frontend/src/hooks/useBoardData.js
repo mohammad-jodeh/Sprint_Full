@@ -85,6 +85,7 @@ const getActiveSprints = (sprints, project) => {
  */
 export function useBoardData(projectId) {
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [issues, setIssues] = useState([]);
   const [statuses, setStatuses] = useState([]);
   const [columns, setColumns] = useState([]);
@@ -96,6 +97,7 @@ export function useBoardData(projectId) {
   useEffect(() => {
     const loadBoardData = async () => {
       setIsLoading(true);
+      setError(null);
       try {        const [
           proj,
           columnsData,
@@ -144,6 +146,7 @@ export function useBoardData(projectId) {
         setEpics(epicsData || []);
       } catch (err) {
         console.error("Failed to load board data:", err);
+        setError(err.message || "Failed to load board data");
       } finally {
         setIsLoading(false);
       }
@@ -154,6 +157,7 @@ export function useBoardData(projectId) {
 
   return {
     isLoading,
+    error,
     issues,
     setIssues,
     statuses,

@@ -61,6 +61,11 @@ export class IssueController {
         return;
       }
 
+      // Pagination parameters
+      const page = Math.max(1, parseInt(req.query.page as string) || 1);
+      const limit = Math.max(1, Math.min(100, parseInt(req.query.limit as string) || 20)); // Max 100
+      const skip = (page - 1) * limit;
+
       const {
         sprintId,
         assignee,
@@ -77,6 +82,8 @@ export class IssueController {
         parentId: parentId as string | undefined,
         type: type ? (type as IssueType) : undefined,
         priority: priority ? (priority as issuePriority) : undefined,
+        skip,
+        limit,
       };
   
       const result = await this.issueService.getAll( // Renamed from getPartialIssues
@@ -85,10 +92,31 @@ export class IssueController {
         options
       );
 
-      res.status(200).json({
-        message: "Issues retrieved successfully",
-        data: result,
-      });
+      // If result is an array, wrap it in pagination object for backward compatibility
+      if (Array.isArray(result)) {
+        res.status(200).json({
+          message: "Issues retrieved successfully",
+          data: result,
+          pagination: {
+            page,
+            limit,
+            total: result.length, // Backend should return this
+            hasMore: result.length >= limit,
+          },
+        });
+      } else {
+        // Service returns object with issues and total
+        res.status(200).json({
+          message: "Issues retrieved successfully",
+          data: result.issues || [],
+          pagination: {
+            page,
+            limit,
+            total: result.total || 0,
+            hasMore: skip + (result.issues?.length || 0) < (result.total || 0),
+          },
+        });
+      }
     } catch (error: any) {
       res.status(error.status || 500).json({
         message: error.message || "Internal server error",

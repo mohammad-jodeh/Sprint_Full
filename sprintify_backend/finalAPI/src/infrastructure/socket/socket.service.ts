@@ -89,10 +89,14 @@ export class SocketService {
         console.error("🔌 Authentication failed: No token provided");
         return next(new Error("Authentication token required"));
       }
-      const decoded = jwt.verify(
-        token,
-        process.env.JWT_SECRET || "secretKeyPlaceHolderWillReplaceLater" // Use environment variable
-      ) as JwtPayload;
+
+      const jwtSecret = process.env.JWT_SECRET;
+      if (!jwtSecret) {
+        console.error("🔌 Authentication failed: JWT_SECRET not configured");
+        return next(new Error("Server configuration error"));
+      }
+
+      const decoded = jwt.verify(token, jwtSecret) as JwtPayload;
 
       socket.userId = decoded.id;
       next();
