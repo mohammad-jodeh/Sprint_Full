@@ -92,14 +92,8 @@ const Register = () => {
       // Call the register API
       const response = await register(registerData);
       
-      // If user prefers to be logged in immediately after registration
-      if (response.token && response.user) {
-        setAuth(response.token, response.user);
-        navigate("/dashboard");
-      } else {
-        // Otherwise redirect to login page or email verification page
-        navigate("/login");
-      }
+      // Redirect to email verification page - user must verify email before accessing app
+      navigate("/verify-email-pending", { state: { email: formData.email } });
     } catch (error) {
       setErrors({
         general: error.message || "Failed to create account. Please try again.",

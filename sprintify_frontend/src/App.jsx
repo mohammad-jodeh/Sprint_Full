@@ -15,6 +15,7 @@ import Register from "./pages/auth/Register";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 import ConfirmEmail from "./pages/auth/ConfirmEmail";
+import VerifyEmailPending from "./pages/auth/VerifyEmailPending";
 import BoardDemo from "./pages/BoardDemo";
 import StatusFieldDemo from "./components/demo/StatusFieldDemo";
 
@@ -71,6 +72,7 @@ function App() {
         <Route path="/" element={<Overview />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/verify-email-pending" element={<VerifyEmailPending />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/confirm-email" element={<ConfirmEmail />} />
