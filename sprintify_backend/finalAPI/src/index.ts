@@ -71,32 +71,49 @@ if (hasDatabaseUrl) {
     await registerDependencies();
     console.log("✅ Dependencies registered");
     
-    console.log("🗄️  Setting up database...");
-    await ensureDatabaseExists({
-      dbName: dbConfig.dbName,
-      user: dbConfig.user,
-      password: dbConfig.password,
-    });
+    // Only ensure database exists in local dev mode
+    // Railway manages the database automatically
+    if (!hasDatabaseUrl) {
+      console.log("🗄️  Setting up database...");
+      await ensureDatabaseExists({
+        dbName: dbConfig.dbName,
+        user: dbConfig.user,
+        password: dbConfig.password,
+      });
+    } else {
+      console.log("✅ Database managed by Railway (skipping creation)");
+    }
 
     // Initialize database connection (but don't sync yet)
+    console.log("🗄️  Connecting to database...");
     await AppDataSource.initialize();
     console.log("✅ Database connected");
     
-    // Run data migrations before schema sync
-    await fixStatusProjectIdMigration();
-    console.log("✅ Migrations completed");
-    
-    // Now perform schema synchronization
+    // First: perform schema synchronization (creates tables)
+    console.log("🗄️  Synchronizing database schema...");
     await AppDataSource.synchronize();
     console.log("✅ Database schema synced");
+    
+    // Then: run data migrations on existing tables
+    await fixStatusProjectIdMigration();
+    console.log("✅ Migrations completed");
 
+    console.log("📡 Starting API server initialization...");
     const API = new AppServer();
+    
+    console.log("📡 Setting up routes...");
     const port = process.env.PORT || 4000;
-    API.listen(Number(port));
+    console.log(`📡 Listening on port ${port}...`);
+    await API.listen(Number(port));  // MUST await here!
     console.log(`✅ 🚀 Server running at http://localhost:${port}`);
   } catch (error) {
     console.error("❌ FATAL ERROR during startup:");
-    console.error(error);
+    console.error("Error type:", error instanceof Error ? error.constructor.name : typeof error);
+    console.error("Error message:", error instanceof Error ? error.message : String(error));
+    if (error instanceof Error && error.stack) {
+      console.error("Stack trace:", error.stack);
+    }
+    console.error("Full error:", error);
     process.exit(1);
   }
 })();

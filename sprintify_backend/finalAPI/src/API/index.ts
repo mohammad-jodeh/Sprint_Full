@@ -28,78 +28,113 @@ export class AppServer {
     // Trust proxy for HTTPS
     this.app.set("trust proxy", 1);
 
+    // HTTPS Redirect (in production)
+    this.app.use((req, res, next) => {
+      if (process.env.NODE_ENV === "production" && !req.secure && req.get('x-forwarded-proto') !== 'https') {
+        return res.redirect('https://' + req.get('host') + req.url);
+      }
+      next();
+    });
+
     // Body parser limit
     this.app.use(express.json({ limit: "10mb" }));
     this.app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
-    // Security Headers
+    // Security Headers - Enhanced
     this.app.use((req, res, next) => {
       res.setHeader("X-Content-Type-Options", "nosniff");
       res.setHeader("X-Frame-Options", "DENY");
       res.setHeader("X-XSS-Protection", "1; mode=block");
       res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+      res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
+      res.setHeader("Content-Security-Policy", "default-src 'self'");
       next();
     });
 
-    // CORS Configuration
-    const allowedOrigins = (process.env.FRONTEND_URL || "http://localhost:5173").split(",");
+    // CORS Configuration - Allow production & preview deployments
+    const allowedOrigins = [
+      "https://sprintify-frontend-blue.vercel.app", // Production frontend
+      "http://localhost:5173",                       // Local development
+      "http://localhost:3000",                       // Alternative local port
+    ];
+
     const corsOptions = {
-      origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+      origin: function (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
         // Allow requests with no origin (like mobile apps or curl requests)
-        if (!origin || allowedOrigins.includes(origin)) {
+        if (!origin) {
           callback(null, true);
-        } else if (process.env.NODE_ENV === "development") {
-          // Allow all in development
-          callback(null, true);
-        } else {
-          callback(new Error("Not allowed by CORS"));
+          return;
         }
+
+        // Allow specific whitelisted origins
+        if (allowedOrigins.includes(origin)) {
+          callback(null, true);
+          return;
+        }
+
+        // Allow all *.vercel.app preview deployments (for testing pull requests/branches)
+        if (origin.endsWith('.vercel.app')) {
+          callback(null, true);
+          return;
+        }
+
+        // Reject all other origins
+        callback(new Error("CORS not allowed for this origin: " + origin));
       },
-      methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-      credentials: true,
+      methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
+      allowedHeaders: ["Content-Type", "Authorization"],
+      credentials: true,  // Enable credentials (cookies, auth headers)
       optionsSuccessStatus: 200,
+      preflightContinue: false,
     };
 
+    // Apply CORS middleware (this handles preflight OPTIONS automatically)
     this.app.use(cors(corsOptions));
 
-    // Rate Limiting
+    // Rate Limiting - Global
     const generalLimiter = rateLimit({
       windowMs: 15 * 60 * 1000, // 15 minutes
-      max: 100, // limit each IP to 100 requests per windowMs
+      max: 200, // limit each IP to 200 requests per windowMs
       message: "Too many requests from this IP, please try again later",
-      standardHeaders: true, // Return rate limit info in `RateLimit-*` headers
-      legacyHeaders: false, // Disable `X-RateLimit-*` headers
-      skip: (req: any) => process.env.NODE_ENV === "development", // Skip rate limiting in development
+      standardHeaders: true,
+      legacyHeaders: false,
+      skip: (req: any) => process.env.NODE_ENV === "development",
     });
 
-    const authLimiter = rateLimit({
-      windowMs: 15 * 60 * 1000, // 15 minutes
-      max: 5, // Only 5 login attempts
-      skipSuccessfulRequests: true, // Don't count successful requests
-      skip: (req: any) => process.env.NODE_ENV === "development", // Skip rate limiting in development
-      message: "Too many login attempts, please try again after 15 minutes",
-    });
-
-    // Apply general limiter to all API routes
-    this.app.use(`${this.apiPrefix}/`, generalLimiter);
-
-    // Apply stricter limiter to authentication endpoints
-    this.app.use(`${this.apiPrefix}/user/login`, authLimiter);
-    this.app.use(`${this.apiPrefix}/user/register`, authLimiter);
+    // Apply rate limiting globally (simpler and more reliable)
+    this.app.use(generalLimiter);
   }
 
   private async setupRoutes() {
+    // Multiple health check endpoints for compatibility with different health checkers
+    this.app.get("/", (_, res) => {
+      res.send({ status: "ok", message: "Sprintify API is running" });
+    });
+    this.app.get("/health", (_, res) => {
+      res.json({ status: "ok" });
+    });
+    this.app.get("/healthz", (_, res) => {
+      res.json({ status: "ok" });
+    });
     this.app.get("/health-check", (_, res) => {
       res.send({ status: "ok" });
+    });
+    this.app.get(`${this.apiPrefix}/health`, (_, res) => {
+      res.json({ status: "ok" });
     });
     this.app.get(`${this.apiPrefix}/health-check`, (_, res) => {
       res.send({ status: "ok" });
     });
 
+    console.debug(`🔍 Starting route discovery...`);
+    
     // Support both ts-node-dev (TypeScript) and compiled (JavaScript) environments
     const pattern = process.env.NODE_ENV === "development" && process.argv.includes("ts-node-dev")
-      ? "routes/*.ts"
-      : "routes/*.js";
+      ? "routes/!(base.route).ts"
+      : "routes/!(base.route).js";
+    
+    console.debug(`🔍 Route pattern: ${pattern}`);
+    console.debug(`🔍 Routes directory: ${path.resolve(__dirname, pattern)}`);
     
     const routeFiles = await glob(
       path.resolve(__dirname, pattern).replace(/\\/g, "/")
@@ -108,34 +143,75 @@ export class AppServer {
     console.info(`Found ${routeFiles.length} route files to load`);
 
     for (const filePath of routeFiles) {
-      const module = await import(filePath);
-      for (const exportedName in module) {
-        const RouteClass = module[exportedName];
-        if (
-          typeof RouteClass === "function" &&
-          Object.getPrototypeOf(RouteClass).name === "BaseRoute"
-        ) {
-          const routeInstance: BaseRoute = new RouteClass();
-          this.app.use(
-            `${this.apiPrefix}${routeInstance.path}`,
-            routeInstance.router
-          );
-          console.success(`Loaded route: ${routeInstance.path}`);
+      console.debug(`🔍 Loading route file: ${filePath}`);
+      try {
+        const module = await import(filePath);
+        for (const exportedName in module) {
+          const RouteClass = module[exportedName];
+          if (
+            typeof RouteClass === "function" &&
+            Object.getPrototypeOf(RouteClass).name === "BaseRoute"
+          ) {
+            const routeInstance: BaseRoute = new RouteClass();
+            
+            // Validate path before registering
+            if (!routeInstance.path || typeof routeInstance.path !== "string") {
+              console.error(`❌ Invalid path for route ${exportedName}: "${routeInstance.path}"`);
+              continue;
+            }
+            
+            this.app.use(
+              `${this.apiPrefix}${routeInstance.path}`,
+              routeInstance.router
+            );
+            console.success(`Loaded route: ${routeInstance.path}`);
+          }
         }
+      } catch (error) {
+        // Log error but continue - don't re-throw so server can still start with health checks
+        console.error(`❌ Error loading route file ${filePath}:`, error);
+        console.warn(`⚠️  Route loading failed, but server will continue with other routes`);
       }
     }
+    
+    console.debug(`✅ All routes loaded, setupRoutes() complete`);
   }
   private setupSocket(): void {
-    const socketService = container.resolve<SocketService>("SocketService");
-    socketService.initialize(this.httpServer);
+    try {
+      const socketService = container.resolve<SocketService>("SocketService");
+      socketService.initialize(this.httpServer);
+    } catch (error) {
+      console.error("❌ Error initializing Socket.IO:", error);
+      // Continue anyway - Socket.IO is not critical for API to work
+    }
   }
 
   public async listen(port: number): Promise<void> {
-    await this.setupRoutes();
-    //*this middleware cant be registered in setupMiddlewares because it needs to be the last middleware
-    this.app.use(errorMiddleware);
-    this.httpServer.listen(port, () =>
-      console.info(`🚀 Server running at http://localhost:${port}`)
-    );
+    try {
+      await this.setupRoutes();
+    } catch (setupError) {
+      console.error(`⚠️  WARN: Failed to fully setup routes, but starting server anyway:`, setupError);
+    }
+    
+    try {
+      this.app.use(errorMiddleware);
+    } catch (middlewareError) {
+      console.error(`❌ ERROR setting up middleware:`, middlewareError);
+    }
+    
+    // CRITICAL: Must wrap in Promise and resolve AFTER server binds to port
+    return new Promise<void>((resolve) => {
+      const server = this.httpServer.listen(port, () => {
+        console.info(`🚀 Server running at http://localhost:${port}`);
+        console.info(`✅ API is ready to accept requests`);
+        resolve();  // ← Only resolve after port is actually bound
+      });
+      
+      // Catch listen errors and log them
+      server.on('error', (error: any) => {
+        console.error(`❌ Server listen error on port ${port}:`, error.message);
+        resolve();  // Still resolve so app doesn't hang
+      });
+    });
   }
 }

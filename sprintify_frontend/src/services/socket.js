@@ -30,8 +30,12 @@ class SocketService {
     }
 
     try {
+      // Use environment variable for Socket.IO URL, matching the REST API backend
+      const socketUrl = import.meta.env.VITE_API_BASE_URL 
+        ? import.meta.env.VITE_API_BASE_URL.replace('/api/v1', '') // Remove API path
+        : 'http://localhost:8080';
       
-      this.socket = io('http://localhost:4000', {
+      this.socket = io(socketUrl, {
         auth: {
           token: token
         },
@@ -142,6 +146,55 @@ class SocketService {
     this.socket.on('project:notification', (data) => {
       this.handleProjectNotification(data);
     });
+
+    // REAL-TIME ISSUE UPDATES
+    // Listen for issue created
+    this.socket.on('issue:created', (data) => {
+      console.log('📝 New issue created (real-time):', data);
+      if (this.onIssueCreated) {
+        this.onIssueCreated(data);
+      }
+    });
+
+    // Listen for issue updated
+    this.socket.on('issue:updated', (data) => {
+      console.log('📝 Issue updated (real-time):', data);
+      if (this.onIssueUpdated) {
+        this.onIssueUpdated(data);
+      }
+    });
+
+    // Listen for issue deleted
+    this.socket.on('issue:deleted', (data) => {
+      console.log('📝 Issue deleted (real-time):', data);
+      if (this.onIssueDeleted) {
+        this.onIssueDeleted(data);
+      }
+    });
+
+    // Listen for issue status changed
+    this.socket.on('issue:status-changed', (data) => {
+      console.log('📝 Issue status changed (real-time):', data);
+      if (this.onIssueStatusChanged) {
+        this.onIssueStatusChanged(data);
+      }
+    });
+
+    // Listen for issue assigned
+    this.socket.on('issue:assigned', (data) => {
+      console.log('📝 Issue assigned (real-time):', data);
+      if (this.onIssueAssigned) {
+        this.onIssueAssigned(data);
+      }
+    });
+
+    // Listen for sprint updates
+    this.socket.on('sprint:updated', (data) => {
+      console.log('🏃 Sprint updated (real-time):', data);
+      if (this.onSprintUpdated) {
+        this.onSprintUpdated(data);
+      }
+    });
   }
 
   /**
@@ -242,6 +295,56 @@ class SocketService {
    */
   setOnProjectNotification(callback) {
     this.onProjectNotification = callback;
+  }
+
+  // ===== REAL-TIME ISSUE UPDATE CALLBACKS =====
+
+  /**
+   * Set callback for issue created
+   * @param {Function} callback - Callback function
+   */
+  setOnIssueCreated(callback) {
+    this.onIssueCreated = callback;
+  }
+
+  /**
+   * Set callback for issue updated
+   * @param {Function} callback - Callback function
+   */
+  setOnIssueUpdated(callback) {
+    this.onIssueUpdated = callback;
+  }
+
+  /**
+   * Set callback for issue deleted
+   * @param {Function} callback - Callback function
+   */
+  setOnIssueDeleted(callback) {
+    this.onIssueDeleted = callback;
+  }
+
+  /**
+   * Set callback for issue status changed
+   * @param {Function} callback - Callback function
+   */
+  setOnIssueStatusChanged(callback) {
+    this.onIssueStatusChanged = callback;
+  }
+
+  /**
+   * Set callback for issue assigned
+   * @param {Function} callback - Callback function
+   */
+  setOnIssueAssigned(callback) {
+    this.onIssueAssigned = callback;
+  }
+
+  /**
+   * Set callback for sprint updated
+   * @param {Function} callback - Callback function
+   */
+  setOnSprintUpdated(callback) {
+    this.onSprintUpdated = callback;
   }
 
   /**

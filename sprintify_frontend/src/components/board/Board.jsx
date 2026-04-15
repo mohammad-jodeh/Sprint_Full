@@ -73,8 +73,12 @@ const Board = ({
       filtered = filtered.filter((issue) =>
         filters.selectedSprints.includes(issue.sprintId)
       );
+    } else if (activeSprints && activeSprints.length > 0) {
+      // If multiple sprints are active, show issues from ALL active sprints
+      const activeSprintIds = activeSprints.map(s => s.id);
+      filtered = filtered.filter((issue) => activeSprintIds.includes(issue.sprintId));
     } else if (activeSprint?.id) {
-      // Fallback to active sprint if no specific sprint selected
+      // Fallback to single active sprint if multiple don't exist
       filtered = filtered.filter((issue) => issue.sprintId === activeSprint.id);
     } else {
       // If no active sprint and no selected sprint, show no issues
@@ -96,7 +100,7 @@ const Board = ({
     }
 
     return filtered;
-  }, [board.issues, filters, activeSprint]);
+  }, [board.issues, filters, activeSprint, activeSprints]);
   const [isAnimated, setIsAnimated] = useState(false);
 
   // Get project role and permissions

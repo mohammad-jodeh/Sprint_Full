@@ -6,6 +6,7 @@ import { getProjectMembers } from "../api/projectMembers";
 import { fetchBoardColumns } from "../api/boardColumns";
 import { fetchSprints } from "../api/sprints";
 import { fetchEpics } from "../api/epics";
+import { getErrorMessage } from "../utils/errorHandler";
 
 /**
  * Helper function to determine the active sprint from a list of sprints and project
@@ -146,7 +147,8 @@ export function useBoardData(projectId) {
         setEpics(epicsData || []);
       } catch (err) {
         console.error("Failed to load board data:", err);
-        setError(err.message || "Failed to load board data");
+        const friendlyErrorMessage = getErrorMessage(err);
+        setError(friendlyErrorMessage);
       } finally {
         setIsLoading(false);
       }

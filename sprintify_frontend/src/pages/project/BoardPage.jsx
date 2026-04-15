@@ -1,6 +1,7 @@
 import { useParams, useSearchParams } from "react-router-dom";
 import Board from "../../components/board/Board";
 import LoadingScreen from "../../components/ui/LoadingScreen";
+import { BoardSkeleton } from "../../components/ui/SkeletonLoader";
 import CreateEpicModal from "../../components/modals/CreateEpicModal";
 import EditEpicModal from "../../components/modals/EditEpicModal";
 import EditIssueModal from "../../components/modals/EditIssueModal";
@@ -66,8 +67,17 @@ const BoardPage = () => {
     setSelectedIssue(issue);
     setIsIssueDetailsOpen(true);
   };
-  if (isLoading || roleLoading) {
-    return <LoadingScreen message="Loading board..." />;
+
+  if (roleLoading) {
+    return <LoadingScreen message="Loading..." />;
+  }
+
+  if (isLoading) {
+    return (
+      <div className="p-6">
+        <BoardSkeleton />
+      </div>
+    );
   }
 
   // Check for data loading errors
