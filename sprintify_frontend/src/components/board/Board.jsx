@@ -6,6 +6,7 @@ import { useBoardStore } from "../../store/boardStore";
 import { useProjectRole } from "../../hooks/useProjectRole";
 import { can, PERMISSIONS } from "../../utils/permission";
 import { updateTask } from "../../api/tasks";
+import socketService from "../../services/socket";
 
 const Board = ({
   boardData,
@@ -110,6 +111,72 @@ const Board = ({
   useEffect(() => {
     setIsAnimated(true);
   }, []);
+
+  // ===== SETUP REAL-TIME SOCKET.IO LISTENERS =====
+  useEffect(() => {
+    // Handler for issue updates
+    const handleIssueUpdate = (updatedIssue) => {
+      console.log("📝 Real-time issue update received:", updatedIssue);
+      setIssues((prev) =>
+        prev.map((issue) =>
+          issue.id === updatedIssue.id ? { ...issue, ...updatedIssue } : issue
+        )
+      );
+    };
+
+    // Handler for new issues
+    const handleNewIssue = (newIssue) => {
+      console.log("➕ Real-time new issue received:", newIssue);
+      setIssues((prev) => [...prev, newIssue]);
+    };
+
+    // Handler for deleted issues
+    const handleIssueDelete = (deletedIssueId) => {
+      console.log("🗑️ Real-time issue deleted:", deletedIssueId);
+      setIssues((prev) => prev.filter((issue) => issue.id !== deletedIssueId));
+    };
+
+    // Handler for status changes
+    const handleStatusChange = (issueData) => {
+      console.log("🔄 Real-time status change:", issueData);
+      setIssues((prev) =>
+        prev.map((issue) =>
+          issue.id === issueData.id
+            ? { ...issue, statusId: issueData.statusId }
+            : issue
+        )
+      );
+    };
+
+    // Handler for assignment changes
+    const handleAssignmentChange = (issueData) => {
+      console.log("👤 Real-time assignment change:", issueData);
+      setIssues((prev) =>
+        prev.map((issue) =>
+          issue.id === issueData.id
+            ? { ...issue, assignee: issueData.assignee }
+            : issue
+        )
+      );
+    };
+
+    // Register all callbacks with socket service
+    socketService.setOnIssueUpdated(handleIssueUpdate);
+    socketService.setOnIssueCreated(handleNewIssue);
+    socketService.setOnIssueDeleted(handleIssueDelete);
+    socketService.setOnIssueStatusChanged(handleStatusChange);
+    socketService.setOnIssueAssigned(handleAssignmentChange);
+
+    // Cleanup function: remove callbacks when component unmounts
+    return () => {
+      socketService.setOnIssueUpdated(null);
+      socketService.setOnIssueCreated(null);
+      socketService.setOnIssueDeleted(null);
+      socketService.setOnIssueStatusChanged(null);
+      socketService.setOnIssueAssigned(null);
+    };
+  }, [setIssues]);
+  // ===== END SOCKET.IO SETUP =====
   const activeFiltersCount =
     filters.selectedUsers.length +
     filters.selectedSprints.length +
