@@ -300,7 +300,7 @@ const AIChatAssistant = ({ projectId, isOpen, onClose }) => {
             statusId = aiIssue.status.id; // Keep as string
           } else if (typeof aiIssue.status === "string") {
             const foundStatus = statuses.find(
-              (s) => s.name.toLowerCase() === aiIssue.status.toLowerCase()
+              (s) => typeof s.name === "string" && s.name.toLowerCase() === aiIssue.status.toLowerCase()
             );
             statusId = foundStatus ? foundStatus.id : null;
           }
@@ -744,6 +744,7 @@ const AIChatAssistant = ({ projectId, isOpen, onClose }) => {
                   if (typeof selectedIssueForDetails.status === "string") {
                     const foundStatus = statuses.find(
                       (s) =>
+                        typeof s.name === "string" &&
                         s.name.toLowerCase() ===
                         selectedIssueForDetails.status.toLowerCase()
                     );
@@ -1008,8 +1009,10 @@ const IssueConfirmationModal = ({
                           (() => {
                             const statusObj = statuses.find(
                               (s) =>
-                                s.name.toLowerCase() ===
-                                  issue.status.toLowerCase() ||
+                                (typeof s.name === "string" &&
+                                 typeof issue.status === "string" &&
+                                 s.name.toLowerCase() ===
+                                   issue.status.toLowerCase()) ||
                                 s.id === issue.statusId
                             );
                             const isCompleted =

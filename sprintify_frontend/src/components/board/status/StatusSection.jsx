@@ -12,7 +12,10 @@ const StatusSection = ({
   onIssueClick,
 }) => {
   // ⚡ Auto-collapse "Done" status to reduce DOM nodes by 30-50%
-  const [isCollapsed, setIsCollapsed] = useState(status.name?.toLowerCase() === 'done' || status.type?.toLowerCase() === 'done');
+  const [isCollapsed, setIsCollapsed] = useState(
+    (typeof status.name === 'string' && status.name.toLowerCase() === 'done') ||
+    (typeof status.type === 'string' && status.type.toLowerCase() === 'done')
+  );
   const [isDraggedOver, setIsDraggedOver] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const dragTimeoutRef = useRef(null);
