@@ -25,15 +25,8 @@ const Board = ({
   const storeFilters = useBoardStore((state) => state.filters);
   const storeSetFilters = useBoardStore((state) => state.setFilters);
 
-  // Add view toggle state - will be updated based on active sprints
+  // Add view toggle state - Kanban is now the default main view
   const [viewMode, setViewMode] = useState("kanban");
-
-  // Update view mode when active sprints change - default to sprint view when active sprints exist
-  useEffect(() => {
-    if (activeSprints && activeSprints.length > 0) {
-      setViewMode("sprint");
-    }
-  }, [activeSprints]);
 
   // Use props if provided, otherwise fall back to store
   const board = useMemo(() => {
