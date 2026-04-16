@@ -9,14 +9,22 @@ import {
 import { useNavigate } from "react-router-dom";
 import SideLinks from "../ui/SideLinks";
 import ConfirmModalLogout from "../modals/ConfirmModalLogout";
+import useAuthStore from "../../store/authstore";
 
 export default function Sidebar() {
   const navigate = useNavigate();
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const { clearAuth } = useAuthStore((state) => state);
 
   const handleLogout = () => {
-    localStorage.clear(); // Optional: clear token/session
-    navigate("/login");
+    // Clear auth store
+    clearAuth();
+    // Clear all local storage
+    localStorage.clear();
+    // Clear session storage
+    sessionStorage.clear();
+    // Navigate to login with replace to prevent back navigation
+    navigate("/login", { replace: true });
   };
 
   const links = [

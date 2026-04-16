@@ -18,7 +18,9 @@ const ProfileDropdown = ({ isOpen, dropdownRef }) => {
 
   const handleLogout = () => {
     clearAuth(); // Use auth store's clearAuth method
-    navigate("/login");
+    localStorage.clear(); // Clear all persisted data
+    sessionStorage.clear(); // Clear session data
+    navigate("/login", { replace: true }); // Replace (not push) to prevent back-button access
   };
 
   if (!isOpen) return null;
