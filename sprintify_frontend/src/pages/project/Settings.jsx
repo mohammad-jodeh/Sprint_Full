@@ -8,6 +8,7 @@ import EditColumnModal from "../../components/modals/EditColumnModal";
 import CreateStatusModal from "../../components/modals/CreateStatusModal";
 import EditStatusModal from "../../components/modals/EditStatusModal";
 import ConfirmDeleteModal from "../../components/modals/ConfirmDeleteModal";
+import ColumnManagement from "../../components/settings/ColumnManagement";
 import { useProjectRole } from "../../hooks/useProjectRole";
 import { can, PERMISSIONS } from "../../utils/permission";
 import toast from "react-hot-toast";
@@ -115,22 +116,16 @@ export default function BoardSettingsPage() {
         <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-custom-600 bg-clip-text text-transparent">
           🧩 Board Settings
         </h1>
-        {canConfigureBoard && (
-          <button
-            onClick={() => setShowCreateCol(true)}
-            className="flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl hover:from-emerald-600 hover:to-teal-700 transition-all"
-            title="Add New Column"
-          >
-            <Plus size={16} /> Add Column
-          </button>
-        )}
-        {!canConfigureBoard && (
-          <div className="text-sm text-gray-500 dark:text-gray-400 italic">
-            You don't have permission to configure the board
-          </div>
-        )}      </div>
-      
-      {/* Board Columns Section */}
+      </div>
+
+      {/* Quick Column Management */}
+      {canConfigureBoard && projectId && (
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-6 border border-blue-200 dark:border-blue-800">
+          <ColumnManagement projectId={projectId} />
+        </div>
+      )}
+
+      {/* Detailed Board Columns Section */}
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
