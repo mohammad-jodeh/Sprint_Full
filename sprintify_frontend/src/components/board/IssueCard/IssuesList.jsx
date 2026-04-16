@@ -9,9 +9,10 @@ const IssuesList = ({ issues, isCollapsed, epics = [], onIssueClick }) => {
 
   return (
     <div className="mt-3 space-y-2">
-      {issues.length === 0 ? (
+      {memoizedIssues.length === 0 ? (
         <EmptyDropZone />
-      ) : (        issues.map((issue) => (
+      ) : (
+        memoizedIssues.map((issue) => (
           <IssueCard 
             key={issue.id} 
             issue={issue}
@@ -37,4 +38,5 @@ const EmptyDropZone = () => (
   </div>
 );
 
-// ⚡ React.memo to prevent unnecessary re-renders of the entire list\nexport default React.memo(IssuesList);
+// ⚡ React.memo to prevent unnecessary re-renders of the entire list
+export default React.memo(IssuesList);

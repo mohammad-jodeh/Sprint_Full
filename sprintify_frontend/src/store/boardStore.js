@@ -224,7 +224,12 @@ export const useBoardStore = create(
           }));
           
           console.log('✅ Column reorder successful');
-        } catch (error) {\n          console.error('❌ Failed to reorder columns:', error.message);\n          // Don't throw - let the board continue functioning even if reorder fails\n          // User can still drag items; column visual order might just be temporarily wrong\n        }\n      },
+        } catch (error) {
+          console.error('❌ Failed to reorder columns:', error.message);
+          // Don't throw - let the board continue functioning even if reorder fails
+          // User can still drag items; column visual order might just be temporarily wrong
+        }
+      },
 
       // Utility actions
       resetBoard: () => {
