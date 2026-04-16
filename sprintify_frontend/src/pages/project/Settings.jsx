@@ -125,130 +125,6 @@ export default function BoardSettingsPage() {
         </div>
       )}
 
-      {/* Detailed Board Columns Section */}
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
-            📋 Board Columns & Statuses
-          </h2>
-          <div className="text-sm text-gray-500 dark:text-gray-400">
-            Organize your workflow with columns and statuses
-          </div>
-        </div>        
-      <div className="space-y-6">
-        {columns.map((column) => (
-          <div
-            key={column.id}
-            className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2 text-gray-800 dark:text-white font-semibold text-xl">
-                <GripVertical
-                  className="text-gray-400 dark:text-gray-500"
-                  size={18}
-                />
-                {column.name}
-              </div>{" "}
-              <div className="flex gap-2">
-                {canConfigureStatus && (
-                  <button
-                    onClick={() => {
-                      setTargetColumnId(column.id);
-                      setShowStatusModal(true);
-                    }}
-                    className="flex items-center gap-1 text-sm text-primary hover:text-blue-600 transition"
-                    title="Add Status"
-                  >
-                    <BadgePlus size={16} />
-                  </button>
-                )}
-                {canConfigureBoard && (
-                  <button
-                    onClick={() => setEditingCol(column)}
-                    className="flex items-center gap-1 text-sm text-primary hover:text-blue-600 transition"
-                    title="Edit Column"
-                  >
-                    <Pencil size={16} />
-                  </button>
-                )}
-                {canConfigureBoard && (
-                  <button
-                    onClick={() => setColumnToDelete(column)}
-                    className="flex items-center gap-1 text-sm text-red-500 hover:text-red-700 transition"
-                    title="Delete Column"
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                )}
-              </div>
-            </div>            <div className="flex flex-wrap gap-2">
-              {(statusesByColumn[column.id] || []).map((status) => (
-                <div
-                  key={status.id}
-                  className="flex items-center gap-2 px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-xs font-medium text-gray-800 dark:text-white shadow-sm backdrop-blur-sm"
-                >
-                  {" "}
-                  {status.name}{" "}
-                  <span className="text-[10px] opacity-50 ml-1">
-                    (
-                    {status.type === "BACKLOG" || status.type === 0
-                      ? "Backlog"
-                      : status.type === "IN_PROGRESS" || status.type === 1
-                      ? "In Progress"
-                      : "Done"}
-                    )
-                  </span>
-                  <div className="flex items-center gap-1 ml-1">
-                    {canConfigureStatus && (
-                      <button
-                        onClick={() => setStatusToEdit(status)}
-                        className="p-1 rounded hover:bg-blue-100 dark:hover:bg-blue-800 text-blue-500 transition"
-                        title="Edit status"
-                      >
-                        <Edit size={12} />
-                      </button>
-                    )}
-                    {canConfigureStatus && (
-                      <button
-                        onClick={() => setStatusToDelete(status)}
-                        className="p-1 rounded hover:bg-red-100 dark:hover:bg-red-800 text-red-500 transition"
-                        title="Delete status"
-                      >
-                        <Trash2 size={12} />
-                      </button>
-                    )}
-                  </div>
-                </div>
-              ))}
-              {(statusesByColumn[column.id] || []).length === 0 && (
-                <span className="text-sm text-gray-400 italic">
-                  No statuses assigned to this column.
-                </span>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>      {columns.length === 0 && (
-        <div className="text-center py-12">
-          <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-8 max-w-md mx-auto">
-            <h3 className="text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">
-              No Board Configuration
-            </h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-              Start by creating columns to organize your board workflow.
-            </p>
-            {canConfigureBoard && (
-              <button
-                onClick={() => setShowCreateCol(true)}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors"
-              >
-                <Plus size={16} />
-                Create Your First Column
-              </button>
-            )}
-          </div>        </div>
-      )}
-
       {/* Modals */}
       <CreateColumnModal
         open={showCreateCol}
@@ -299,7 +175,6 @@ export default function BoardSettingsPage() {
           onConfirm={handleDeleteColumn}
         />
       )}
-      </div>
     </div>
   );
 }
