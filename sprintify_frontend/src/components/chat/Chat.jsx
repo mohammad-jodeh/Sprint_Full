@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import io from "socket.io-client";
 import ChatWindow from "./ChatWindow";
 import ChannelsList from "./ChannelsList";
-import { useAuthStore } from "../../store/useAuthStore";
+import useAuthStore from "../../store/authstore";
 import {
   createChatChannel,
   getChatChannels,
