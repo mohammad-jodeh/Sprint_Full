@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { getIssueColor } from "./IssueTypeUtils";
 import { useIssueCardDragDrop } from '../../../hooks/useIssueCardDragDrop';
 import IssueCardHeader from "./IssueCardHeader";

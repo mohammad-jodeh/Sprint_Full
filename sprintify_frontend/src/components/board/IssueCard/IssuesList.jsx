@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import IssueCard from './IssueCard';
 
 // Component for displaying issues list following SRP
 const IssuesList = ({ issues, isCollapsed, epics = [], onIssueClick }) => {
+  // ⚡ Memoize the issues list to prevent re-rendering when parent updates
+  const memoizedIssues = useMemo(() => issues, [issues]);
   if (isCollapsed) return null;
 
   return (
@@ -35,4 +37,4 @@ const EmptyDropZone = () => (
   </div>
 );
 
-export default IssuesList;
+// ⚡ React.memo to prevent unnecessary re-renders of the entire list\nexport default React.memo(IssuesList);

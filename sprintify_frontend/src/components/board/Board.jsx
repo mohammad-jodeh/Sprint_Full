@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import BoardHeader from "./BoardHeader";
 import BoardContent from "./BoardContent";
 import SprintBoard from "./SprintBoard";
@@ -182,48 +182,36 @@ const Board = ({
     filters.selectedSprints.length +
     (filters.showUnassigned ? 1 : 0);
   const totalIssues = board.issues.length;
-  // Handler functions following SRP
-  const handleIssueCreated = (newIssue) => {
+  // Handler functions following SRP - memoized to prevent child re-renders
+  const handleIssueCreated = useCallback((newIssue) => {
     setIssues((prev) => [...prev, newIssue]);
-  };
-  const handleColumnCreated = (data) => {
+  }, [setIssues]);
+
+  const handleColumnCreated = useCallback((data) => {
     const { column, statuses: newStatuses } = data;
     setColumns((prev) => [...prev, column]);
     if (newStatuses && newStatuses.length > 0) {
       setStatuses((prev) => [...prev, ...newStatuses]);
     }
-  };
+  }, [setColumns, setStatuses]);
 
-  const handleColumnUpdated = (updatedColumn) => {
+  const handleColumnUpdated = useCallback((updatedColumn) => {
     setColumns((prev) =>
       prev.map((col) => (col.id === updatedColumn.id ? updatedColumn : col))
     );
-  };
-  const handleColumnDeleted = (columnId) => {
+  }, [setColumns]);
+
+  const handleColumnDeleted = useCallback((columnId) => {
     setColumns((prev) => prev.filter((col) => col.id !== columnId));
-    // Also remove statuses that belonged to this column
     setStatuses((prev) =>
       prev.filter((status) => status.columnId !== columnId)
     );
-  };
-  const handleAddIssue = () => {
-    // Add issue logic here
-  };
+  }, [setColumns, setStatuses]);
 
-  const handleSettings = () => {
-    // Settings logic here
-  };
-
-  const handleMore = () => {
-    // More actions logic here
-  };
-  // Handle moving issues between statuses
-  const handleMoveIssue = async (sourceStatusId, targetStatusId, issueId) => {
+  const handleMoveIssue = useCallback(async (sourceStatusId, targetStatusId, issueId) => {
     if (sourceStatusId === targetStatusId) return;
 
     try {
-      // Update the issue's status in the API
-      // updateTask requires: projectId, issueId, updates
       const projectId = board.project?.id;
       if (!projectId) {
         console.error("Project ID is not available");
@@ -232,7 +220,6 @@ const Board = ({
       
       await updateTask(projectId, issueId, { statusId: targetStatusId });
 
-      // Update the local state immediately to reflect the change
       if (setIssues) {
         setIssues((prevIssues) =>
           prevIssues.map((issue) =>
@@ -244,9 +231,8 @@ const Board = ({
       }
     } catch (error) {
       console.error("Failed to move issue:", error);
-      // You could add a toast notification here to inform the user of the error
     }
-  };
+  }, [board.project?.id, setIssues]);
 
   // Check if we have required data to render the board
   const hasRequiredData = board?.columns && board.columns.length > 0 && board.issues;
