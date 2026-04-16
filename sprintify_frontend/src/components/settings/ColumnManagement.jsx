@@ -41,18 +41,24 @@ const ColumnManagement = ({ projectId }) => {
     }
 
     try {
+      setIsLoading(true);
       const newOrder = columns.length;
       const newColumn = await createBoardColumn(projectId, {
         name: newColumnName.trim(),
         order: newOrder,
       });
 
-      setColumns([...columns, newColumn]);
+      // Refresh columns from API to ensure sync
+      const updatedColumns = await fetchBoardColumns(projectId);
+      setColumns(updatedColumns.sort((a, b) => (a.order || 0) - (b.order || 0)));
+      
       setNewColumnName("");
       setShowCreateForm(false);
       toast.success("Column created successfully!");
     } catch (error) {
       toast.error(error.message || "Failed to create column");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -203,21 +209,23 @@ const ColumnManagement = ({ projectId }) => {
                   setNewColumnName("");
                 }
               }}
-              className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
               autoFocus
             />
             <button
               onClick={handleCreateColumn}
-              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+              disabled={isLoading}
+              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Create
+              {isLoading ? "Creating..." : "Create"}
             </button>
             <button
               onClick={() => {
                 setShowCreateForm(false);
                 setNewColumnName("");
               }}
-              className="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-900 dark:text-white rounded-lg hover:bg-gray-400 transition"
+              disabled={isLoading}
+              className="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-900 dark:text-white rounded-lg hover:bg-gray-400 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Cancel
             </button>
@@ -262,7 +270,7 @@ const ColumnManagement = ({ projectId }) => {
                       setEditingName("");
                     }
                   }}
-                  className="flex-1 px-3 py-2 border border-blue-500 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="flex-1 px-3 py-2 border-2 border-primary rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
                   autoFocus
                 />
               ) : (
