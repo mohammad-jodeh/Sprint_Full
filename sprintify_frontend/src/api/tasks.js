@@ -63,11 +63,12 @@ export const fetchProjectTaskStatistics = async (projectId) => {
     const tasks = await fetchTasks(projectId);
     
     // Calculate statistics based on task status
+    // Status structure: { type: 0 (BACKLOG), 1 (IN_PROGRESS), 2 (DONE) }
     const statistics = {
       total: tasks.length,
-      todo: tasks.filter(task => task.status === 'TODO' || task.status === 'BACKLOG').length,
-      in_progress: tasks.filter(task => task.status === 'IN_PROGRESS' || task.status === 'IN PROGRESS').length,
-      done: tasks.filter(task => task.status === 'DONE' || task.status === 'COMPLETED').length,
+      todo: tasks.filter(task => task.status?.type === 0 || task.status?.type === 'BACKLOG').length,
+      in_progress: tasks.filter(task => task.status?.type === 1 || task.status?.type === 'IN_PROGRESS').length,
+      done: tasks.filter(task => task.status?.type === 2 || task.status?.type === 'DONE').length,
     };
     
     return statistics;
