@@ -29,12 +29,16 @@ export class BoardColumnRepo implements IBoardColumnRepo {
 
   async update(dto: UpdateBoardColumnDto): Promise<BoardColumn> {
     try {
-      const res = await this._boardColumnRepo.update(dto.id, dto);
+      // ⚡ BUGFIX: Exclude 'id' from update payload - never update primary keys!
+      // Only update the fields that should change: name and order
+      const { id, ...updatePayload } = dto;
+      
+      const res = await this._boardColumnRepo.update(id, updatePayload);
       if (res.affected === 0) {
         throw new UserError("BoardColumn not found or no changes made.", 404);
       }
 
-      return this._boardColumnRepo.findOneOrFail({ where: { id: dto.id } });
+      return this._boardColumnRepo.findOneOrFail({ where: { id } });
     } catch (error) {
       throw getDBError(error);
     }
