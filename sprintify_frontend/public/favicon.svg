@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Sprintify favicon - S with arrow -->
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4f46e5;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="64" height="64" rx="12" fill="url(#grad)"/>
+  
+  <!-- S shape with arrow -->
+  <g transform="translate(8, 10)">
+    <!-- S curve -->
+    <path d="M 20 5 Q 28 5 28 12 Q 28 18 18 18 L 32 18 Q 38 18 38 24 Q 38 30 28 30 Q 20 30 20 36" 
+          stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    
+    <!-- Arrow -->
+    <g transform="translate(38, 24)">
+      <line x1="0" y1="0" x2="12" y2="0" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      <path d="M 12 0 L 8 -3 L 10 0 L 8 3 Z" fill="white"/>
+    </g>
+  </g>
+</svg>
