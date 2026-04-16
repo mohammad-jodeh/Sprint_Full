@@ -6,7 +6,7 @@ import { useBoardStore } from "../../store/boardStore";
 import { useProjectRole } from "../../hooks/useProjectRole";
 import { can, PERMISSIONS } from "../../utils/permission";
 import { updateTask } from "../../api/tasks";
-import socketService from "../../services/socket";
+import { fetchBoardColumns } from "../../api/boardColumns";
 
 const Board = ({
   boardData,
@@ -180,13 +180,25 @@ const Board = ({
     setIssues((prev) => [...prev, newIssue]);
   }, [setIssues]);
 
-  const handleColumnCreated = useCallback((data) => {
+  const handleColumnCreated = useCallback(async (data) => {
     const { column, statuses: newStatuses } = data;
     setColumns((prev) => [...prev, column]);
     if (newStatuses && newStatuses.length > 0) {
       setStatuses((prev) => [...prev, ...newStatuses]);
     }
-  }, [setColumns, setStatuses]);
+    
+    // ⚡ Refetch columns from API to ensure they're properly loaded and ordered
+    // This prevents issues with newly created columns not appearing
+    try {
+      if (boardData?.id) {
+        const freshColumns = await fetchBoardColumns(boardData.id);
+        setColumns(freshColumns);
+      }
+    } catch (error) {
+      console.error('Failed to refresh columns after creation:', error);
+      // Keep the optimistic update even if refresh fails
+    }
+  }, [setColumns, setStatuses, boardData?.id]);
 
   const handleColumnUpdated = useCallback((updatedColumn) => {
     setColumns((prev) =>

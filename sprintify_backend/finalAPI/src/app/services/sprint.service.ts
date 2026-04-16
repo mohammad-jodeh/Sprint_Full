@@ -47,9 +47,9 @@ export class SprintService {
       this.socketService.emitToProject(updatedSprint.projectId, "sprint:updated", {
         id: updatedSprint.id,
         name: updatedSprint.name,
-        status: updatedSprint.status,
         startDate: updatedSprint.startDate,
         endDate: updatedSprint.endDate,
+        archived: updatedSprint.archived,
         projectId: updatedSprint.projectId,
       });
       console.log(`📨 Emitted sprint:updated for sprint ${updatedSprint.name}`);

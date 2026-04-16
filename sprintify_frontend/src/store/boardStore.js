@@ -204,28 +204,27 @@ export const useBoardStore = create(
       // Update column orders for drag and drop
       reorderColumns: async (projectId, newColumnOrder) => {
         try {
-          // Optimistically update the UI
-          set((state) => ({
-            board: {
-              ...state.board,
-              columns: newColumnOrder
-            }
-          }));
-
           // Prepare updates for backend
           const columnUpdates = newColumnOrder.map((column, index) => ({
             id: column.id,
             order: index
           }));
 
-          // Update backend
+          console.log('🔄 Reordering columns:', columnUpdates);
+          
+          // Update backend first before updating UI
           await updateColumnOrders(projectId, columnUpdates);
-        } catch (error) {
-          console.error('Failed to reorder columns:', error);
-          // Revert on error - could add toast notification here
-          throw error;
-        }
-      },
+          
+          // Only update UI after backend succeeds
+          set((state) => ({
+            board: {
+              ...state.board,
+              columns: newColumnOrder
+            }
+          }));
+          
+          console.log('✅ Column reorder successful');
+        } catch (error) {\n          console.error('❌ Failed to reorder columns:', error.message);\n          // Don't throw - let the board continue functioning even if reorder fails\n          // User can still drag items; column visual order might just be temporarily wrong\n        }\n      },
 
       // Utility actions
       resetBoard: () => {

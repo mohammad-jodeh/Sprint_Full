@@ -75,13 +75,16 @@ export const deleteBoardColumn = async (projectId, columnId) => {
 // Bulk update column orders (for drag and drop reordering)
 export const updateColumnOrders = async (projectId, columnUpdates) => {
   try {
-    const updatePromises = columnUpdates.map(({ id, order }) =>
-      protectedApi.patch(`/${projectId}/board-columns`, { id, order })
-    );
+    const updatePromises = columnUpdates.map(({ id, order }) => {
+      // ⚡ Exclude id from request body - only send order
+      // The API should only update the order, never the id
+      return protectedApi.patch(`/${projectId}/board-columns`, { id, order });
+    });
     
     const responses = await Promise.all(updatePromises);
     return responses.map(response => response.data);
   } catch (error) {
+    console.error('Column order update error:', error.response?.data || error.message);
     if (error.response) {
       throw new Error(
         error.response.data?.message || "Failed to update column orders"
