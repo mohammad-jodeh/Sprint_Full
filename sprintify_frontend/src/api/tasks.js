@@ -58,18 +58,40 @@ export const deleteTask = async (projectId, taskId) => {
 };
 
 // Fetch project task statistics
+// Supports default statuses (0=BACKLOG/Todo, 1=IN_PROGRESS, 2=DONE)
+// and custom columns/statuses added by users
 export const fetchProjectTaskStatistics = async (projectId) => {
   try {
     const tasks = await fetchTasks(projectId);
     
-    // Calculate statistics based on task status
-    // Status structure: { type: 0 (BACKLOG), 1 (IN_PROGRESS), 2 (DONE) }
+    // Calculate statistics based on status.type
+    // Groups issues by their status type value:
+    // 0 = To Do (BACKLOG)
+    // 1 = In Progress
+    // 2 = Done
+    // Can expand for custom status types
+    
     const statistics = {
       total: tasks.length,
-      todo: tasks.filter(task => task.status?.type === 0 || task.status?.type === 'BACKLOG').length,
-      in_progress: tasks.filter(task => task.status?.type === 1 || task.status?.type === 'IN_PROGRESS').length,
-      done: tasks.filter(task => task.status?.type === 2 || task.status?.type === 'DONE').length,
+      todo: 0,
+      in_progress: 0,
+      done: 0,
     };
+
+    // Count tasks by status type value
+    tasks.forEach(task => {
+      const statusType = task.status?.type;
+      
+      if (statusType === 0 || statusType === 'BACKLOG') {
+        statistics.todo++;
+      } else if (statusType === 1 || statusType === 'IN_PROGRESS') {
+        statistics.in_progress++;
+      } else if (statusType === 2 || statusType === 'DONE' || statusType === 'COMPLETED') {
+        statistics.done++;
+      }
+      // Note: Custom status types (3+) can be added in future
+      // For now, we group into the 3 main categories above
+    });
     
     return statistics;
   } catch (error) {

@@ -6,6 +6,8 @@ import { User2Icon, BarChart2, Activity, Loader2 } from "lucide-react";
 import ProjectBarChart from "../../components/Charts/ProjectBarChart";
 import { fetchSprints } from "../../api/sprints";
 import { useProjectRole } from "../../hooks/useProjectRole";
+import { fetchBoardColumns } from "../../api/boardColumns";
+import { fetchStatuses } from "../../api/statuses";
 
 const ProjectOverview = () => {
   const { projectId } = useParams();
@@ -20,6 +22,8 @@ const ProjectOverview = () => {
   });
   const [issuesByAssignee, setIssuesByAssignee] = useState([]);
   const [sprintActivity, setSprintActivity] = useState([]);
+  const [boardColumns, setBoardColumns] = useState([]);
+  const [statusMap, setStatusMap] = useState({});
   useEffect(() => {
     const loadProjectData = async () => {
       setIsLoading(true);
@@ -33,6 +37,25 @@ const ProjectOverview = () => {
 
         const stats = await fetchProjectTaskStatistics(projectId);
         setIssueStats(stats);
+
+        // Fetch board columns and statuses for future custom column support
+        try {
+          const columns = await fetchBoardColumns(projectId);
+          const statuses = await fetchStatuses({ projectId });
+          
+          // Create a map of status ID to status details for easy lookup
+          const statusLookup = {};
+          if (Array.isArray(statuses)) {
+            statuses.forEach(status => {
+              statusLookup[status.id] = status;
+            });
+          }
+          
+          setBoardColumns(columns || []);
+          setStatusMap(statusLookup);
+        } catch (error) {
+          console.warn("Could not fetch board columns/statuses:", error);
+        }
 
         const issues = await fetchTasks(projectId, { includeRelated: true });
         const countByAssignee = {};
@@ -186,6 +209,13 @@ const ProjectOverview = () => {
                 <p className="text-gray-600 dark:text-gray-300 mt-1">Done</p>
               </div>
             </div>
+
+            {/* Note: Custom columns can be added in Settings. */}
+            {boardColumns.length > 0 && (
+              <p className="text-xs text-gray-400 dark:text-gray-500 mt-2 text-center">
+                {boardColumns.length} column{boardColumns.length !== 1 ? 's' : ''} configured • View details in Settings
+              </p>
+            )}
           </div>
         </div>
 
