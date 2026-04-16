@@ -7,6 +7,7 @@ import { useProjectRole } from "../../hooks/useProjectRole";
 import { can, PERMISSIONS } from "../../utils/permission";
 import { updateTask } from "../../api/tasks";
 import { fetchBoardColumns } from "../../api/boardColumns";
+import socketService from "../../services/socket";
 
 const Board = ({
   boardData,
