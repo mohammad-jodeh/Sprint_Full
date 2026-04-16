@@ -5,7 +5,14 @@ import ProfileDropdown from "../ui/ProfileDropdown";
 import { Plus, User2Icon } from "lucide-react";
 
 const Logo = () => (
-  <div className="text-xl font-bold text-primary">Sprintify</div>
+  <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
+    <img 
+      src="/sprintify-logo.svg" 
+      alt="Sprintify" 
+      className="h-8 w-8"
+    />
+    <span className="text-xl font-bold text-primary hidden sm:inline">Sprintify</span>
+  </div>
 );
 
 const NewProjectButton = () => {
