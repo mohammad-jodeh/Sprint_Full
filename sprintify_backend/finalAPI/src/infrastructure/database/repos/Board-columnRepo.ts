@@ -65,4 +65,46 @@ export class BoardColumnRepo implements IBoardColumnRepo {
       throw getDBError(error);
     }
   }
+
+  async updateBulk(updates: UpdateBoardColumnDto[]): Promise<BoardColumn[]> {
+    try {
+      // Use transaction to avoid unique constraint violations
+      const queryRunner = AppDataSource.createQueryRunner();
+      await queryRunner.connect();
+      await queryRunner.startTransaction();
+
+      try {
+        // Update all columns with temporary negative orders to avoid constraint violations
+        for (let i = 0; i < updates.length; i++) {
+          const tempOrder = -(i + 1); // Use negative temp order: -1, -2, -3, etc.
+          await queryRunner.manager.update(
+            BoardColumn,
+            updates[i].id,
+            { order: tempOrder }
+          );
+        }
+
+        // Now update to final order values
+        const updatedColumns: BoardColumn[] = [];
+        for (const update of updates) {
+          const { id, ...updatePayload } = update;
+          await queryRunner.manager.update(BoardColumn, id, updatePayload);
+          const column = await queryRunner.manager.findOneOrFail(BoardColumn, {
+            where: { id },
+          });
+          updatedColumns.push(column);
+        }
+
+        await queryRunner.commitTransaction();
+        return updatedColumns;
+      } catch (error) {
+        await queryRunner.rollbackTransaction();
+        throw error;
+      } finally {
+        await queryRunner.release();
+      }
+    } catch (error) {
+      throw getDBError(error);
+    }
+  }
 }
