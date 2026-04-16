@@ -1,0 +1,331 @@
+[4/14/2026, 9:50:49 AM]: (node:9088) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[4/14/2026, 9:50:49 AM]: ❌ Failed to check/create database "sprintify" AggregateError
+[4/14/2026, 9:50:49 AM]: AggregateError: 
+    at internalConnectMultiple (node:net:1142:49)
+    at afterConnectMultiple (node:net:1723:7)
+[4/14/2026, 10:04:10 AM]: (node:28260) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[4/14/2026, 10:04:10 AM]: ❌ Failed to check/create database "sprintify" Error: SASL: SCRAM-SERVER-FIRST-MESSAGE: client password must be a string
+[4/14/2026, 10:04:10 AM]: Error: SASL: SCRAM-SERVER-FIRST-MESSAGE: client password must be a string
+    at Object.continueSession (C:\Users\Admin\sprint_full\Sprint_Full\sprintify_backend\finalAPI\node_modules\pg\lib\crypto\sasl.js:36:11)
+    at Client._handleAuthSASLContinue (C:\Users\Admin\sprint_full\Sprint_Full\sprintify_backend\finalAPI\node_modules\pg\lib\client.js:276:18)
+    at Connection.emit (node:events:508:28)
+    at C:\Users\Admin\sprint_full\Sprint_Full\sprintify_backend\finalAPI\node_modules\pg\lib\connection.js:116:12
+    at Parser.parse (C:\Users\Admin\sprint_full\Sprint_Full\sprintify_backend\finalAPI\node_modules\pg-protocol\src\parser.ts:103:9)
+    at Socket.<anonymous> (C:\Users\Admin\sprint_full\Sprint_Full\sprintify_backend\finalAPI\node_modules\pg-protocol\src\index.ts:7:48)
+    at Socket.emit (node:events:508:28)
+    at addChunk (node:internal/streams/readable:563:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+    at Socket.Readable.push (node:internal/streams/readable:394:5)
+[4/14/2026, 10:05:29 AM]: (node:11372) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[4/14/2026, 10:05:29 AM]: ❌ Error during status projectId migration: QueryFailedError: relation "status" does not exist
+[4/14/2026, 10:05:29 AM]: QueryFailedError: relation "status" does not exist
+    at PostgresQueryRunner.query (C:\Users\Admin\sprint_full\Sprint_Full\sprintify_backend\finalAPI\src\driver\postgres\PostgresQueryRunner.ts:328:19)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at fixStatusProjectIdMigration (C:\Users\Admin\sprint_full\Sprint_Full\sprintify_backend\finalAPI\src\infrastructure\database\migrations\fix-status-projectid.ts:22:35)
+    at C:\Users\Admin\sprint_full\Sprint_Full\sprintify_backend\finalAPI\src\index.ts:21:3
+[4/14/2026, 10:06:20 AM]: (node:20320) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[4/14/2026, 10:06:22 AM]: (node:21548) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[4/14/2026, 10:06:34 AM]: (node:23212) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[4/14/2026, 10:06:45 AM]: 🔌 Socket authentication error: jwt malformed
+[4/14/2026, 10:06:47 AM]: 🔌 Socket authentication error: jwt malformed
+[4/14/2026, 10:06:51 AM]: 🔌 Socket authentication error: jwt malformed
+[4/14/2026, 10:07:00 AM]: 🔌 Socket authentication error: jwt malformed
+[4/14/2026, 10:07:06 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:07:06 AM]: InvalidAPIKeyError: Request does not contain a valid Server token. send confirmEmail
+[4/14/2026, 10:07:16 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:07:36 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:09:11 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:09:13 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:09:16 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:09:19 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:09:22 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:09:23 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:09:30 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:09:39 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:10:00 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:11:27 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:11:29 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:11:33 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:11:41 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:11:57 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:12:19 AM]: "Not authorized, token not found"
+[4/14/2026, 10:12:26 AM]: "Not authorized, token not found"
+[4/14/2026, 10:12:27 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:13:02 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:13:04 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:13:05 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:13:08 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:13:14 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:13:22 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:13:24 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:13:25 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:13:28 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:13:36 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:13:45 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:13:46 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:13:46 AM]: InvalidAPIKeyError: Request does not contain a valid Server token. send confirmEmail
+[4/14/2026, 10:13:52 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:14:16 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:15:43 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:15:46 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:15:50 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:15:58 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:16:14 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:16:44 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:20:18 AM]: "Not authorized, token not found"
+[4/14/2026, 10:20:30 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:20:32 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:20:36 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:20:44 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:20:49 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:20:51 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:20:55 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:21:00 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:21:03 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:21:20 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:21:30 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:21:51 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:26:05 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:29:19 AM]: Error: invalid input syntax for type uuid: "undefined"
+[4/14/2026, 10:29:20 AM]: Error: invalid input syntax for type uuid: "undefined"
+[4/14/2026, 10:29:20 AM]: Error: invalid input syntax for type uuid: "undefined"
+[4/14/2026, 10:29:20 AM]: Error: invalid input syntax for type uuid: "undefined"
+[4/14/2026, 10:29:21 AM]: Error: invalid input syntax for type uuid: "undefined"
+[4/14/2026, 10:29:21 AM]: Error: invalid input syntax for type uuid: "undefined"
+[4/14/2026, 10:29:24 AM]: Error: invalid input syntax for type uuid: "undefined"
+[4/14/2026, 10:29:24 AM]: Error: invalid input syntax for type uuid: "undefined"
+[4/14/2026, 10:29:25 AM]: Error: invalid input syntax for type uuid: "undefined"
+[4/14/2026, 10:29:28 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:29:30 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:29:34 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:29:42 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:29:54 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:29:56 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:29:59 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:30:01 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:30:05 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:30:13 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:30:29 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:30:59 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:32:47 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:32:49 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:32:53 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:33:01 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:33:17 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:33:39 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:33:41 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:33:45 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:33:47 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:33:53 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:34:09 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:34:39 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:36:42 AM]: QueryFailedError: invalid input syntax for type uuid: "[object Object]"
+[4/14/2026, 10:36:51 AM]: QueryFailedError: invalid input syntax for type uuid: "[object Object]"
+[4/14/2026, 10:43:13 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:43:15 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:43:19 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:43:27 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:43:43 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:44:13 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:44:29 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:44:31 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:44:35 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:44:43 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:44:59 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:45:29 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:47:09 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:47:10 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:47:12 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:47:12 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:47:14 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:47:18 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:47:26 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:47:42 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:48:13 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:48:33 AM]: "Not authorized, token not found"
+[4/14/2026, 10:48:43 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:48:45 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:48:49 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:48:54 AM]: "Not authorized, token not found"
+[4/14/2026, 10:48:58 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:49:14 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:49:26 AM]: "Not authorized, token not found"
+[4/14/2026, 10:49:44 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:52:09 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:52:09 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:52:11 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:52:12 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:52:15 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:52:17 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:52:23 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:52:26 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:52:35 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:52:36 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:52:37 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:52:39 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:52:39 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:52:41 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:52:43 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:52:44 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:52:49 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:52:53 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:52:53 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:52:54 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:52:54 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:52:56 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:53:00 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:53:08 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:53:08 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:53:10 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:53:14 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:53:22 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:53:25 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:53:38 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:53:56 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:54:00 AM]: "Not authorized, token not found"
+[4/14/2026, 10:54:09 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:55:33 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:55:33 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:55:36 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:55:36 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:55:41 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:55:41 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:55:50 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:55:50 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:56:07 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:56:07 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:56:38 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:56:38 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:57:33 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:57:33 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:57:35 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:57:39 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:57:47 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:58:03 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:58:33 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:59:15 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:59:17 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:59:21 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:59:29 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 10:59:45 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 11:00:15 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 11:00:17 AM]: "Not authorized, token not found"
+[4/14/2026, 11:01:40 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 11:01:42 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 11:01:46 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 11:01:54 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 11:02:10 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 11:02:40 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 11:06:19 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 11:06:21 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 11:06:25 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 11:06:33 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 11:06:49 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 11:07:19 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 11:26:57 AM]: 🔌 Socket authentication error: invalid signature
+[4/14/2026, 11:27:03 AM]: (node:23836) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[4/14/2026, 11:27:14 AM]: (node:5248) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[4/14/2026, 11:27:27 AM]: (node:22740) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[4/14/2026, 11:27:48 AM]: (node:28472) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[4/14/2026, 11:27:50 AM]: (node:23440) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[4/14/2026, 12:08:04 PM]: (node:19452) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[4/14/2026, 12:08:05 PM]: Error: listen EADDRINUSE: address already in use :::4000
+    at Server.setupListenHandle [as _listen2] (node:net:1948:16)
+    at listenInCluster (node:net:2005:12)
+    at Server.listen (node:net:2110:7)
+    at AppServer.listen (C:\Users\Admin\sprint_full\Sprint_Full\sprintify_backend\finalAPI\src\API\index.ts:129:21)
+[4/14/2026, 12:10:47 PM]: (node:19952) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[4/14/2026, 12:10:47 PM]: Error: listen EADDRINUSE: address already in use :::4000
+    at Server.setupListenHandle [as _listen2] (node:net:1948:16)
+    at listenInCluster (node:net:2005:12)
+    at Server.listen (node:net:2110:7)
+    at AppServer.listen (C:\Users\Admin\sprint_full\Sprint_Full\sprintify_backend\finalAPI\src\API\index.ts:129:21)
+[4/14/2026, 12:12:50 PM]: (node:17480) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[4/14/2026, 12:12:50 PM]: Error: listen EADDRINUSE: address already in use :::4000
+    at Server.setupListenHandle [as _listen2] (node:net:1948:16)
+    at listenInCluster (node:net:2005:12)
+    at Server.listen (node:net:2110:7)
+    at AppServer.listen (C:\Users\Admin\sprint_full\Sprint_Full\sprintify_backend\finalAPI\src\API\index.ts:129:21)
+[4/14/2026, 12:13:54 PM]: (node:25524) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[4/14/2026, 12:16:19 PM]: (node:23896) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[4/14/2026, 12:19:48 PM]: (node:8072) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[4/14/2026, 12:19:48 PM]: (node:2152) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[4/14/2026, 12:19:48 PM]: Error: listen EADDRINUSE: address already in use :::4000
+    at Server.setupListenHandle [as _listen2] (node:net:1948:16)
+    at listenInCluster (node:net:2005:12)
+    at Server.listen (node:net:2110:7)
+    at AppServer.listen (C:\Users\Admin\sprint_full\Sprint_Full\sprintify_backend\finalAPI\src\API\index.ts:136:21)
+[4/14/2026, 12:28:13 PM]: (node:18224) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[4/14/2026, 12:28:13 PM]: Error: listen EADDRINUSE: address already in use :::4000
+    at Server.setupListenHandle [as _listen2] (node:net:1948:16)
+    at listenInCluster (node:net:2005:12)
+    at Server.listen (node:net:2110:7)
+    at AppServer.listen (C:\Users\Admin\sprint_full\Sprint_Full\sprintify_backend\finalAPI\src\API\index.ts:136:21)
+[4/14/2026, 12:41:09 PM]: (node:6656) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[4/14/2026, 12:41:09 PM]: Error: listen EADDRINUSE: address already in use :::4000
+    at Server.setupListenHandle [as _listen2] (node:net:1948:16)
+    at listenInCluster (node:net:2005:12)
+    at Server.listen (node:net:2110:7)
+    at AppServer.listen (C:\Users\Admin\sprint_full\Sprint_Full\sprintify_backend\finalAPI\src\API\index.ts:137:21)
+[4/14/2026, 1:05:09 PM]: (node:22708) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[4/14/2026, 1:05:10 PM]: Error: listen EADDRINUSE: address already in use :::4000
+    at Server.setupListenHandle [as _listen2] (node:net:1948:16)
+    at listenInCluster (node:net:2005:12)
+    at Server.listen (node:net:2110:7)
+    at AppServer.listen (C:\Users\Admin\sprint_full\Sprint_Full\sprintify_backend\finalAPI\src\API\index.ts:137:21)
+[4/14/2026, 1:06:28 PM]: (node:2556) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[4/14/2026, 1:06:29 PM]: Error: listen EADDRINUSE: address already in use :::4000
+    at Server.setupListenHandle [as _listen2] (node:net:1948:16)
+    at listenInCluster (node:net:2005:12)
+    at Server.listen (node:net:2110:7)
+    at AppServer.listen (C:\Users\Admin\sprint_full\Sprint_Full\sprintify_backend\finalAPI\src\API\index.ts:137:21)
+[4/14/2026, 1:27:00 PM]: (node:2424) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[4/14/2026, 1:27:01 PM]: Error: listen EADDRINUSE: address already in use :::4000
+    at Server.setupListenHandle [as _listen2] (node:net:1948:16)
+    at listenInCluster (node:net:2005:12)
+    at Server.listen (node:net:2110:7)
+    at AppServer.listen (C:\Users\Admin\sprint_full\Sprint_Full\sprintify_backend\finalAPI\src\API\index.ts:137:21)
+[4/14/2026, 1:27:28 PM]: (node:27228) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[4/14/2026, 1:27:28 PM]: Error: listen EADDRINUSE: address already in use :::4000
+    at Server.setupListenHandle [as _listen2] (node:net:1948:16)
+    at listenInCluster (node:net:2005:12)
+    at Server.listen (node:net:2110:7)
+    at AppServer.listen (C:\Users\Admin\sprint_full\Sprint_Full\sprintify_backend\finalAPI\src\API\index.ts:137:21)
+[4/14/2026, 1:49:37 PM]: (node:3212) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[4/14/2026, 1:49:37 PM]: Error: listen EADDRINUSE: address already in use :::4000
+    at Server.setupListenHandle [as _listen2] (node:net:1948:16)
+    at listenInCluster (node:net:2005:12)
+    at Server.listen (node:net:2110:7)
+    at AppServer.listen (C:\Users\Admin\sprint_full\Sprint_Full\sprintify_backend\finalAPI\src\API\index.ts:137:21)
+[4/14/2026, 2:06:37 PM]: (node:26484) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[4/14/2026, 2:06:37 PM]: Error: listen EADDRINUSE: address already in use :::4000
+    at Server.setupListenHandle [as _listen2] (node:net:1948:16)
+    at listenInCluster (node:net:2005:12)
+    at Server.listen (node:net:2110:7)
+    at AppServer.listen (C:\Users\Admin\sprint_full\Sprint_Full\sprintify_backend\finalAPI\src\API\index.ts:137:21)
