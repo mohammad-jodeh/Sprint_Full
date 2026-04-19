@@ -8,10 +8,10 @@ import {
   Settings,
   Users,
   BarChart2,
+  Zap,
 } from "lucide-react";
 
 import SideLinks from "../ui/SideLinks";
-import ChatSidebar from "../chat/ChatSidebar";
 
 export default function ProjectSidebar() {
   const { projectId } = useParams();
@@ -49,6 +49,13 @@ export default function ProjectSidebar() {
       text: "Team",
     },
     {
+      to: `/projects/${projectId}/automation`,
+      icon: (
+        <Zap className="mr-3 h-6 w-6 text-gray-500 dark:text-gray-400" />
+      ),
+      text: "Automation",
+    },
+    {
       to: `/projects/${projectId}/settings`,
       icon: (
         <Settings className="mr-3 h-6 w-6 text-gray-500 dark:text-gray-400" />
@@ -84,8 +91,7 @@ export default function ProjectSidebar() {
         );
       })}
 
-      {/* Chat Section */}
-      <ChatSidebar projectId={projectId} />
+
     </nav>
   );
 }

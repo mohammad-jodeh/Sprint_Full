@@ -1,4 +1,5 @@
 import { useParams, useSearchParams } from "react-router-dom";
+import { useState } from "react";
 import Board from "../../components/board/Board";
 import LoadingScreen from "../../components/ui/LoadingScreen";
 import { BoardSkeleton } from "../../components/ui/SkeletonLoader";
@@ -11,7 +12,6 @@ import { useBoardData } from "../../hooks/useBoardData";
 import { useProjectRole } from "../../hooks/useProjectRole";
 import { updateTask } from "../../api/tasks";
 import toast from "react-hot-toast";
-import { useState } from "react";
 
 const BoardPage = () => {
   const { projectId } = useParams();

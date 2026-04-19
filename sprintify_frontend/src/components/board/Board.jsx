@@ -7,6 +7,7 @@ import { useProjectRole } from "../../hooks/useProjectRole";
 import { can, PERMISSIONS } from "../../utils/permission";
 import { updateTask } from "../../api/tasks";
 import { fetchBoardColumns } from "../../api/boardColumns";
+import { exportBoardAsPDF } from "../../utils/exportBoardAsPDF";
 import socketService from "../../services/socket";
 
 const Board = ({
@@ -93,6 +94,40 @@ const Board = ({
     if (filters.showUnassigned && filters.selectedUsers.length === 0) {
       filtered = filtered.filter((issue) => !issue.assignee);
     }
+
+    // Apply sorting
+    const sortBy = filters.sortBy || 'priority';
+    filtered = [...filtered].sort((a, b) => {
+      switch (sortBy) {
+        case 'priority': {
+          // Priority: HIGH > MEDIUM > LOW
+          const priorityOrder = { HIGH: 3, MEDIUM: 2, LOW: 1 };
+          const priorityA = priorityOrder[a.issuePriority] || 2;
+          const priorityB = priorityOrder[b.issuePriority] || 2;
+          return priorityB - priorityA; // Descending (HIGH first)
+        }
+        case 'created': {
+          // Created date: Newest first
+          const dateA = new Date(a.createdAt || 0).getTime();
+          const dateB = new Date(b.createdAt || 0).getTime();
+          return dateB - dateA;
+        }
+        case 'storyPoints': {
+          // Story points: Highest first
+          const pointsA = a.storyPoint || 0;
+          const pointsB = b.storyPoint || 0;
+          return pointsB - pointsA;
+        }
+        case 'assignee': {
+          // Assignee: A-Z (alphabetical)
+          const assigneeA = a.assignee || '';
+          const assigneeB = b.assignee || '';
+          return assigneeA.localeCompare(assigneeB);
+        }
+        default:
+          return 0;
+      }
+    });
 
     return filtered;
   }, [board.issues, filters, activeSprint, activeSprints]);
@@ -240,6 +275,16 @@ const Board = ({
     }
   }, [board.project?.id, setIssues]);
 
+  const handleExportBoardAsPDF = useCallback(async () => {
+    try {
+      const projectName = board.project?.name || "Board";
+      const members = boardData?.members || [];
+      await exportBoardAsPDF(projectName, board.columns, filteredIssues, members);
+    } catch (error) {
+      console.error("Failed to export board as PDF:", error);
+    }
+  }, [board.project?.name, board.columns, filteredIssues, boardData?.members]);
+
   // Check if we have required data to render the board
   const hasRequiredData = board?.columns && board.columns.length > 0 && board.issues;
   
@@ -279,19 +324,21 @@ const Board = ({
           availableSprints={activeSprints || []}
           viewMode={viewMode}
           setViewMode={setViewMode}
+          onExportPDF={handleExportBoardAsPDF}
         />
         
         {/* Board Content - Conditional based on view mode */}
-        {viewMode === "sprint" ? (
-          <SprintBoard
-            issues={board.issues || []}
-            setIssues={setIssues}
-            activeSprints={activeSprints || []}
-            onIssueClick={onIssueClick}
-            projectId={boardData?.id}
-          />
-        ) : (
-          <BoardContent
+        <div id="board-content">
+          {viewMode === "sprint" ? (
+            <SprintBoard
+              issues={board.issues || []}
+              setIssues={setIssues}
+              activeSprints={activeSprints || []}
+              onIssueClick={onIssueClick}
+              projectId={boardData?.id}
+            />
+          ) : (
+            <BoardContent
             board={board}
             isAnimated={isAnimated}
             canConfigureBoard={canConfigureBoard}
@@ -307,7 +354,8 @@ const Board = ({
             filters={filters}
             activeSprints={activeSprints}
           />
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

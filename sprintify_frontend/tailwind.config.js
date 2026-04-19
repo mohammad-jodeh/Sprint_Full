@@ -51,6 +51,7 @@ export default {
           900: '#383794'
         },
         gray: {
+          50: '#F9FAFB',
           100: '#F3F4F6',
           200: '#E5E7EB',
           300: '#D1D5DB',
@@ -58,8 +59,11 @@ export default {
           500: '#6B7280',
           600: '#4B5563',
           700: '#374151',
+          750: '#2D3748',
           800: '#1F2937',
-          900: '#111827'
+          850: '#1A202C',
+          900: '#111827',
+          950: '#030712'
         }
       },
       fontFamily: {
@@ -97,7 +101,7 @@ export default {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-primary': 'linear-gradient(to bottom, #1E293B, #0F172A)',
-        'gradient-card': 'linear-gradient(to bottom right, #1E293B, #0F172A)',
+        'gradient-card': 'linear-gradient(to bottom right, #1F2937, #111827)',
         'gradient-header': 'linear-gradient(to right, #1E293B, #334155)',
       }
     },

@@ -5,6 +5,7 @@ import {
   deleteBoardColumn,
   updateColumnOrders,
 } from "../../api/boardColumns";
+import { createStatus } from "../../api/statuses";
 import toast from "react-hot-toast";
 import { GripVertical, Plus, Trash2, Edit2, X } from "lucide-react";
 
@@ -43,10 +44,38 @@ const ColumnManagement = ({ projectId }) => {
     try {
       setIsLoading(true);
       const newOrder = columns.length;
+      
+      console.log("📊 Creating column with name:", newColumnName.trim(), "order:", newOrder);
+      
       const newColumn = await createBoardColumn(projectId, {
         name: newColumnName.trim(),
         order: newOrder,
       });
+
+      console.log("✅ Column response:", newColumn);
+      const columnId = newColumn?.column?.id || newColumn?.id || newColumn?.data?.id;
+      console.log("📍 Column ID extracted:", columnId);
+
+      // Automatically create a status with the same name as the column
+      if (columnId) {
+        try {
+          await createStatus(
+            {
+              name: newColumnName.trim(),
+              type: 0, // BACKLOG = 0 (numeric enum value)
+              columnId: columnId,
+              projectId: projectId,
+            },
+            projectId
+          );
+          console.log("✅ Status created successfully for column:", columnId);
+        } catch (statusError) {
+          console.error("❌ Failed to create status for column:", statusError);
+          toast.warn("Column created, but status creation failed. Please create the status manually.");
+        }
+      } else {
+        console.warn("⚠️ Column created but no columnId returned");
+      }
 
       // Refresh columns from API to ensure sync
       const updatedColumns = await fetchBoardColumns(projectId);
@@ -54,7 +83,7 @@ const ColumnManagement = ({ projectId }) => {
       
       setNewColumnName("");
       setShowCreateForm(false);
-      toast.success("Column created successfully!");
+      toast.success("Column and status created successfully!");
     } catch (error) {
       toast.error(error.message || "Failed to create column");
     } finally {

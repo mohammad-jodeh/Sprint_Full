@@ -69,10 +69,13 @@ export class SocketService {
       },
       allowEIO3: true, // Allow Engine.IO v3 clients
       transports: ["websocket", "polling"],
-      pingTimeout: 60000,
-      pingInterval: 25000,
+      pingTimeout: 20000, // Reduce from 60s to 20s for faster disconnect detection
+      pingInterval: 10000, // Send ping every 10s (was 25s)
       upgradeTimeout: 10000,
       maxHttpBufferSize: 1e6,
+      connectTimeout: 45000, // Max time to wait for initial connection
+      // Enable polling timeout handling
+      serveClient: false, // Don't serve Socket.IO client files
     });
 
     this.io.use(this.authenticateSocket.bind(this));
@@ -173,7 +176,8 @@ export class SocketService {
     // Handle joining chat channels
     socket.on("join-channel", (channelId: string) => {
       socket.join(`channel:${channelId}`);
-      console.info(`🔌 User ${userId} joined chat channel: ${channelId}`);
+      console.log(`✅ [SOCKET] User ${userId} joined channel room: channel:${channelId}`);
+      console.log(`📊 [SOCKET-ROOMS] Socket ${socket.id} rooms:`, socket.rooms);
       
       // Notify others in the channel
       this.io?.to(`channel:${channelId}`).emit("user-joined", { userId });
@@ -182,7 +186,7 @@ export class SocketService {
     // Handle leaving chat channels
     socket.on("leave-channel", (channelId: string) => {
       socket.leave(`channel:${channelId}`);
-      console.info(`🔌 User ${userId} left chat channel: ${channelId}`);
+      console.log(`❌ [SOCKET] User ${userId} left channel room: channel:${channelId}`);
       
       // Notify others in the channel
       this.io?.to(`channel:${channelId}`).emit("user-left", { userId });
@@ -285,6 +289,14 @@ export class SocketService {
 
     this.io.emit(event, data);
     console.info(`🔔 Broadcast notification sent: ${event}`);
+  }
+
+  /**
+   * Get the Socket.IO server instance
+   * @returns The Socket.IO server instance or undefined
+   */
+  getIO(): SocketIOServer | undefined {
+    return this.io;
   }
 
   /**

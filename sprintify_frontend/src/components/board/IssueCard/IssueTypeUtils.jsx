@@ -38,17 +38,17 @@ export const getIssueTypeIcon = (issue) => {
 };
 
 /**
- * Returns priority icon based on story points
+ * Returns priority icon based on issue priority field
  */
 export const getPriorityIcon = (issue) => {
-  const storyPoints = issue.storyPoint || 0;
+  const priority = issue.issuePriority || "MEDIUM";
 
-  if (storyPoints >= 5) {
-    return <CircleAlert className="h-4 w-4 text-error" />; // High priority
-  } else if (storyPoints >= 3) {
-    return <CircleAlert className="h-4 w-4 text-warning" />; // Medium priority
+  if (priority === "HIGH") {
+    return <CircleAlert className="h-4 w-4 text-red-500" title="High Priority" />; // High priority - red
+  } else if (priority === "MEDIUM") {
+    return <CircleAlert className="h-4 w-4 text-yellow-500" title="Medium Priority" />; // Medium priority - yellow
   } else {
-    return <CircleAlert className="h-4 w-4 text-success" />; // Low priority
+    return <CircleAlert className="h-4 w-4 text-green-500" title="Low Priority" />; // Low priority - green
   }
 };
 

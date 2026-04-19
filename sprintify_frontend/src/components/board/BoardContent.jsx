@@ -1,6 +1,5 @@
 import React, { useRef, useCallback } from "react";
 import Column from "./Column/Column";
-import CreateColumn from "./Column/CreateColumn";
 import { useAutoScroll } from "../../hooks/useAutoScroll";
 import { useColumnReorder } from "../../hooks/useColumnReorder";
 import { useBoardStore } from "../../store/boardStore";
@@ -106,14 +105,6 @@ const BoardContent = ({
             />
           </div>
         ))}
-        {canConfigureBoard && (
-          <CreateColumn
-            projectId={board.project?.id}
-            onColumnCreated={onColumnCreated}
-            isAnimated={isAnimated}
-            animationDelay={board.columns.length * 150}
-          />
-        )}
       </div>
     </div>
   );

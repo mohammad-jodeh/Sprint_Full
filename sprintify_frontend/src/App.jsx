@@ -44,6 +44,7 @@ const Backlog = lazy(() => import("./pages/project/Backlog"));
 const Sprintspage = lazy(() => import("./pages/project/Sprintspage"));
 const Team = lazy(() => import("./pages/project/Team"));
 const Settings = lazy(() => import("./pages/project/Settings"));
+const AutomationPage = lazy(() => import("./pages/AutomationPage"));
 const Profile = lazy(() => import("./pages/Profile"));
 
 function App() {
@@ -118,6 +119,7 @@ function App() {
             <Route path="sprint" element={<Sprintspage />} />
             <Route path="team" element={<Team />} />
             <Route path="settings" element={<Settings />} />
+            <Route path="automation" element={<AutomationPage />} />
           </Route>
 
           {/* Standalone Profile Route */}

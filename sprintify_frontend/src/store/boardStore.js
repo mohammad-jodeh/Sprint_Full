@@ -11,7 +11,8 @@ export const useBoardStore = create(
       filters: {
         selectedUsers: [],
         selectedSprints: [],
-        showUnassigned: false
+        showUnassigned: false,
+        sortBy: 'priority' // Default sort: priority
       },
       
       // Actions
@@ -241,12 +242,22 @@ export const useBoardStore = create(
         set({ filters: newFilters });
       },
 
+      setSortBy: (sortBy) => {
+        set((state) => ({
+          filters: {
+            ...state.filters,
+            sortBy
+          }
+        }));
+      },
+
       clearFilters: () => {
         set({
           filters: {
             selectedUsers: [],
             selectedSprints: [],
-            showUnassigned: false
+            showUnassigned: false,
+            sortBy: 'priority'
           }
         });
       },

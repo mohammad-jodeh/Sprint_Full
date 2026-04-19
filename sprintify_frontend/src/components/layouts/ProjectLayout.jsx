@@ -1,13 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet, useParams } from "react-router-dom";
 import useThemeStore from "../../store/themeStore";
 import useAuthStore from "../../store/authstore";
 import ProjectSidebar from "../sidebars/ProjectSidebar";
 import NavbarProject from "../navbar/NavbarProject";
-import AIChatFloatingButton from "../AIChatFloatingButton";
 
 export default function ProjectLayout() {
   const { theme } = useThemeStore();
+  const { projectId } = useParams();
+  
   return (
     <div className="h-screen flex flex-col overflow-hidden bg-gray-50 dark:bg-background-dark">
       {/* Background overlay elements */}
@@ -34,8 +35,7 @@ export default function ProjectLayout() {
         </main>
       </div>
 
-      {/* AI Chat Floating Button */}
-      <AIChatFloatingButton />
+
     </div>
   );
 }

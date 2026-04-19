@@ -1,9 +1,6 @@
 import { DataSource } from "typeorm";
 import {
   BoardColumn,
-  ChatChannel,
-  ChatChannelMember,
-  ChatMessage,
   Epic,
   Issue,
   Notification,
@@ -12,6 +9,7 @@ import {
   Sprint,
   Status,
   User,
+  AutomationRule,
 } from "../../domain/entities";
 import dotenv from "dotenv";
 dotenv.config();
@@ -26,6 +24,11 @@ if (process.env.DATABASE_URL) {
     url: process.env.DATABASE_URL,
     synchronize: false,
     logging: ["error", "warn"],
+    // Connection pooling for better concurrency (60+ users)
+    pool: {
+      max: 20,  // Max connections from pool
+      min: 2,   // Min idle connections
+    },
   };
 } else {
   // Local dev mode: use individual variables
@@ -38,6 +41,11 @@ if (process.env.DATABASE_URL) {
     database: process.env.DB_NAME || "sprintify",
     synchronize: false,
     logging: ["error", "warn"],
+    // Connection pooling for better concurrency
+    pool: {
+      max: 20,
+      min: 2,
+    },
   };
 }
 
@@ -45,9 +53,6 @@ export const AppDataSource = new DataSource({
   ...dbConfig,
   entities: [
     BoardColumn,
-    ChatChannel,
-    ChatChannelMember,
-    ChatMessage,
     Epic,
     Issue,
     Notification,
@@ -56,5 +61,6 @@ export const AppDataSource = new DataSource({
     Sprint,
     Status,
     User,
+    AutomationRule,
   ],
 });

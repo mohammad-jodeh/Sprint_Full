@@ -90,9 +90,13 @@ export default function CreateIssueModal({ onClose, onCreate, defaultSprintId })
       }
     };
     fetchData();
-  }, [projectId]);const handleSubmit = async (e) => {
+  }, [projectId]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.title.trim()) return toast.error("Title is required");
+    if (statuses.length === 0) return toast.error("No statuses available. Please create columns and statuses in Settings first");
+    if (!form.statusId) return toast.error("Status is required");
 
     setSaving(true);
     try {
@@ -102,7 +106,7 @@ export default function CreateIssueModal({ onClose, onCreate, defaultSprintId })
         storyPoint: form.storyPoint,
         type: form.type,
         issuePriority: form.issuePriority,
-        statusId: form.statusId || null,
+        statusId: form.statusId,
         assignee: form.assignee || null,
         epicId: form.epicId || null,
         sprintId: form.sprintId || null,
@@ -244,20 +248,27 @@ export default function CreateIssueModal({ onClose, onCreate, defaultSprintId })
           <label className="block text-sm font-medium text-gray-800 dark:text-gray-300 mb-1">
             Status <span className="text-red-500">*</span>
           </label>
-          <select
-            name="statusId"
-            value={form.statusId}
-            onChange={(e) => setForm({ ...form, statusId: e.target.value })}
-            required
-            className="w-full px-3 py-2 text-sm rounded-lg border bg-white text-gray-800 dark:bg-gray-800 dark:text-white border-gray-300 dark:border-gray-600"
-          >
-            <option value="">Select status</option>
-            {statuses.map((status) => (
-              <option key={status.id} value={status.id}>
-                {status.name}
-              </option>
-            ))}
-          </select>
+          {statuses.length === 0 ? (
+            <div className="w-full px-3 py-2 text-sm rounded-lg border border-yellow-300 dark:border-yellow-700 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-300">
+              <p className="font-medium">No statuses available</p>
+              <p className="text-xs mt-1">Create columns and statuses in Settings first</p>
+            </div>
+          ) : (
+            <select
+              name="statusId"
+              value={form.statusId}
+              onChange={(e) => setForm({ ...form, statusId: e.target.value })}
+              required
+              className="w-full px-3 py-2 text-sm rounded-lg border bg-white text-gray-800 dark:bg-gray-800 dark:text-white border-gray-300 dark:border-gray-600"
+            >
+              <option value="">Select a status</option>
+              {statuses.map((status) => (
+                <option key={status.id} value={status.id}>
+                  {status.name}
+                </option>
+              ))}
+            </select>
+          )}
         </div>
         {/* Assignee */}
         <div>
